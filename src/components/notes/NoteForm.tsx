@@ -32,7 +32,8 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
-  const [previewImages, setPreviewImages] = useState<string[]>(editingNote?.images || []);
+  const [existingImages, setExistingImages] = useState<string[]>(editingNote?.images || []);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +45,7 @@ export const NoteForm = ({
     setFiles([...files, ...selectedFiles]);
   };
 
-  const removeImage = (index: number) => {
+  const removeNewImage = (index: number) => {
     const newPreviewImages = [...previewImages];
     newPreviewImages.splice(index, 1);
     setPreviewImages(newPreviewImages);
@@ -54,10 +55,16 @@ export const NoteForm = ({
     setFiles(newFiles);
   };
 
+  const removeExistingImage = (index: number) => {
+    const newExistingImages = [...existingImages];
+    newExistingImages.splice(index, 1);
+    setExistingImages(newExistingImages);
+  };
+
   const handleSubmit = async () => {
     try {
       setUploading(true);
-      const uploadedImageUrls: string[] = [...(editingNote?.images || [])];
+      const uploadedImageUrls: string[] = [...existingImages];
 
       for (const file of files) {
         const fileExt = file.name.split('.').pop();
@@ -85,6 +92,7 @@ export const NoteForm = ({
       onSubmit(uploadedImageUrls);
       setFiles([]);
       setPreviewImages([]);
+      setExistingImages([]);
     } catch (error) {
       toast({
         title: t('notes.errors.imageUploadFailed'),
@@ -113,15 +121,35 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
-        <div className="flex flex-wrap gap-4">
-          {previewImages.map((url, index) => (
-            <ImagePreview
-              key={index}
-              url={url}
-              onRemove={() => removeImage(index)}
-            />
-          ))}
-        </div>
+        {existingImages.length > 0 && (
+          <div>
+            <h4 className="text-sm font-medium mb-2">{t('notes.existingImages')}</h4>
+            <div className="flex flex-wrap gap-4">
+              {existingImages.map((url, index) => (
+                <ImagePreview
+                  key={`existing-${index}`}
+                  url={url}
+                  onRemove={() => removeExistingImage(index)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {previewImages.length > 0 && (
+          <div>
+            <h4 className="text-sm font-medium mb-2">{t('notes.newImages')}</h4>
+            <div className="flex flex-wrap gap-4">
+              {previewImages.map((url, index) => (
+                <ImagePreview
+                  key={`new-${index}`}
+                  url={url}
+                  onRemove={() => removeNewImage(index)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
         
         <div className="flex items-center gap-4">
           <Button
