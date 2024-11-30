@@ -5,6 +5,7 @@ import { NoteForm } from "@/components/notes/NoteForm";
 import { NoteCard } from "@/components/notes/NoteCard";
 import { useGuestMode } from "@/contexts/GuestModeContext";
 import { useTranslation } from "react-i18next";
+import { parseContent } from "@/utils/contentParser";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -35,12 +36,14 @@ export const NotesContainer = ({
       return;
     }
 
+    const { links, email, phone } = parseContent(content);
+
     onCreateNote({
       title: title.trim(),
       content: content.trim(),
-      links: [],
-      phone: null,
-      email: null,
+      links,
+      phone,
+      email,
       is_public: false,
     });
 
@@ -55,10 +58,15 @@ export const NotesContainer = ({
   const handleUpdateNote = async () => {
     if (!editingNote) return;
 
+    const { links, email, phone } = parseContent(content);
+
     onUpdateNote({
       ...editingNote,
       title: title.trim(),
       content: content.trim(),
+      links,
+      phone,
+      email,
     });
 
     setEditingNote(null);

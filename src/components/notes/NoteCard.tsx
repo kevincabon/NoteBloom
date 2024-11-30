@@ -1,7 +1,9 @@
 import { Note } from "@/types/note";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Link, Mail, Phone } from "lucide-react";
+import { formatContent } from "@/utils/contentParser";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface NoteCardProps {
   note: Note;
@@ -32,8 +34,76 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
         </div>
       </div>
       <p className="text-muted-foreground line-clamp-3">
-        {note.content}
+        {formatContent(note.content || "")}
       </p>
+      <div className="flex gap-4 mt-4">
+        {note.links && note.links.length > 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Link className="h-4 w-4" />
+                  {note.links.length}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <ul className="space-y-1">
+                  {note.links.map((link, index) => (
+                    <li key={index}>
+                      <a
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+        {note.email && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Mail className="h-4 w-4" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <a
+                  href={`mailto:${note.email}`}
+                  className="text-primary hover:underline"
+                >
+                  {note.email}
+                </a>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+        {note.phone && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Phone className="h-4 w-4" />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <a
+                  href={`tel:${note.phone}`}
+                  className="text-primary hover:underline"
+                >
+                  {note.phone}
+                </a>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
       <time className="text-sm text-muted-foreground mt-4 block">
         {new Intl.DateTimeFormat("fr-FR", {
           dateStyle: "medium",
