@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Menu, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Note {
   id: string;
   title: string;
-  content: string;
-  createdAt: Date;
+  content: string | null;
+  created_at: string;
   links?: string[];
   phone?: string;
   email?: string;
@@ -21,8 +22,33 @@ const Index = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleCreateNote = () => {
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("notes")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setNotes(data || []);
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les notes",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreateNote = async () => {
     if (!title.trim()) {
       toast({
         title: "Titre requis",
@@ -32,21 +58,35 @@ const Index = () => {
       return;
     }
 
-    const newNote: Note = {
-      id: Date.now().toString(),
-      title: title.trim(),
-      content: content.trim(),
-      createdAt: new Date(),
-    };
+    try {
+      const { data, error } = await supabase
+        .from("notes")
+        .insert([
+          {
+            title: title.trim(),
+            content: content.trim() || null,
+          },
+        ])
+        .select()
+        .single();
 
-    setNotes([newNote, ...notes]);
-    setTitle("");
-    setContent("");
+      if (error) throw error;
 
-    toast({
-      title: "Note créée",
-      description: "Votre note a été enregistrée avec succès",
-    });
+      setNotes([data, ...notes]);
+      setTitle("");
+      setContent("");
+
+      toast({
+        title: "Note créée",
+        description: "Votre note a été enregistrée avec succès",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de créer la note",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -101,7 +141,7 @@ const Index = () => {
                   {new Intl.DateTimeFormat("fr-FR", {
                     dateStyle: "medium",
                     timeStyle: "short",
-                  }).format(note.createdAt)}
+                  }).format(new Date(note.created_at))}
                 </time>
               </Card>
             ))}
