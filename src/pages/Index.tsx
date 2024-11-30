@@ -32,9 +32,16 @@ const Index = () => {
 
   const fetchNotes = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("notes")
         .select("*")
+        .eq('user_id', user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -61,12 +68,19 @@ const Index = () => {
     }
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("notes")
         .insert([
           {
             title: title.trim(),
             content: content.trim() || null,
+            user_id: user.id,
           },
         ])
         .select()
