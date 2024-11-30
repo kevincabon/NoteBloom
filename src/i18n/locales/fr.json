@@ -26,5 +26,10 @@
     "switchToGuest": "Mode invité",
     "switchToAuth": "Se connecter",
     "guestMode": "Mode invité actif"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
   }
 }
