@@ -45,11 +45,15 @@ const Login = () => {
                   email_label: "Email",
                   password_label: "Mot de passe",
                   button_label: "Se connecter",
+                  loading_button_label: "Connexion en cours...",
+                  social_provider_text: "Continuer avec {{provider}}",
                 },
                 sign_up: {
                   email_label: "Email",
                   password_label: "Mot de passe",
                   button_label: "S'inscrire",
+                  loading_button_label: "Inscription en cours...",
+                  social_provider_text: "Continuer avec {{provider}}",
                 },
               },
             }}
