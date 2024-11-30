@@ -148,7 +148,7 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
           </SheetHeader>
           <div className="mt-6">
             <div className="whitespace-pre-wrap">
-              {note.content}
+              {formatContent(note.content || "")}
             </div>
             {note.images && note.images.length > 0 && (
               <div className="mt-6">
