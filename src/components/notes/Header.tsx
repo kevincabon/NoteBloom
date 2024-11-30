@@ -1,5 +1,7 @@
 import { Menu, Save, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 interface HeaderProps {
   isEditing: boolean;
@@ -8,6 +10,8 @@ interface HeaderProps {
 }
 
 export const Header = ({ isEditing, onSave, onLogout }: HeaderProps) => {
+  const { t } = useTranslation();
+
   return (
     <header className="fixed top-0 left-0 right-0 h-16 border-b bg-background/80 backdrop-blur-sm z-50">
       <div className="container h-full flex items-center justify-between">
@@ -15,12 +19,13 @@ export const Header = ({ isEditing, onSave, onLogout }: HeaderProps) => {
           <Button variant="ghost" size="icon">
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">Notes</h1>
+          <h1 className="text-xl font-semibold">{t('notes.title')}</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          <LanguageSelector />
           <Button onClick={onSave} className="gap-2">
             <Save className="h-4 w-4" />
-            {isEditing ? "Modifier" : "Enregistrer"}
+            {isEditing ? t('common.edit') : t('common.save')}
           </Button>
           <Button variant="ghost" size="icon" onClick={onLogout}>
             <LogOut className="h-5 w-5" />

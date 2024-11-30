@@ -1,0 +1,25 @@
+{
+  "common": {
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "logout": "Logout"
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "New note",
+    "titlePlaceholder": "Note title",
+    "contentPlaceholder": "Start writing...",
+    "created": "Note created",
+    "updated": "Note updated",
+    "deleted": "Note deleted",
+    "errors": {
+      "titleRequired": "Title is required",
+      "createError": "Could not create note",
+      "updateError": "Could not update note",
+      "deleteError": "Could not delete note"
+    }
+  }
+}

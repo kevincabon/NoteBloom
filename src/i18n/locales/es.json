@@ -1,0 +1,25 @@
+{
+  "common": {
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "logout": "Cerrar sesión"
+  },
+  "notes": {
+    "title": "Notas",
+    "newNote": "Nueva nota",
+    "titlePlaceholder": "Título de la nota",
+    "contentPlaceholder": "Empieza a escribir...",
+    "created": "Nota creada",
+    "updated": "Nota actualizada",
+    "deleted": "Nota eliminada",
+    "errors": {
+      "titleRequired": "El título es obligatorio",
+      "createError": "No se pudo crear la nota",
+      "updateError": "No se pudo actualizar la nota",
+      "deleteError": "No se pudo eliminar la nota"
+    }
+  }
+}

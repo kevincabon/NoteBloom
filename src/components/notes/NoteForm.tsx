@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Note } from "@/types/note";
+import { useTranslation } from "react-i18next";
 
 interface NoteFormProps {
   title: string;
@@ -21,17 +22,19 @@ export const NoteForm = ({
   onContentChange,
   onCancelEdit,
 }: NoteFormProps) => {
+  const { t } = useTranslation();
+
   return (
     <Card className="p-6 space-y-4 animate-fade-in">
       <Input
-        placeholder="Titre de la note"
+        placeholder={t('notes.titlePlaceholder')}
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
         className="text-lg font-medium"
         maxLength={100}
       />
       <Textarea
-        placeholder="Commencez à écrire..."
+        placeholder={t('notes.contentPlaceholder')}
         value={content}
         onChange={(e) => onContentChange(e.target.value)}
         className="min-h-[200px] resize-none"
@@ -42,7 +45,7 @@ export const NoteForm = ({
           variant="ghost" 
           onClick={onCancelEdit}
         >
-          Annuler
+          {t('common.cancel')}
         </Button>
       )}
     </Card>

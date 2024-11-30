@@ -1,0 +1,25 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "logout": "Déconnexion"
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "Nouvelle note",
+    "titlePlaceholder": "Titre de la note",
+    "contentPlaceholder": "Commencez à écrire...",
+    "created": "Note créée",
+    "updated": "Note modifiée",
+    "deleted": "Note supprimée",
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "createError": "Impossible de créer la note",
+      "updateError": "Impossible de modifier la note",
+      "deleteError": "Impossible de supprimer la note"
+    }
+  }
+}
