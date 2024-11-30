@@ -28,11 +28,12 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Ne pas ouvrir le Sheet si on clique sur les boutons d'action
-    if (!(e.target as HTMLElement).closest('button')) {
+    if (!(e.target as HTMLElement).closest('button') && !(e.target as HTMLElement).closest('a')) {
       setIsOpen(true);
     }
   };
+
+  const formattedContent = formatContent(note.content || "");
 
   return (
     <>
@@ -59,9 +60,10 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
             </Button>
           </div>
         </div>
-        <p className="text-muted-foreground line-clamp-3">
-          {formatContent(note.content || "")}
-        </p>
+        <div 
+          className="text-muted-foreground line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: formattedContent }}
+        />
 
         <ImageGallery images={note.images || []} />
 
@@ -69,8 +71,8 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
           {note.links && note.links.length > 0 && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
                     <Link className="h-4 w-4" />
                     {note.links.length}
                   </div>
@@ -84,6 +86,7 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-primary hover:underline"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           {link}
                         </a>
@@ -97,8 +100,8 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
           {note.email && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
                     <Mail className="h-4 w-4" />
                   </div>
                 </TooltipTrigger>
@@ -106,6 +109,7 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
                   <a
                     href={`mailto:${note.email}`}
                     className="text-primary hover:underline"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {note.email}
                   </a>
@@ -116,8 +120,8 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
           {note.phone && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
                     <Phone className="h-4 w-4" />
                   </div>
                 </TooltipTrigger>
@@ -125,6 +129,7 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
                   <a
                     href={`tel:${note.phone}`}
                     className="text-primary hover:underline"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {note.phone}
                   </a>
@@ -147,9 +152,10 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
             <SheetTitle>{note.title}</SheetTitle>
           </SheetHeader>
           <div className="mt-6">
-            <div className="whitespace-pre-wrap">
-              {formatContent(note.content || "")}
-            </div>
+            <div 
+              className="whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: formattedContent }}
+            />
             {note.images && note.images.length > 0 && (
               <div className="mt-6">
                 <ImageGallery images={note.images} />
