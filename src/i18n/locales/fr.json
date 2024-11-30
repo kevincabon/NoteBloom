@@ -21,5 +21,10 @@
       "updateError": "Impossible de modifier la note",
       "deleteError": "Impossible de supprimer la note"
     }
+  },
+  "auth": {
+    "switchToGuest": "Mode invité",
+    "switchToAuth": "Se connecter",
+    "guestMode": "Mode invité actif"
   }
 }

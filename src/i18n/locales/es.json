@@ -21,5 +21,10 @@
       "updateError": "No se pudo actualizar la nota",
       "deleteError": "No se pudo eliminar la nota"
     }
+  },
+  "auth": {
+    "switchToGuest": "Modo invitado",
+    "switchToAuth": "Iniciar sesión",
+    "guestMode": "Modo invitado activo"
   }
 }

@@ -7,9 +7,10 @@ interface HeaderProps {
   isEditing: boolean;
   onSave: () => void;
   onLogout: () => void;
+  children?: React.ReactNode;
 }
 
-export const Header = ({ isEditing, onSave, onLogout }: HeaderProps) => {
+export const Header = ({ isEditing, onSave, onLogout, children }: HeaderProps) => {
   const { t } = useTranslation();
 
   return (
@@ -22,6 +23,7 @@ export const Header = ({ isEditing, onSave, onLogout }: HeaderProps) => {
           <h1 className="text-xl font-semibold">{t('notes.title')}</h1>
         </div>
         <div className="flex items-center gap-4">
+          {children}
           <LanguageSelector />
           <Button onClick={onSave} className="gap-2">
             <Save className="h-4 w-4" />

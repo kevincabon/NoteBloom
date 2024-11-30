@@ -21,5 +21,10 @@
       "updateError": "Could not update note",
       "deleteError": "Could not delete note"
     }
+  },
+  "auth": {
+    "switchToGuest": "Guest mode",
+    "switchToAuth": "Sign in",
+    "guestMode": "Guest mode active"
   }
 }
