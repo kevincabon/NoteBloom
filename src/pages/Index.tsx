@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, Save, LogOut } from "lucide-react";
+import { Plus, Menu, Save, LogOut, Trash2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,7 @@ const Index = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -105,6 +106,72 @@ const Index = () => {
     }
   };
 
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      const { error } = await supabase
+        .from("notes")
+        .delete()
+        .eq('id', noteId);
+
+      if (error) throw error;
+
+      setNotes(notes.filter(note => note.id !== noteId));
+      toast({
+        title: "Note supprimée",
+        description: "La note a été supprimée avec succès",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer la note",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditNote = async () => {
+    if (!editingNote) return;
+
+    try {
+      const { error } = await supabase
+        .from("notes")
+        .update({
+          title: title.trim(),
+          content: content.trim() || null,
+        })
+        .eq('id', editingNote.id);
+
+      if (error) throw error;
+
+      setNotes(notes.map(note => 
+        note.id === editingNote.id 
+          ? { ...note, title: title.trim(), content: content.trim() || null }
+          : note
+      ));
+
+      setEditingNote(null);
+      setTitle("");
+      setContent("");
+
+      toast({
+        title: "Note modifiée",
+        description: "La note a été mise à jour avec succès",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier la note",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const startEditing = (note: Note) => {
+    setEditingNote(note);
+    setTitle(note.title);
+    setContent(note.content || "");
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/login");
@@ -121,9 +188,12 @@ const Index = () => {
             <h1 className="text-xl font-semibold">Notes</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button onClick={handleCreateNote} className="gap-2">
+            <Button 
+              onClick={editingNote ? handleEditNote : handleCreateNote} 
+              className="gap-2"
+            >
               <Save className="h-4 w-4" />
-              Enregistrer
+              {editingNote ? "Modifier" : "Enregistrer"}
             </Button>
             <Button variant="ghost" size="icon" onClick={handleLogout}>
               <LogOut className="h-5 w-5" />
@@ -149,15 +219,45 @@ const Index = () => {
               className="min-h-[200px] resize-none"
               maxLength={1000}
             />
+            {editingNote && (
+              <Button 
+                variant="ghost" 
+                onClick={() => {
+                  setEditingNote(null);
+                  setTitle("");
+                  setContent("");
+                }}
+              >
+                Annuler
+              </Button>
+            )}
           </Card>
 
           <div className="space-y-4">
             {notes.map((note) => (
               <Card
                 key={note.id}
-                className="p-6 note-card cursor-pointer hover:shadow-md transition-shadow"
+                className="p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300 fade-in"
               >
-                <h3 className="text-lg font-medium mb-2">{note.title}</h3>
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-lg font-medium">{note.title}</h3>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => startEditing(note)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteNote(note.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
                 <p className="text-muted-foreground line-clamp-3">
                   {note.content}
                 </p>
