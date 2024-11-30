@@ -4,11 +4,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Note } from "@/types/note";
 import { useTranslation } from "react-i18next";
-import { ImagePlus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
-import { ImagePreview } from "./ImagePreview";
+import { ImageUploader } from "./ImageUploader";
+import { ImageList } from "./ImageList";
+import { useImageHandling } from "./useImageHandling";
 
 interface NoteFormProps {
   title: string;
@@ -32,57 +33,15 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
-  const [existingImages, setExistingImages] = useState<string[]>(editingNote?.images || []);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [files, setFiles] = useState<File[]>([]);
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    if (selectedFiles.length === 0) return;
-
-    const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
-    setPreviewImages([...previewImages, ...newPreviewUrls]);
-    setFiles([...files, ...selectedFiles]);
-  };
-
-  const removeNewImage = (index: number) => {
-    const newPreviewImages = [...previewImages];
-    newPreviewImages.splice(index, 1);
-    setPreviewImages(newPreviewImages);
-
-    const newFiles = [...files];
-    newFiles.splice(index, 1);
-    setFiles(newFiles);
-  };
-
-  const removeExistingImage = async (index: number) => {
-    try {
-      const imageUrl = existingImages[index];
-      const path = imageUrl.split('/').pop();
-      if (!path) return;
-
-      const { error: deleteError } = await supabase.storage
-        .from('notes-images')
-        .remove([path]);
-
-      if (deleteError) {
-        toast({
-          title: t('notes.errors.imageDeleteFailed'),
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const newExistingImages = [...existingImages];
-      newExistingImages.splice(index, 1);
-      setExistingImages(newExistingImages);
-    } catch (error) {
-      toast({
-        title: t('notes.errors.imageDeleteFailed'),
-        variant: "destructive",
-      });
-    }
-  };
+  
+  const {
+    existingImages,
+    previewImages,
+    files,
+    handleNewFiles,
+    removeNewImage,
+    removeExistingImage,
+  } = useImageHandling(editingNote?.images || []);
 
   const handleSubmit = async () => {
     try {
@@ -113,9 +72,6 @@ export const NoteForm = ({
       }
 
       onSubmit(uploadedImageUrls);
-      setFiles([]);
-      setPreviewImages([]);
-      setExistingImages([]);
     } catch (error) {
       toast({
         title: t('notes.errors.imageUploadFailed'),
@@ -144,55 +100,22 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
-        {existingImages.length > 0 && (
-          <div>
-            <h4 className="text-sm font-medium mb-2">{t('notes.existingImages')}</h4>
-            <div className="flex flex-wrap gap-4">
-              {existingImages.map((url, index) => (
-                <ImagePreview
-                  key={`existing-${index}`}
-                  url={url}
-                  onRemove={() => removeExistingImage(index)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        <ImageList
+          title={t('notes.existingImages')}
+          images={existingImages}
+          onRemove={removeExistingImage}
+        />
 
-        {previewImages.length > 0 && (
-          <div>
-            <h4 className="text-sm font-medium mb-2">{t('notes.newImages')}</h4>
-            <div className="flex flex-wrap gap-4">
-              {previewImages.map((url, index) => (
-                <ImagePreview
-                  key={`new-${index}`}
-                  url={url}
-                  onRemove={() => removeNewImage(index)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        <ImageList
+          title={t('notes.newImages')}
+          images={previewImages}
+          onRemove={removeNewImage}
+        />
         
-        <div className="flex items-center gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => document.getElementById('image-upload')?.click()}
-            disabled={uploading}
-          >
-            <ImagePlus className="w-4 h-4 mr-2" />
-            {t('notes.addImage')}
-          </Button>
-          <input
-            type="file"
-            id="image-upload"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
+        <ImageUploader
+          onFilesSelected={handleNewFiles}
+          disabled={uploading}
+        />
       </div>
 
       <div className="flex justify-end gap-2">
