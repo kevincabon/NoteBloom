@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Plus, Menu, Save } from "lucide-react";
+import { Plus, Menu, Save, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface Note {
   id: string;
@@ -23,6 +24,7 @@ const Index = () => {
   const [content, setContent] = useState("");
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchNotes();
@@ -89,6 +91,11 @@ const Index = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="fixed top-0 left-0 right-0 h-16 border-b bg-background/80 backdrop-blur-sm z-50">
@@ -103,6 +110,9 @@ const Index = () => {
             <Button onClick={handleCreateNote} className="gap-2">
               <Save className="h-4 w-4" />
               Enregistrer
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-5 w-5" />
             </Button>
           </div>
         </div>
