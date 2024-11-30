@@ -1,5 +1,7 @@
+import React from 'react';
+
 // Regex patterns for detection
-const URL_PATTERN = /https?:\/\/[^\s<]+[^<.,:;"')\]\s]/g;
+const URL_PATTERN = /https?:\/\/[^\s<]+[^<.,:;"')}\]\s]/g;
 const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const PHONE_PATTERN = /(?:\+\d{1,3}[-. ]?)?\(?\d{1,4}\)?[-. ]?\d{1,4}[-. ]?\d{1,9}/g;
 
@@ -15,8 +17,8 @@ export const parseContent = (content: string) => {
   };
 };
 
-export const formatContent = (content: string): JSX.Element[] => {
-  const parts: (string | JSX.Element)[] = [];
+export const formatContent = (content: string): React.ReactNode[] => {
+  const parts: (string | React.ReactNode)[] = [];
   let lastIndex = 0;
 
   // Function to add text between matches
@@ -79,5 +81,5 @@ export const formatContent = (content: string): JSX.Element[] => {
 
   addTextBetween(lastIndex, content.length);
 
-  return parts as JSX.Element[];
+  return parts;
 };
