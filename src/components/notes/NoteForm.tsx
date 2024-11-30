@@ -38,7 +38,7 @@ export const NoteForm = ({
     const selectedFiles = Array.from(e.target.files || []);
     if (selectedFiles.length === 0) return;
 
-    // Preview images
+    // Prévisualisation des images
     const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...newPreviewUrls]);
     setFiles([...files, ...selectedFiles]);
@@ -59,7 +59,7 @@ export const NoteForm = ({
       setUploading(true);
       const uploadedImageUrls: string[] = [...(editingNote?.images || [])];
 
-      // Upload new files
+      // Upload des nouveaux fichiers
       for (const file of files) {
         const fileExt = file.name.split('.').pop();
         const filePath = `${crypto.randomUUID()}.${fileExt}`;
@@ -113,7 +113,7 @@ export const NoteForm = ({
         maxLength={1000}
       />
       
-      {/* Image upload section */}
+      {/* Section upload d'images */}
       <div className="space-y-4">
         <div className="flex flex-wrap gap-4">
           {previewImages.map((url, index) => (
