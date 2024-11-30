@@ -1,85 +1,42 @@
-import React from 'react';
-
-// Regex patterns for detection
-const URL_PATTERN = /https?:\/\/[^\s<]+[^<.,:;"')}\]\s]/g;
-const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-const PHONE_PATTERN = /(?:\+\d{1,3}[-. ]?)?\(?\d{1,4}\)?[-. ]?\d{1,4}[-. ]?\d{1,9}/g;
+import { Link } from "lucide-react";
 
 export const parseContent = (content: string) => {
-  const links: string[] = content.match(URL_PATTERN) || [];
-  const emails: string[] = content.match(EMAIL_PATTERN) || [];
-  const phones: string[] = content.match(PHONE_PATTERN) || [];
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g;
+  const phoneRegex = /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
 
-  return {
-    links,
-    email: emails[0] || null,
-    phone: phones[0] || null,
-  };
+  const links = content.match(urlRegex) || [];
+  const email = content.match(emailRegex)?.[0];
+  const phone = content.match(phoneRegex)?.[0];
+
+  return { links, email, phone };
 };
 
-export const formatContent = (content: string): React.ReactNode[] => {
-  const parts: (string | React.ReactNode)[] = [];
-  let lastIndex = 0;
+export const formatContent = (content: string): string => {
+  if (!content) return "";
 
-  // Function to add text between matches
-  const addTextBetween = (start: number, end: number) => {
-    if (start < end) {
-      parts.push(content.slice(start, end));
-    }
-  };
+  let formattedContent = content;
 
-  // Find all matches
-  const matches = [
-    ...content.matchAll(URL_PATTERN),
-    ...content.matchAll(EMAIL_PATTERN),
-    ...content.matchAll(PHONE_PATTERN),
-  ].sort((a, b) => (a.index || 0) - (b.index || 0));
-
-  // Process each match
-  matches.forEach((match, i) => {
-    const matchText = match[0];
-    const startIndex = match.index || 0;
-
-    addTextBetween(lastIndex, startIndex);
-
-    if (URL_PATTERN.test(matchText)) {
-      parts.push(
-        <a
-          key={`link-${i}`}
-          href={matchText}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary hover:underline"
-        >
-          {matchText}
-        </a>
-      );
-    } else if (EMAIL_PATTERN.test(matchText)) {
-      parts.push(
-        <a
-          key={`email-${i}`}
-          href={`mailto:${matchText}`}
-          className="text-primary hover:underline"
-        >
-          {matchText}
-        </a>
-      );
-    } else if (PHONE_PATTERN.test(matchText)) {
-      parts.push(
-        <a
-          key={`phone-${i}`}
-          href={`tel:${matchText.replace(/[^0-9+]/g, "")}`}
-          className="text-primary hover:underline"
-        >
-          {matchText}
-        </a>
-      );
-    }
-
-    lastIndex = startIndex + matchText.length;
+  // Format URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  formattedContent = formattedContent.replace(urlRegex, (url) => {
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" onclick="event.stopPropagation()">${url}</a>`;
   });
 
-  addTextBetween(lastIndex, content.length);
+  // Format emails
+  const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g;
+  formattedContent = formattedContent.replace(emailRegex, (email) => {
+    return `<a href="mailto:${email}" class="text-primary hover:underline" onclick="event.stopPropagation()">${email}</a>`;
+  });
 
-  return parts;
+  // Format phone numbers
+  const phoneRegex = /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
+  formattedContent = formattedContent.replace(phoneRegex, (phone) => {
+    return `<a href="tel:${phone}" class="text-primary hover:underline" onclick="event.stopPropagation()">${phone}</a>`;
+  });
+
+  // Remplacer les retours à la ligne par des <br>
+  formattedContent = formattedContent.replace(/\n/g, '<br>');
+
+  return formattedContent;
 };
