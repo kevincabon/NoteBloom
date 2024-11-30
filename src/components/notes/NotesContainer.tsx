@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Note } from "@/types/note";
 import { NoteForm } from "@/components/notes/NoteForm";
 import { NoteCard } from "@/components/notes/NoteCard";
@@ -85,6 +84,7 @@ export const NotesContainer = ({
         editingNote={editingNote}
         onTitleChange={setTitle}
         onContentChange={setContent}
+        onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
         onCancelEdit={() => {
           setEditingNote(null);
           setTitle("");

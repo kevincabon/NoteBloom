@@ -3,7 +3,9 @@ export interface Note {
   title: string;
   content: string | null;
   created_at: string;
-  links?: string[];
-  phone?: string;
-  email?: string;
+  updated_at: string;
+  links: string[] | null;
+  phone: string | null;
+  email: string | null;
+  is_public: boolean | null;
 }

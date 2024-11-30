@@ -28,11 +28,12 @@ export const GuestModeProvider = ({ children }: { children: React.ReactNode }) =
   }, [guestNotes]);
 
   const addGuestNote = (note: Omit<Note, "id" | "created_at" | "updated_at">) => {
+    const now = new Date().toISOString();
     const newNote: Note = {
       ...note,
       id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: now,
+      updated_at: now,
     };
     setGuestNotes((prev) => [newNote, ...prev]);
   };
