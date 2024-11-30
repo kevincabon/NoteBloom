@@ -8,7 +8,7 @@ interface ImagePreviewProps {
 
 export const ImagePreview = ({ url, onRemove }: ImagePreviewProps) => {
   return (
-    <div className="relative">
+    <div className="relative group">
       <img
         src={url}
         alt=""
@@ -18,7 +18,7 @@ export const ImagePreview = ({ url, onRemove }: ImagePreviewProps) => {
         onClick={onRemove}
         variant="destructive"
         size="icon"
-        className="absolute -top-2 -right-2 h-6 w-6"
+        className="absolute -top-2 -right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <X className="h-4 w-4" />
       </Button>
