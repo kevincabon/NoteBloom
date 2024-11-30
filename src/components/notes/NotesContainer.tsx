@@ -27,7 +27,7 @@ export const NotesContainer = ({
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
 
-  const handleCreateNote = async () => {
+  const handleCreateNote = async (images: string[]) => {
     if (!title.trim()) {
       toast({
         title: t("notes.errors.titleRequired"),
@@ -45,6 +45,7 @@ export const NotesContainer = ({
       phone,
       email,
       is_public: false,
+      images,
     });
 
     setTitle("");
@@ -55,7 +56,7 @@ export const NotesContainer = ({
     });
   };
 
-  const handleUpdateNote = async () => {
+  const handleUpdateNote = async (images: string[]) => {
     if (!editingNote) return;
 
     const { links, email, phone } = parseContent(content);
@@ -67,6 +68,7 @@ export const NotesContainer = ({
       links,
       phone,
       email,
+      images,
     });
 
     setEditingNote(null);

@@ -15,6 +15,7 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          images: string[] | null
           is_public: boolean | null
           links: string[] | null
           phone: string | null
@@ -27,6 +28,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          images?: string[] | null
           is_public?: boolean | null
           links?: string[] | null
           phone?: string | null
@@ -39,6 +41,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          images?: string[] | null
           is_public?: boolean | null
           links?: string[] | null
           phone?: string | null

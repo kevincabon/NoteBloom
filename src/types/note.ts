@@ -8,4 +8,5 @@ export interface Note {
   phone: string | null;
   email: string | null;
   is_public: boolean | null;
+  images: string[] | null;
 }
