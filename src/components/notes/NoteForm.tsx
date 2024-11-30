@@ -12,6 +12,7 @@ interface NoteFormProps {
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
   onCancelEdit: () => void;
+  onSubmit: () => void;
 }
 
 export const NoteForm = ({
@@ -21,6 +22,7 @@ export const NoteForm = ({
   onTitleChange,
   onContentChange,
   onCancelEdit,
+  onSubmit,
 }: NoteFormProps) => {
   const { t } = useTranslation();
 
@@ -40,14 +42,19 @@ export const NoteForm = ({
         className="min-h-[200px] resize-none"
         maxLength={1000}
       />
-      {editingNote && (
-        <Button 
-          variant="ghost" 
-          onClick={onCancelEdit}
-        >
-          {t('common.cancel')}
+      <div className="flex justify-end gap-2">
+        {editingNote && (
+          <Button 
+            variant="ghost" 
+            onClick={onCancelEdit}
+          >
+            {t('common.cancel')}
+          </Button>
+        )}
+        <Button onClick={onSubmit}>
+          {editingNote ? t('common.save') : t('notes.create')}
         </Button>
-      )}
+      </div>
     </Card>
   );
 };
