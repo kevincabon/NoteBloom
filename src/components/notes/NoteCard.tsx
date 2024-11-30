@@ -1,14 +1,15 @@
 import { Note } from "@/types/note";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Link, Mail, Phone, Image } from "lucide-react";
+import { Edit, Trash2, Link, Mail, Phone } from "lucide-react";
 import { formatContent } from "@/utils/contentParser";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ImageGallery } from "./ImageGallery";
 import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NoteCardProps {
   note: Note;
@@ -42,47 +43,9 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
         {formatContent(note.content || "")}
       </p>
 
-      {note.images && note.images.length > 0 && (
-        <div className="mt-4">
-          <div className="flex flex-wrap gap-2">
-            {note.images.map((image, index) => (
-              <Dialog key={index}>
-                <DialogTrigger>
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-20 h-20 object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity"
-                  />
-                </DialogTrigger>
-                <DialogContent className="max-w-3xl">
-                  <img
-                    src={image}
-                    alt=""
-                    className="w-full h-auto"
-                  />
-                </DialogContent>
-              </Dialog>
-            ))}
-          </div>
-        </div>
-      )}
+      <ImageGallery images={note.images || []} />
 
       <div className="flex gap-4 mt-4">
-        {note.images && note.images.length > 0 && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <Image className="h-4 w-4" />
-                  {note.images.length}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                {note.images.length} image(s)
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
         {note.links && note.links.length > 0 && (
           <TooltipProvider>
             <Tooltip>

@@ -4,10 +4,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Note } from "@/types/note";
 import { useTranslation } from "react-i18next";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { ImagePreview } from "./ImagePreview";
 
 interface NoteFormProps {
   title: string;
@@ -38,7 +39,6 @@ export const NoteForm = ({
     const selectedFiles = Array.from(e.target.files || []);
     if (selectedFiles.length === 0) return;
 
-    // Prévisualisation des images
     const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...newPreviewUrls]);
     setFiles([...files, ...selectedFiles]);
@@ -59,7 +59,6 @@ export const NoteForm = ({
       setUploading(true);
       const uploadedImageUrls: string[] = [...(editingNote?.images || [])];
 
-      // Upload des nouveaux fichiers
       for (const file of files) {
         const fileExt = file.name.split('.').pop();
         const filePath = `${crypto.randomUUID()}.${fileExt}`;
@@ -113,23 +112,14 @@ export const NoteForm = ({
         maxLength={1000}
       />
       
-      {/* Section upload d'images */}
       <div className="space-y-4">
         <div className="flex flex-wrap gap-4">
           {previewImages.map((url, index) => (
-            <div key={index} className="relative">
-              <img
-                src={url}
-                alt=""
-                className="w-24 h-24 object-cover rounded-md"
-              />
-              <button
-                onClick={() => removeImage(index)}
-                className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            <ImagePreview
+              key={index}
+              url={url}
+              onRemove={() => removeImage(index)}
+            />
           ))}
         </div>
         
