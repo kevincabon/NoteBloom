@@ -55,10 +55,33 @@ export const NoteForm = ({
     setFiles(newFiles);
   };
 
-  const removeExistingImage = (index: number) => {
-    const newExistingImages = [...existingImages];
-    newExistingImages.splice(index, 1);
-    setExistingImages(newExistingImages);
+  const removeExistingImage = async (index: number) => {
+    try {
+      const imageUrl = existingImages[index];
+      const path = imageUrl.split('/').pop();
+      if (!path) return;
+
+      const { error: deleteError } = await supabase.storage
+        .from('notes-images')
+        .remove([path]);
+
+      if (deleteError) {
+        toast({
+          title: t('notes.errors.imageDeleteFailed'),
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const newExistingImages = [...existingImages];
+      newExistingImages.splice(index, 1);
+      setExistingImages(newExistingImages);
+    } catch (error) {
+      toast({
+        title: t('notes.errors.imageDeleteFailed'),
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSubmit = async () => {
