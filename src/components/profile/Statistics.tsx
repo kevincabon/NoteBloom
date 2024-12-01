@@ -23,7 +23,8 @@ export const Statistics = () => {
       const { data: folders, error: foldersError } = await supabase
         .from("folders")
         .select("id")
-        .eq("user_id", user.id);
+        .eq("user_id", user.id)
+        .returns<Array<{ id: string }>>();
 
       if (foldersError) throw foldersError;
 
