@@ -10,8 +10,8 @@ import { ImageUploader } from "./ImageUploader";
 import { ImageList } from "./ImageList";
 import { useImageHandling } from "./useImageHandling";
 import { RichTextEditor } from "./RichTextEditor";
-import { AudioRecorder } from "./AudioRecorder";
-import { AudioPlayer } from "./AudioPlayer";
+import { AudioSection } from "./AudioSection";
+import { useAudioHandling } from "./useAudioHandling";
 
 interface NoteFormProps {
   title: string;
@@ -35,7 +35,6 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(editingNote?.audio_url || null);
   
   const {
     existingImages,
@@ -45,6 +44,12 @@ export const NoteForm = ({
     removeNewImage,
     removeExistingImage,
   } = useImageHandling(editingNote?.images || []);
+
+  const {
+    audioUrl,
+    handleNewAudio,
+    handleDeleteAudio,
+  } = useAudioHandling(editingNote?.audio_url || null);
 
   const handleSubmit = async () => {
     try {
@@ -85,36 +90,6 @@ export const NoteForm = ({
     }
   };
 
-  const handleDeleteAudio = async () => {
-    if (editingNote?.audio_url) {
-      const audioPath = editingNote.audio_url.split('/').pop();
-      if (audioPath) {
-        const { error } = await supabase.storage
-          .from('notes-audio')
-          .remove([audioPath]);
-
-        if (error) {
-          toast({
-            title: t('notes.errors.audioDeleteFailed'),
-            variant: "destructive",
-          });
-          return;
-        }
-      }
-    }
-    setAudioUrl(null);
-    toast({
-      title: t('notes.audioDeleted'),
-    });
-  };
-
-  const handleNewAudio = (url: string) => {
-    if (audioUrl) {
-      handleDeleteAudio();
-    }
-    setAudioUrl(url);
-  };
-
   return (
     <Card className="p-6 space-y-4 animate-fade-in">
       <Input
@@ -132,14 +107,11 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium">{t('notes.audioRecording')}</h3>
-          {audioUrl ? (
-            <AudioPlayer url={audioUrl} onDelete={handleDeleteAudio} />
-          ) : (
-            <AudioRecorder onAudioSaved={handleNewAudio} />
-          )}
-        </div>
+        <AudioSection
+          audioUrl={audioUrl}
+          onNewAudio={handleNewAudio}
+          onDeleteAudio={handleDeleteAudio}
+        />
 
         <ImageList
           title={t('notes.existingImages')}
