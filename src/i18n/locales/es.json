@@ -18,6 +18,7 @@
     "created": "Nota creada",
     "updated": "Nota actualizada",
     "deleted": "Nota eliminada",
+    "searchPlaceholder": "Buscar notas...",
     "errors": {
       "titleRequired": "El título es obligatorio",
       "createError": "No se pudo crear la nota",

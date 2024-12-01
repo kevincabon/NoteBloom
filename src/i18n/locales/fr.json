@@ -1,78 +1,39 @@
 {
-  "auth": {
-    "emailPlaceholder": "Email",
-    "passwordPlaceholder": "Mot de passe",
-    "loginButton": "Se connecter",
-    "registerButton": "S'inscrire",
-    "googleButton": "Continuer avec Google",
-    "forgotPassword": "Mot de passe oublié ?",
-    "noAccount": "Pas encore de compte ?",
-    "hasAccount": "Déjà un compte ?",
-    "resetPassword": "Réinitialiser le mot de passe",
-    "resetPasswordSuccess": "Un email de réinitialisation a été envoyé",
-    "errors": {
-      "invalidEmail": "Email invalide",
-      "invalidPassword": "Mot de passe invalide",
-      "generic": "Une erreur est survenue"
-    }
-  },
-  "notes": {
-    "newNote": "Nouvelle note",
-    "titlePlaceholder": "Titre",
-    "contentPlaceholder": "Contenu",
-    "saveButton": "Enregistrer",
-    "cancelButton": "Annuler",
-    "deleteButton": "Supprimer",
-    "editButton": "Modifier",
-    "created": "Note créée",
-    "updated": "Note mise à jour",
-    "deleted": "Note supprimée",
-    "moved": "Note déplacée",
-    "moveNote": "Déplacer la note",
-    "selectDestination": "Sélectionnez un dossier de destination",
-    "allNotes": "Toutes les notes",
-    "searchPlaceholder": "Rechercher une note...",
-    "sortBy": "Trier par",
-    "sortByDate": "Date",
-    "sortByTitle": "Titre",
-    "errors": {
-      "titleRequired": "Le titre est requis",
-      "moveFailed": "Erreur lors du déplacement de la note",
-      "generic": "Une erreur est survenue"
-    }
-  },
-  "profile": {
-    "title": "Profil",
-    "email": "Email",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
-    "updated": "Profil mis à jour",
-    "recentActivity": "Activités récentes",
-    "statistics": "Statistiques",
-    "totalNotes": "Total des notes",
-    "totalFolders": "Total des dossiers",
-    "options": "Options",
-    "emailNotifications": "Notifications par email",
-    "publicProfile": "Profil public",
-    "errors": {
-      "updateFailed": "Erreur lors de la mise à jour du profil"
-    }
-  },
   "common": {
-    "loading": "Chargement...",
-    "error": "Erreur",
-    "success": "Succès",
     "save": "Enregistrer",
-    "cancel": "Annuler",
-    "delete": "Supprimer",
     "edit": "Modifier",
-    "create": "Créer",
-    "update": "Mettre à jour",
-    "search": "Rechercher",
-    "noResults": "Aucun résultat",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
     "logout": "Déconnexion",
     "backToHome": "Retour à l'accueil",
     "theme": "Thème",
     "language": "Langue"
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "Nouvelle note",
+    "titlePlaceholder": "Titre de la note",
+    "contentPlaceholder": "Commencez à écrire...",
+    "created": "Note créée",
+    "updated": "Note mise à jour",
+    "deleted": "Note supprimée",
+    "searchPlaceholder": "Rechercher des notes...",
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "createError": "Impossible de créer la note",
+      "updateError": "Impossible de modifier la note",
+      "deleteError": "Impossible de supprimer la note"
+    }
+  },
+  "auth": {
+    "switchToGuest": "Mode invité",
+    "switchToAuth": "Se connecter",
+    "guestMode": "Mode invité actif"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
   }
 }

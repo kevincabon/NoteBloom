@@ -18,6 +18,7 @@
     "created": "Note created",
     "updated": "Note updated",
     "deleted": "Note deleted",
+    "searchPlaceholder": "Search notes...",
     "errors": {
       "titleRequired": "Title is required",
       "createError": "Could not create note",
