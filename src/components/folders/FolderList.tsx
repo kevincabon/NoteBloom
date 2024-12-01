@@ -5,7 +5,9 @@ import { useTranslation } from "react-i18next";
 import { FolderDialog } from "./FolderDialog";
 import { FolderTreeItem } from "./FolderTreeItem";
 import { useFolderHierarchy } from "@/hooks/useFolderHierarchy";
-import { useFolders } from "@/hooks/useFolders"; // Import the new hook
+import { useFolders } from "@/hooks/useFolders";
+import { useRoleLimits } from "@/hooks/useRoleLimits";
+import { useSupabase } from "@/components/auth/supabase-provider";
 import { Folder } from "@/types/folder";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +37,9 @@ export const FolderList = ({
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
   const { folders, isLoading } = useFolderHierarchy();
-  const { createFolder, updateFolder, deleteFolder } = useFolders(); // Use the new hook
+  const { createFolder, updateFolder, deleteFolder } = useFolders();
+  const { canCreateMoreRootFolders, canCreateMoreSubfolders } = useRoleLimits();
+  const { user } = useSupabase();
 
   // Utiliser localStorage pour persister l'état des dossiers développés
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(() => {
@@ -47,6 +51,19 @@ export const FolderList = ({
   useEffect(() => {
     localStorage.setItem('expandedFolders', JSON.stringify(Array.from(expandedFolders)));
   }, [expandedFolders]);
+
+  // Fonction pour vérifier si on peut créer un dossier
+  const canCreateFolder = (parentId: string | null) => {
+    if (!folders) return false;
+    
+    if (!parentId) {
+      const rootFolders = folders.filter(f => !f.parent_id);
+      return canCreateMoreRootFolders(rootFolders.length);
+    } else {
+      const subFolders = folders.filter(f => f.parent_id === parentId);
+      return canCreateMoreSubfolders(subFolders.length);
+    }
+  };
 
   const handleToggleExpand = (folderId: string) => {
     const newExpanded = new Set(expandedFolders);
@@ -68,25 +85,14 @@ export const FolderList = ({
     setShowCreateDialog(true);
   };
 
-  // Compte les dossiers racine
-  const getRootFoldersCount = (folders: Folder[]) => {
-    return folders.filter(f => !f.parent_id).length;
-  };
-
-  // Compte les sous-dossiers pour un dossier parent donné
-  const getSubFoldersCount = (parentId: string) => {
-    return folders.filter(f => f.parent_id === parentId).length;
-  };
-
-  // Vérifie si un dossier peut avoir plus de sous-dossiers
-  const canAddSubFolder = (parentId: string) => {
-    return getSubFoldersCount(parentId) < MAX_SUBFOLDERS;
+  const handleDeleteFolder = async (folderId: string) => {
+    await deleteFolder(folderId);
   };
 
   const renderFolderTree = (folder: Folder, level: number = 0) => {
     const isExpanded = expandedFolders.has(folder.id);
     const hasChildren = folder.children && folder.children.length > 0;
-    const canAddMore = canAddSubFolder(folder.id);
+    const canAddMore = canCreateFolder(folder.id);
 
     return (
       <div key={folder.id} className="w-full">
@@ -99,7 +105,7 @@ export const FolderList = ({
           onSelect={() => onSelectFolder(folder.id)}
           onToggleExpand={() => handleToggleExpand(folder.id)}
           onEdit={() => setEditingFolder(folder)}
-          onDelete={() => handleDeleteFolder(folder.id)} // Use the new delete function
+          onDelete={() => handleDeleteFolder(folder.id)}
           subFolders={folders}
         >
           {hasChildren && (
@@ -126,14 +132,10 @@ export const FolderList = ({
     );
   };
 
-  const handleDeleteFolder = async (folderId: string) => {
-    await deleteFolder(folderId);
+  const handleUpdateFolder = async (data: { name: string; color?: string; parent_id?: string | null }) => {
+    await updateFolder(editingFolder.id, data);
+    setEditingFolder(null);
   };
-
-  const rootFolderCount = folders.filter(f => !f.parent_id).length;
-  const canCreateFolder = !selectedFolderId 
-    ? rootFolderCount < MAX_ROOT_FOLDERS  // Limite uniquement pour les dossiers racine
-    : folders.filter(f => f.parent_id === selectedFolderId).length < MAX_SUBFOLDERS; // Limite pour les sous-dossiers
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -166,7 +168,7 @@ export const FolderList = ({
           size="sm"
           className="w-full"
           onClick={handleCreateClick}
-          disabled={!canCreateFolder}
+          disabled={!canCreateFolder(null)}
         >
           <Plus className="mr-2 h-4 w-4" />
           {t('folders.createFolder')}
@@ -183,19 +185,18 @@ export const FolderList = ({
           onOpenChange={setShowCreateDialog}
           onSubmit={onCreateFolder}
           folders={folders}
+          user={user}
         />
       )}
 
       {editingFolder && (
         <FolderDialog
-          isOpen={!!editingFolder}
-          onOpenChange={() => setEditingFolder(null)}
-          onSubmit={(data) => {
-            updateFolder(editingFolder.id, data);
-            setEditingFolder(null);
-          }}
-          folders={folders.filter(f => f.id !== editingFolder.id)}
           folder={editingFolder}
+          isOpen={!!editingFolder}
+          onOpenChange={(open) => !open && setEditingFolder(null)}
+          onSubmit={handleUpdateFolder}
+          folders={folders}
+          user={user}
         />
       )}
     </div>

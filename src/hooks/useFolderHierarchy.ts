@@ -14,10 +14,11 @@ export const useFolderHierarchy = () => {
 
       const { data, error } = await supabase
         .from("folders")
-        .select("*")
+        .select("id, name, description, color, user_id, parent_id, created_at, updated_at")
         .eq('user_id', user.id)  
         .order("parent_id", { nullsFirst: true })
-        .order("name");
+        .order("name")
+        .returns<Folder[]>();
 
       if (error) {
         console.error("Error fetching folders:", error);
