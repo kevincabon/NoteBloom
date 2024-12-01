@@ -74,6 +74,16 @@ export const NoteForm = ({
         uploadedImageUrls.push(publicUrl);
       }
 
+      // Si on modifie une note et qu'on a supprimé l'audio, on supprime le fichier
+      if (editingNote?.audio_url && !audioUrl) {
+        const audioPath = editingNote.audio_url.split('/').pop();
+        if (audioPath) {
+          await supabase.storage
+            .from('notes-audio')
+            .remove([audioPath]);
+        }
+      }
+
       onSubmit(uploadedImageUrls, audioUrl);
     } catch (error) {
       toast({
@@ -85,8 +95,35 @@ export const NoteForm = ({
     }
   };
 
-  const handleDeleteAudio = () => {
+  const handleDeleteAudio = async () => {
+    if (editingNote?.audio_url) {
+      const audioPath = editingNote.audio_url.split('/').pop();
+      if (audioPath) {
+        const { error } = await supabase.storage
+          .from('notes-audio')
+          .remove([audioPath]);
+
+        if (error) {
+          toast({
+            title: t('notes.errors.audioDeleteFailed'),
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+    }
     setAudioUrl(null);
+    toast({
+      title: t('notes.audioDeleted'),
+    });
+  };
+
+  const handleNewAudio = (url: string) => {
+    // Si on avait déjà un audio, on le supprime d'abord
+    if (audioUrl) {
+      handleDeleteAudio();
+    }
+    setAudioUrl(url);
   };
 
   return (
@@ -111,7 +148,7 @@ export const NoteForm = ({
           {audioUrl ? (
             <AudioPlayer url={audioUrl} onDelete={handleDeleteAudio} />
           ) : (
-            <AudioRecorder onAudioSaved={setAudioUrl} />
+            <AudioRecorder onAudioSaved={handleNewAudio} />
           )}
         </div>
 
