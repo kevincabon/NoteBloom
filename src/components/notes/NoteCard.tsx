@@ -1,20 +1,15 @@
-import { Note } from "@/types/note";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
-import { formatContent } from "@/utils/contentParser";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { useState } from "react";
-import { NoteMetadata } from "./NoteMetadata";
-import { NoteHeader } from "./NoteHeader";
-import { NoteContent } from "./NoteContent";
-import { NoteTimestamps } from "./NoteTimestamps";
-import { FolderBadge } from "./FolderBadge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Edit, X } from "lucide-react";
+import { Note } from "@/types/note";
+import { NoteContent } from "./NoteContent";
+import { NoteHeader } from "./NoteHeader";
+import { NoteMetadata } from "./NoteMetadata";
+import { NoteTimestamps } from "./NoteTimestamps";
+import { formatContent } from "@/utils/contentParser";
+import { cn } from "@/lib/utils";
 
 interface NoteCardProps {
   note: Note;
@@ -30,6 +25,8 @@ export const NoteCard = ({
   isSharedView = false 
 }: NoteCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const formattedContent = formatContent(note.content || "");
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -39,38 +36,70 @@ export const NoteCard = ({
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!onDelete) return;
+    
+    setIsDeleting(true);
+    
+    // Attendre que l'animation de fade out soit terminée avant de supprimer
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    // Animer la hauteur
+    if (cardRef.current) {
+      cardRef.current.style.height = `${cardRef.current.offsetHeight}px`;
+      cardRef.current.offsetHeight; // Force reflow
+      cardRef.current.style.height = '0';
+    }
+    
+    // Attendre que l'animation de height soit terminée avant de supprimer
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    onDelete(id);
+  };
+
   return (
     <>
-      <Card 
-        className="p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300 fade-in"
-        onClick={handleCardClick}
+      <div 
+        ref={cardRef}
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          isDeleting && "opacity-0 overflow-hidden"
+        )}
       >
-        <NoteHeader 
-          note={note} 
-          onEdit={onEdit}
-          onDelete={onDelete}
-          isSharedView={isSharedView}
-        />
-        <div className="mt-4">
-          <NoteContent content={formattedContent} />
-        </div>
-        <div className="mt-4">
-          <NoteMetadata 
-            links={note.links}
-            email={note.email}
-            phone={note.phone}
-            images={note.images}
+        <Card 
+          className={cn(
+            "p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300",
+            "animate-fade-in"
+          )}
+          onClick={handleCardClick}
+        >
+          <NoteHeader 
+            note={note} 
+            onEdit={onEdit}
+            onDelete={(id) => handleDelete(id)}
             isSharedView={isSharedView}
           />
-        </div>
-        <div className="mt-2">
-          <NoteTimestamps 
-            createdAt={note.created_at}
-            updatedAt={note.updated_at}
-            owner={note.owner}
-          />
-        </div>
-      </Card>
+          <div className="mt-4">
+            <NoteContent content={formattedContent} audioUrl={note.audio_url} images={note.images} />
+          </div>
+          <div className="mt-4">
+            <NoteMetadata 
+              links={note.links}
+              email={note.email}
+              phone={note.phone}
+              images={note.images}
+              isSharedView={isSharedView}
+            />
+          </div>
+          <div className="mt-2">
+            <NoteTimestamps 
+              createdAt={note.created_at}
+              updatedAt={note.updated_at}
+              owner={note.owner}
+            />
+          </div>
+        </Card>
+      </div>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto" aria-describedby="note-content-description">
@@ -114,7 +143,7 @@ export const NoteCard = ({
               content={formattedContent} 
               audioUrl={note.audio_url}
               images={note.images}
-              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none no-truncate"
+              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none"
               fullContent
             />
             <div className="mt-4 pt-4 border-t">

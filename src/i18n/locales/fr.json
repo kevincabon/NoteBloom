@@ -58,7 +58,14 @@
     "delete": {
       "title": "Supprimer le dossier",
       "description": "Êtes-vous sûr de vouloir supprimer ce dossier ? Toutes les notes qu'il contient seront également supprimées. Cette action est irréversible."
-    }
+    },
+    "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer le dossier \"{name}\" ?",
+    "deleteDetails": "Cette action supprimera également",
+    "deleteWarning": "Cette action est irréversible et supprimera définitivement tous les éléments ci-dessus.",
+    "subFoldersCount": "{{count}} sous-dossier",
+    "subFoldersCount_plural": "{{count}} sous-dossiers",
+    "notesCount": "{{count}} note",
+    "notesCount_plural": "{{count}} notes"
   },
   "notes": {
     "title": "Notes",
