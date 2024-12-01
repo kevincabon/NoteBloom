@@ -5,19 +5,9 @@ import { NoteCard } from "@/components/notes/NoteCard";
 import { useGuestMode } from "@/contexts/GuestModeContext";
 import { useTranslation } from "react-i18next";
 import { parseContent } from "@/utils/contentParser";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { NoteMoveDialog } from "./NoteMoveDialog";
+import { NoteListControls } from "./NoteListControls";
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
 import { useNotes } from "@/hooks/useNotes";
 
 interface NotesContainerProps {
@@ -46,31 +36,11 @@ export const NotesContainer = ({
   const { isGuestMode } = useGuestMode();
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
 
-  const { data: folders = [] } = useQuery({
-    queryKey: ["folders"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
-      const { data, error } = await supabase
-        .from("folders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
   const handleCreateNote = async (images: string[], audioUrl: string | null) => {
-    if (!title.trim()) {
-      return;
-    }
+    if (!title.trim()) return;
 
     const { links, email, phone } = parseContent(content);
     
-    console.log("Preparing to create note with audio:", audioUrl);
-
     const noteData = {
       title: title.trim(),
       content: content.trim(),
@@ -126,7 +96,7 @@ export const NotesContainer = ({
       const { error } = await supabase
         .from("notes")
         .update({ folder_id: newFolderId })
-        .eq("id", note.id);
+        .eq('id', note.id);
 
       if (error) throw error;
 
@@ -143,7 +113,7 @@ export const NotesContainer = ({
     }
   };
 
-  const filteredAndSortedNotes = notes
+  const filteredAndSortedNotes = initialNotes
     .filter((note) => {
       const searchLower = searchQuery.toLowerCase();
       return (
@@ -175,26 +145,12 @@ export const NotesContainer = ({
         onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
       />
 
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder={t("notes.searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <Select value={sortBy} onValueChange={(value: "date" | "title") => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={t("notes.sortBy")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="date">{t("notes.sortByDate")}</SelectItem>
-            <SelectItem value="title">{t("notes.sortByTitle")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <NoteListControls
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        sortBy={sortBy}
+        onSortChange={(value: "date" | "title") => setSortBy(value)}
+      />
 
       <div className="space-y-4">
         {filteredAndSortedNotes.map((note) => (
@@ -215,35 +171,12 @@ export const NotesContainer = ({
         ))}
       </div>
 
-      <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("notes.moveNote")}</DialogTitle>
-            <DialogDescription>
-              {t("notes.selectDestination")}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => selectedNote && handleMoveNote(selectedNote, null)}
-            >
-              {t("notes.allNotes")}
-            </Button>
-            {folders.map((folder) => (
-              <Button
-                key={folder.id}
-                variant="outline"
-                className="w-full justify-start"
-                onClick={() => selectedNote && handleMoveNote(selectedNote, folder.id)}
-              >
-                {folder.name}
-              </Button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <NoteMoveDialog
+        isOpen={isMoveDialogOpen}
+        onOpenChange={setIsMoveDialogOpen}
+        selectedNote={selectedNote}
+        onMoveNote={handleMoveNote}
+      />
     </div>
   );
 };
