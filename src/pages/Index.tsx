@@ -150,7 +150,7 @@ const Index = () => {
       </Header>
 
       <main className="container pt-24 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] lg:grid-cols-[250px_minmax(600px,_1fr)] gap-8">
           <aside className="space-y-4">
             <FolderList onSelectFolder={setSelectedFolderId} />
           </aside>
