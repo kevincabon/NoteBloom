@@ -74,16 +74,6 @@ export const NoteForm = ({
         uploadedImageUrls.push(publicUrl);
       }
 
-      // Si on modifie une note et qu'on a supprimé l'audio, on supprime le fichier
-      if (editingNote?.audio_url && !audioUrl) {
-        const audioPath = editingNote.audio_url.split('/').pop();
-        if (audioPath) {
-          await supabase.storage
-            .from('notes-audio')
-            .remove([audioPath]);
-        }
-      }
-
       onSubmit(uploadedImageUrls, audioUrl);
     } catch (error) {
       toast({
@@ -119,7 +109,6 @@ export const NoteForm = ({
   };
 
   const handleNewAudio = (url: string) => {
-    // Si on avait déjà un audio, on le supprime d'abord
     if (audioUrl) {
       handleDeleteAudio();
     }
