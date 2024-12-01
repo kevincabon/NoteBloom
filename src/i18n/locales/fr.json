@@ -47,6 +47,13 @@
     "username": "Nom d'utilisateur",
     "usernamePlaceholder": "Entrez votre nom d'utilisateur",
     "updated": "Profil mis à jour",
+    "recentActivity": "Activités récentes",
+    "statistics": "Statistiques",
+    "totalNotes": "Total des notes",
+    "totalFolders": "Total des dossiers",
+    "options": "Options",
+    "emailNotifications": "Notifications par email",
+    "publicProfile": "Profil public",
     "errors": {
       "updateFailed": "Erreur lors de la mise à jour du profil"
     }

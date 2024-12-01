@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { RecentActivity } from "@/components/profile/RecentActivity";
+import { Statistics } from "@/components/profile/Statistics";
+import { UserOptions } from "@/components/profile/UserOptions";
 
 const Profile = () => {
   const { t } = useTranslation();
@@ -67,66 +70,72 @@ const Profile = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-16">
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl font-bold flex items-center gap-2">
-              <User className="h-6 w-6" />
-              {t("profile.title")}
-            </CardTitle>
-            <Button variant="outline" onClick={handleLogout}>
-              {t("common.logout")}
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="email">{t("profile.email")}</Label>
-            <Input
-              id="email"
-              type="email"
-              value={profile?.email || ""}
-              disabled
-              className="bg-muted"
-            />
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                <User className="h-6 w-6" />
+                {t("profile.title")}
+              </CardTitle>
+              <Button variant="outline" onClick={handleLogout}>
+                {t("common.logout")}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">{t("profile.email")}</Label>
+              <Input
+                id="email"
+                type="email"
+                value={profile?.email || ""}
+                disabled
+                className="bg-muted"
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="username">{t("profile.username")}</Label>
-            {isEditing ? (
-              <div className="flex gap-2">
-                <Input
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder={t("profile.usernamePlaceholder")}
-                />
-                <Button onClick={handleUpdateProfile}>
-                  {t("common.save")}
-                </Button>
-                <Button variant="outline" onClick={() => setIsEditing(false)}>
-                  {t("common.cancel")}
-                </Button>
-              </div>
-            ) : (
-              <div className="flex gap-2 items-center">
-                <Input
-                  id="username"
-                  value={profile?.username || ""}
-                  disabled
-                  className="bg-muted"
-                />
-                <Button variant="outline" onClick={() => {
-                  setUsername(profile?.username || "");
-                  setIsEditing(true);
-                }}>
-                  {t("common.edit")}
-                </Button>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+            <div className="space-y-2">
+              <Label htmlFor="username">{t("profile.username")}</Label>
+              {isEditing ? (
+                <div className="flex gap-2">
+                  <Input
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder={t("profile.usernamePlaceholder")}
+                  />
+                  <Button onClick={handleUpdateProfile}>
+                    {t("common.save")}
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    {t("common.cancel")}
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <Input
+                    id="username"
+                    value={profile?.username || ""}
+                    disabled
+                    className="bg-muted"
+                  />
+                  <Button variant="outline" onClick={() => {
+                    setUsername(profile?.username || "");
+                    setIsEditing(true);
+                  }}>
+                    {t("common.edit")}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Statistics />
+        <RecentActivity />
+        <UserOptions />
+      </div>
     </div>
   );
 };
