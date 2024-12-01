@@ -25,7 +25,7 @@ type Feedback = {
   status: string;
   created_at: string;
   user_id: string;
-  profiles: Profile | null;
+  profile: Profile | null;
 };
 
 export const FeedbackManager = () => {
@@ -39,7 +39,7 @@ export const FeedbackManager = () => {
         .from("feedback")
         .select(`
           *,
-          profiles:profiles(username)
+          profile:profiles!user_id(username)
         `)
         .order("created_at", { ascending: false });
 
@@ -90,7 +90,7 @@ export const FeedbackManager = () => {
           <TableBody>
             {feedbacks?.map((feedback) => (
               <TableRow key={feedback.id}>
-                <TableCell>{feedback.profiles?.username || t("admin.unknownUser")}</TableCell>
+                <TableCell>{feedback.profile?.username || t("admin.unknownUser")}</TableCell>
                 <TableCell>
                   <Badge variant="outline">{feedback.type}</Badge>
                 </TableCell>
