@@ -14,7 +14,8 @@
     "optional": "opcional",
     "createdAt": "Creado el",
     "updatedAt": "Modificado el",
-    "add": "Añadir"
+    "add": "Añadir",
+    "saving": "Guardando..."
   },
   "folders": {
     "title": "Carpetas",

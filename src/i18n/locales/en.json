@@ -19,7 +19,8 @@
     "copy": "Copy",
     "share": "Share",
     "copied": "Copied!",
-    "email": "Email"
+    "email": "Email",
+    "saving": "Saving..."
   },
   "folders": {
     "title": "Folders",

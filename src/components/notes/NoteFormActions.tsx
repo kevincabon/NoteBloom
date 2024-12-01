@@ -4,13 +4,15 @@ import { useTranslation } from "react-i18next";
 interface NoteFormActionsProps {
   isEditing: boolean;
   isUploading: boolean;
+  isSubmitting: boolean;
   onCancel: () => void;
   onSubmit: () => void;
 }
 
 export const NoteFormActions = ({ 
   isEditing, 
-  isUploading, 
+  isUploading,
+  isSubmitting,
   onCancel, 
   onSubmit 
 }: NoteFormActionsProps) => {
@@ -21,15 +23,21 @@ export const NoteFormActions = ({
       <Button 
         variant="ghost" 
         onClick={onCancel}
-        disabled={isUploading}
+        disabled={isUploading || isSubmitting}
       >
         {t('common.cancel')}
       </Button>
       <Button 
         onClick={onSubmit}
-        disabled={isUploading}
+        disabled={isUploading || isSubmitting}
       >
-        {isUploading ? t('common.uploading') : isEditing ? t('common.save') : t('notes.create')}
+        {isSubmitting 
+          ? t('common.saving')
+          : isUploading 
+            ? t('common.uploading') 
+            : isEditing 
+              ? t('common.save') 
+              : t('notes.create')}
       </Button>
     </div>
   );

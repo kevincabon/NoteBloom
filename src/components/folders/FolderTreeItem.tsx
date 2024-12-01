@@ -1,60 +1,113 @@
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { MoreHorizontal, Pencil, Trash2, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Folder } from "@/types/folder";
-import { FolderItem } from "./FolderItem";
 
 interface FolderTreeItemProps {
   folder: Folder;
+  level: number;
   isSelected: boolean;
+  hasChildren: boolean;
+  isExpanded: boolean;
   onSelect: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
   onToggleExpand: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 export const FolderTreeItem = ({
   folder,
+  level,
   isSelected,
+  hasChildren,
+  isExpanded,
   onSelect,
+  onToggleExpand,
   onEdit,
   onDelete,
-  onToggleExpand,
 }: FolderTreeItemProps) => {
-  const hasChildren = folder.children && folder.children.length > 0;
+  const { t } = useTranslation();
+
+  const handleExpandClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onToggleExpand();
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect();
+  };
 
   return (
     <div
-      className="flex items-center"
-      style={{ paddingLeft: `${(folder.level || 0) * 1.5}rem` }}
+      className={cn(
+        "group flex items-center gap-1 rounded-md px-2 py-1 text-sm cursor-pointer",
+        isSelected && "bg-accent",
+        !isSelected && "hover:bg-accent/50"
+      )}
+      style={{ paddingLeft: `${level * 12 + 8}px` }}
+      onClick={handleClick}
     >
-      {hasChildren ? (
+      {hasChildren && (
         <Button
           variant="ghost"
           size="icon"
-          className="h-6 w-6"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleExpand();
-          }}
-        >
-          {folder.isExpanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
+          className={cn(
+            "h-4 w-4 p-0 hover:bg-background/50",
+            isExpanded && "rotate-90"
           )}
+          onClick={handleExpandClick}
+        >
+          <ChevronRight className="h-3 w-3" />
         </Button>
-      ) : (
-        <div className="w-6" />
       )}
-      <div className="flex-1">
-        <FolderItem
-          folder={folder}
-          isSelected={isSelected}
-          onSelect={onSelect}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      </div>
+      {!hasChildren && <div className="w-4" />}
+      
+      <span
+        className="h-2 w-2 rounded-full shrink-0"
+        style={{ backgroundColor: folder.color }}
+      />
+      
+      <span className="flex-1 truncate">{folder.name}</span>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-background/50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={(e) => {
+            e.stopPropagation();
+            onEdit();
+          }}>
+            <Pencil className="mr-2 h-4 w-4" />
+            {t("common.edit")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            {t("common.delete")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ColorPicker } from "@/components/ui/color-picker";
+import { Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,111 +14,155 @@ import {
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 import { Folder } from "@/types/folder";
+import { useForm } from "react-hook-form";
+
+const MAX_SUBFOLDERS = 3;
 
 interface FolderDialogProps {
-  folder?: Folder | null;
+  folder?: Folder;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: { name: string; color?: string; parent_id?: string | null }) => void;
+  onSubmit: (data: { name: string; color: string; parent_id: string | null }) => void;
   folders: Folder[];
+}
+
+interface FormData {
+  name: string;
+  color: string;
+  parent_id: string | null;
 }
 
 export const FolderDialog = ({
   folder,
-  isOpen,
+  isOpen: open,
   onOpenChange,
   onSubmit,
   folders,
 }: FolderDialogProps) => {
   const { t } = useTranslation();
-  const [name, setName] = useState("");
-  const [color, setColor] = useState("#000000");
-  const [parentId, setParentId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Mettre à jour les valeurs quand le dossier change ou quand le dialogue s'ouvre
+  const form = useForm<FormData>({
+    defaultValues: {
+      name: folder?.name || "",
+      color: folder?.color || "#000000",
+      parent_id: folder?.parent_id || null,
+    },
+  });
+
+  // Mettre à jour les valeurs quand le dossier change
   useEffect(() => {
-    if (isOpen) {
-      setName(folder?.name || "");
-      setColor(folder?.color || "#000000");
-      setParentId(folder?.parent_id || null);
+    if (folder) {
+      form.reset({
+        name: folder.name,
+        color: folder.color,
+        parent_id: folder.parent_id,
+      });
+    } else {
+      form.reset({
+        name: "",
+        color: "#000000",
+        parent_id: null,
+      });
     }
-  }, [folder, isOpen]);
+  }, [folder, form]);
 
-  // Fonction récursive pour vérifier si un dossier est un descendant
-  const isDescendant = (folder: Folder, ancestorId?: string): boolean => {
-    if (!ancestorId) return false;
-    if (folder.parent_id === ancestorId) return true;
-    const parent = folders.find(f => f.id === folder.parent_id);
-    return parent ? isDescendant(parent, ancestorId) : false;
+  const handleSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    try {
+      await onSubmit(data);
+      onOpenChange(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ 
-      name, 
-      color, 
-      parent_id: parentId === "none" ? null : parentId 
-    });
+  const isParentFolderAtLimit = (parentId: string) => {
+    return folders.filter(f => f.parent_id === parentId).length >= MAX_SUBFOLDERS;
   };
-
-  const availableParentFolders = folders.filter(f => 
-    // Ne pas permettre de sélectionner le dossier lui-même comme parent
-    f.id !== folder?.id &&
-    // Ne pas permettre de sélectionner un descendant comme parent
-    !isDescendant(f, folder?.id)
-  );
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {folder ? t("folders.edit") : t("folders.create")}
+            {folder ? t('folders.edit') : t('folders.create')}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
+
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">{t("folders.name")}</Label>
+              <Label htmlFor="name">{t('folders.name')}</Label>
               <Input
+                {...form.register('name', { required: true })}
                 id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t("folders.namePlaceholder")}
+                placeholder={t('folders.namePlaceholder')}
               />
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="color">{t("folders.color")}</Label>
+              <Label htmlFor="color">{t('folders.color')}</Label>
               <Input
+                {...form.register('color')}
                 id="color"
                 type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
               />
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="parent">{t("folders.parent")}</Label>
+              <Label htmlFor="parent_id">{t('folders.parent')}</Label>
               <Select
-                value={parentId || "none"}
-                onValueChange={(value) => setParentId(value === "none" ? null : value)}
+                value={form.watch('parent_id') ?? "none"}
+                onValueChange={(value) => form.setValue('parent_id', value === "none" ? null : value)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={t("folders.noParent")} />
+                  <SelectValue placeholder={t('folders.noParent')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">{t("folders.noParent")}</SelectItem>
-                  {availableParentFolders.map((f) => (
-                    <SelectItem key={f.id} value={f.id}>
-                      {f.name}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="none">
+                    {t('folders.noParent')}
+                  </SelectItem>
+                  {folders
+                    .filter((f) => f.id !== folder?.id) // Exclure le dossier actuel
+                    .map((f) => (
+                      <SelectItem
+                        key={f.id}
+                        value={f.id}
+                        disabled={isParentFolderAtLimit(f.id)}
+                      >
+                        {f.name}
+                        {isParentFolderAtLimit(f.id) && (
+                          <span className="ml-2 text-sm text-muted-foreground">
+                            ({t('folders.subFolderLimitReached')})
+                          </span>
+                        )}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
+
           <DialogFooter>
-            <Button type="submit">
-              {folder ? t("common.save") : t("common.create")}
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            >
+              {t('common.cancel')}
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : folder ? (
+                t('common.save')
+              ) : (
+                t('common.create')
+              )}
             </Button>
           </DialogFooter>
         </form>

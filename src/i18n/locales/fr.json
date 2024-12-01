@@ -19,7 +19,8 @@
     "copy": "Copier",
     "share": "Partager",
     "copied": "Copié !",
-    "email": "Email"
+    "email": "Email",
+    "saving": "Enregistrement..."
   },
   "folders": {
     "title": "Dossiers",
@@ -33,7 +34,9 @@
     "createFolder": "Créer un dossier",
     "description": "Description",
     "color": "Couleur",
-    "namePlaceholder": "Mon dossier",
+    "parent": "Dossier parent",
+    "noParent": "Aucun",
+    "namePlaceholder": "Nom du dossier",
     "descriptionPlaceholder": "Description du dossier",
     "searchPlaceholder": "Rechercher dans les dossiers...",
     "colorPlaceholder": "Couleur du dossier",
@@ -42,6 +45,10 @@
     "deleted": "Dossier supprimé",
     "empty": "Aucun dossier",
     "sharedWithMe": "Notes partagées avec moi",
+    "limitReached": "Limite de dossiers atteinte",
+    "limitReachedDescription": "Vous ne pouvez pas créer plus de {{max}} dossiers racine",
+    "subFolderLimitReached": "Limite de sous-dossiers atteinte",
+    "subFolderLimitReachedDescription": "Vous ne pouvez pas créer plus de {{max}} sous-dossiers dans ce dossier",
     "errors": {
       "nameRequired": "Le nom est requis",
       "createError": "Impossible de créer le dossier",

@@ -36,6 +36,7 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(editingNote?.folder_id || null);
 
   useEffect(() => {
@@ -61,7 +62,10 @@ export const NoteForm = ({
   } = useAudioHandling(editingNote?.audio_url || null);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    
     try {
+      setIsSubmitting(true);
       setUploading(true);
       const uploadedImageUrls: string[] = [...existingImages];
 
@@ -88,7 +92,7 @@ export const NoteForm = ({
         uploadedImageUrls.push(publicUrl);
       }
 
-      onSubmit(uploadedImageUrls, audioUrl, selectedFolderId);
+      await onSubmit(uploadedImageUrls, audioUrl, selectedFolderId);
     } catch (error) {
       toast({
         title: t('notes.errors.imageUploadFailed'),
@@ -96,6 +100,7 @@ export const NoteForm = ({
       });
     } finally {
       setUploading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -149,6 +154,7 @@ export const NoteForm = ({
       <NoteFormActions
         isEditing={!!editingNote}
         isUploading={uploading}
+        isSubmitting={isSubmitting}
         onCancel={onCancelEdit}
         onSubmit={handleSubmit}
       />

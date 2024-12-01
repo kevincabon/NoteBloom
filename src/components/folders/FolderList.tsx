@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Share2 } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FolderDialog } from "./FolderDialog";
 import { FolderTreeItem } from "./FolderTreeItem";
 import { useFolderHierarchy } from "@/hooks/useFolderHierarchy";
 import { Folder } from "@/types/folder";
+import { cn } from "@/lib/utils";
+
+const MAX_ROOT_FOLDERS = 6;
+const MAX_SUBFOLDERS = 3;
 
 interface FolderListProps {
   selectedFolderId: string | null;
@@ -58,9 +62,29 @@ export const FolderList = ({
     setExpandedFolders(newExpanded);
   };
 
+  const handleCreateClick = () => {
+    setShowCreateDialog(true);
+  };
+
+  // Compte les dossiers racine
+  const getRootFoldersCount = (folders: Folder[]) => {
+    return folders.filter(f => !f.parent_id).length;
+  };
+
+  // Compte les sous-dossiers pour un dossier parent donné
+  const getSubFoldersCount = (parentId: string) => {
+    return folders.filter(f => f.parent_id === parentId).length;
+  };
+
+  // Vérifie si un dossier peut avoir plus de sous-dossiers
+  const canAddSubFolder = (parentId: string) => {
+    return getSubFoldersCount(parentId) < MAX_SUBFOLDERS;
+  };
+
   const renderFolderTree = (folder: Folder, level: number = 0) => {
     const isExpanded = expandedFolders.has(folder.id);
     const hasChildren = folder.children && folder.children.length > 0;
+    const canAddMore = canAddSubFolder(folder.id);
 
     return (
       <div key={folder.id} className="w-full">
@@ -74,19 +98,35 @@ export const FolderList = ({
           onToggleExpand={() => handleToggleExpand(folder.id)}
           onEdit={() => setEditingFolder(folder)}
           onDelete={() => onDeleteFolder(folder.id)}
-        />
+        >
+          {hasChildren && (
+            <ChevronRight 
+              className={cn(
+                "h-4 w-4 shrink-0 transition-transform duration-200",
+                isExpanded && "transform rotate-90"
+              )}
+            />
+          )}
+          {!hasChildren && <div className="w-4" />}
+        </FolderTreeItem>
         {hasChildren && isExpanded && (
-          <div className="ml-[-0.9rem]">
+          <div className="ml-[0.5rem]">
             {folder.children.map(child => renderFolderTree(child, level + 1))}
+            {!canAddMore && (
+              <div className="text-sm text-muted-foreground text-center p-2 ml-6">
+                {t('folders.subFolderLimitReached')}
+              </div>
+            )}
           </div>
         )}
       </div>
     );
   };
 
-  const handleCreateClick = () => {
-    setShowCreateDialog(true);
-  };
+  const rootFolderCount = folders.filter(f => !f.parent_id).length;
+  const canCreateFolder = !selectedFolderId 
+    ? rootFolderCount < MAX_ROOT_FOLDERS  // Limite uniquement pour les dossiers racine
+    : folders.filter(f => f.parent_id === selectedFolderId).length < MAX_SUBFOLDERS; // Limite pour les sous-dossiers
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -119,6 +159,7 @@ export const FolderList = ({
           size="sm"
           className="w-full"
           onClick={handleCreateClick}
+          disabled={!canCreateFolder}
         >
           <Plus className="mr-2 h-4 w-4" />
           {t('folders.createFolder')}
