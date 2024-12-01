@@ -46,7 +46,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
   useEffect(() => {
     console.log("Setting up realtime subscription");
     
-    // Créer un canal spécifique pour les changements de notes
     const channel = supabase.channel('notes_changes')
       .on(
         'postgres_changes',
@@ -58,13 +57,10 @@ export const useNotes = (initialNotes: Note[] = []) => {
         async (payload) => {
           console.log("Realtime change received:", payload);
           
-          // Récupérer les notes actuelles du cache
           const currentNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
-          
           let newNotes: Note[];
           let toastMessage;
 
-          // Récupérer les informations du dossier si nécessaire
           const getFolderInfo = async (folderId: string | null) => {
             if (!folderId) return null;
             const { data } = await supabase
@@ -84,8 +80,14 @@ export const useNotes = (initialNotes: Note[] = []) => {
                   folder_name: folder?.name,
                   folder_color: folder?.color,
                 } as Note;
-                newNotes = [newNote, ...currentNotes];
-                toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
+                
+                // Vérifier si la note appartient à l'utilisateur actuel
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user && newNote.user_id === user.id) {
+                  newNotes = [newNote, ...currentNotes];
+                  toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
+                  queryClient.setQueryData(["notes"], newNotes);
+                }
                 break;
               }
               case 'UPDATE': {
@@ -95,22 +97,27 @@ export const useNotes = (initialNotes: Note[] = []) => {
                   folder_name: folder?.name,
                   folder_color: folder?.color,
                 } as Note;
-                newNotes = currentNotes.map(note => 
-                  note.id === updatedNote.id ? updatedNote : note
-                );
-                toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
+                
+                // Mettre à jour uniquement si la note existe dans la liste actuelle
+                if (currentNotes.some(note => note.id === updatedNote.id)) {
+                  newNotes = currentNotes.map(note => 
+                    note.id === updatedNote.id ? updatedNote : note
+                  );
+                  toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
+                  queryClient.setQueryData(["notes"], newNotes);
+                }
                 break;
               }
-              case 'DELETE':
-                newNotes = currentNotes.filter(note => note.id !== payload.old.id);
-                toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
+              case 'DELETE': {
+                // Supprimer uniquement si la note existe dans la liste actuelle
+                if (currentNotes.some(note => note.id === payload.old.id)) {
+                  newNotes = currentNotes.filter(note => note.id !== payload.old.id);
+                  toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
+                  queryClient.setQueryData(["notes"], newNotes);
+                }
                 break;
-              default:
-                return;
+              }
             }
-
-            // Mettre à jour le cache avec les nouvelles données
-            queryClient.setQueryData(["notes"], newNotes);
             
             if (toastMessage) {
               toast(toastMessage);
