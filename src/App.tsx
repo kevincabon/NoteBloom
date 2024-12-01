@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,14 @@ const App = () => (
                   element={
                     <ProtectedRoute>
                       <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
                     </ProtectedRoute>
                   }
                 />
