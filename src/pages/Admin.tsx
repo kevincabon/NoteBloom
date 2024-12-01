@@ -5,6 +5,8 @@ import { AdminStats } from "@/components/admin/AdminStats";
 import { FeedbackManager } from "@/components/admin/FeedbackManager";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -40,7 +42,13 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold">{t("admin.dashboard")}</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">{t("admin.dashboard")}</h1>
+        <Button variant="outline" size="sm" onClick={() => navigate("/")} className="flex items-center gap-2">
+          <Home className="h-4 w-4" />
+          {t("common.backToHome")}
+        </Button>
+      </div>
       <AdminStats />
       <FeedbackManager />
     </div>

@@ -14,15 +14,36 @@
     "optional": "opcional",
     "createdAt": "Creado el",
     "updatedAt": "Modificado el",
+    "unknown": "Fecha desconocida",
     "add": "Añadir",
-    "saving": "Guardando..."
+    "copy": "Copiar",
+    "share": "Compartir",
+    "copied": "¡Copiado!",
+    "email": "Correo electrónico",
+    "saving": "Guardando...",
+    "confirm": "Confirmar",
+    "actions": "Acciones"
+  },
+  "delete": {
+    "note": {
+      "title": "Eliminar nota",
+      "description": "¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."
+    }
   },
   "folders": {
     "title": "Carpetas",
+    "all": "Todas las notas",
+    "loading": "Cargando...",
     "newFolder": "Nueva Carpeta",
     "create": "Crear",
     "edit": "Editar Carpeta",
     "delete": "Eliminar Carpeta",
+    "name": "Nombre",
+    "createFolder": "Crear Carpeta",
+    "description": "Descripción",
+    "color": "Color",
+    "parent": "Carpeta superior",
+    "noParent": "Ninguna",
     "deleteConfirmation": "¿Estás seguro de que quieres eliminar la carpeta \"{name}\"?",
     "deleteDetails": "Esta acción también eliminará",
     "deleteWarning": "Esta acción es irreversible y eliminará permanentemente todos los elementos mencionados anteriormente.",
@@ -38,11 +59,20 @@
     "updated": "Carpeta actualizada",
     "deleted": "Carpeta eliminada",
     "empty": "Sin carpetas",
+    "sharedWithMe": "Compartido conmigo",
+    "limitReached": "Límite de carpetas alcanzado",
+    "limitReachedDescription": "No puedes crear más de {{max}} carpetas raíz",
+    "subFolderLimitReached": "Límite de subcarpetas alcanzado",
+    "subFolderLimitReachedDescription": "No puedes crear más de {{max}} subcarpetas en esta carpeta",
     "errors": {
       "nameRequired": "El nombre es obligatorio",
       "createError": "No se pudo crear la carpeta",
       "updateError": "No se pudo actualizar la carpeta",
       "deleteError": "No se pudo eliminar la carpeta"
+    },
+    "delete": {
+      "title": "Eliminar carpeta",
+      "description": "¿Estás seguro de que quieres eliminar esta carpeta? Todas las notas dentro de ella también serán eliminadas. Esta acción no se puede deshacer."
     }
   },
   "notes": {
@@ -56,6 +86,7 @@
     "updated": "Nota actualizada",
     "deleted": "Nota eliminada",
     "searchPlaceholder": "Buscar notas...",
+    "searchInAllFolders": "Buscar en todas las carpetas",
     "sortBy": "Ordenar por",
     "sortByDate": "Fecha",
     "sortByTitle": "Título",
@@ -76,6 +107,85 @@
       "updateError": "No se pudo actualizar la nota",
       "deleteError": "No se pudo eliminar la nota",
       "imageUploadFailed": "No se pudo subir la imagen"
+    },
+    "delete": {
+      "note": {
+        "title": "Eliminar nota",
+        "description": "¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."
+      },
+      "folder": {
+        "title": "Eliminar carpeta",
+        "description": "¿Estás seguro de que quieres eliminar esta carpeta? Todas las notas dentro de ella también serán eliminadas. Esta acción no se puede deshacer."
+      }
+    },
+    "shared": {
+      "title": "Compartido conmigo",
+      "empty": "No hay notas compartidas todavía",
+      "owner": "Compartido por {{username}}",
+      "indicator": "Esta nota está compartida",
+      "with": "Compartido con"
+    },
+    "sharing": {
+      "title": "Compartir nota",
+      "public": "Visibilidad",
+      "shareWithUsers": "Compartir con usuarios",
+      "generateLink": "Enlace para compartir",
+      "publicNote": "Nota pública",
+      "privateNote": "Nota privada",
+      "publicDescription": "Cualquier persona con el enlace puede ver esta nota",
+      "privateDescription": "Solo tú puedes ver esta nota",
+      "userEmailPlaceholder": "Introduce el correo electrónico",
+      "sharedWith": "Compartido con",
+      "noShares": "Esta nota no ha sido compartida con nadie todavía",
+      "linkExpiration": "Expiración del enlace",
+      "expiresInHours": "Expira en {{hours}} horas",
+      "expiresInDays": "Expira en {{days}} días",
+      "success": {
+        "madePublic": "La nota ahora es pública",
+        "madePrivate": "La nota ahora es privada",
+        "shared": "Nota compartida con éxito",
+        "deleted": "Compartir eliminado con éxito",
+        "linkCopied": "Enlace copiado al portapapeles"
+      },
+      "errors": {
+        "userNotFound": "Usuario no encontrado",
+        "alreadyShared": "La nota ya está compartida con este usuario",
+        "shareError": "Error al compartir la nota",
+        "visibilityError": "Error al actualizar la visibilidad de la nota",
+        "loadError": "Error al cargar usuarios compartidos"
+      }
+    }
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "create": "Crear etiqueta",
+    "edit": "Editar etiqueta",
+    "delete": "Eliminar etiqueta",
+    "name": "Nombre",
+    "color": "Color",
+    "addToNote": "Añadir etiqueta",
+    "removeFromNote": "Quitar etiqueta",
+    "noTags": "Sin etiquetas",
+    "searchPlaceholder": "Buscar etiquetas...",
+    "manage": "Gestionar etiquetas",
+    "deleteConfirmTitle": "Eliminar etiqueta",
+    "deleteConfirmDescription": "¿Estás seguro de que quieres eliminar la etiqueta \"{tag}\"? Esta acción no se puede deshacer.",
+    "limitReached": "Límite de etiquetas alcanzado",
+    "errors": {
+      "createError": "No se pudo crear la etiqueta",
+      "updateError": "No se pudo actualizar la etiqueta",
+      "deleteError": "No se pudo eliminar la etiqueta",
+      "maxTagsReached": "Límite de etiquetas alcanzado",
+      "maxTagsReachedDescription": "No puedes crear más de {{max}} etiquetas"
+    }
+  },
+  "sharedNote": {
+    "errors": {
+      "error": "Ha ocurrido un error",
+      "fetchError": "No se pudo recuperar la nota compartida",
+      "linkNotFound": "El enlace de compartir no es válido o ha expirado",
+      "linkExpired": "Este enlace de compartir ha expirado",
+      "noteNotFound": "No se encontró la nota"
     }
   },
   "auth": {
@@ -137,7 +247,16 @@
     "error": "Error",
     "updateError": "No se pudo actualizar el estado",
     "success": "Éxito",
-    "statusUpdated": "Estado actualizado"
+    "statusUpdated": "Estado actualizado",
+    "user": "Usuario",
+    "type": "Tipo",
+    "content": "Contenido",
+    "status": "Estado",
+    "date": "Fecha",
+    "actions": "Acciones",
+    "pending": "Pendiente",
+    "inProgress": "En proceso",
+    "resolved": "Resuelto"
   },
   "landing": {
     "title": "Bienvenido a Quick Note Garden",
@@ -158,5 +277,15 @@
         "description": "Encuentra tus notas fácilmente con nuestro sistema de búsqueda"
       }
     }
+  },
+  "favorites": {
+    "title": "Favoritos",
+    "addToFavorites": "Añadir a favoritos",
+    "removeFromFavorites": "Quitar de favoritos",
+    "addSuccess": "Nota añadida a favoritos",
+    "removeSuccess": "Nota eliminada de favoritos",
+    "addError": "No se pudo añadir a favoritos",
+    "removeError": "No se pudo quitar de favoritos",
+    "noFavorites": "No hay favoritos"
   }
 }

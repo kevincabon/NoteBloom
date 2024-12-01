@@ -20,7 +20,9 @@
     "share": "Partager",
     "copied": "Copié !",
     "email": "Email",
-    "saving": "Enregistrement..."
+    "saving": "Enregistrement...",
+    "confirm": "Confirmer",
+    "actions": "Actions"
   },
   "folders": {
     "title": "Dossiers",
@@ -78,6 +80,7 @@
     "updated": "Note mise à jour",
     "deleted": "Note supprimée",
     "searchPlaceholder": "Rechercher des notes...",
+    "searchInAllFolders": "Rechercher dans tous les dossiers",
     "sortBy": "Trier par",
     "sortByDate": "Date",
     "sortByTitle": "Titre",
@@ -138,8 +141,10 @@
       "imageUploadFailed": "Impossible d'envoyer l'image"
     },
     "delete": {
-      "title": "Supprimer la note",
-      "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+      "note": {
+        "title": "Supprimer la note",
+        "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+      }
     }
   },
   "tags": {
@@ -171,7 +176,7 @@
       "fetchError": "Impossible de récupérer la note partagée",
       "linkNotFound": "Le lien de partage est invalide ou a expiré",
       "linkExpired": "Ce lien de partage a expiré",
-      "noteNotFound": "La note n'a pas été trouvée"
+      "noteNotFound": "Note introuvable"
     }
   },
   "auth": {
@@ -223,6 +228,15 @@
   },
   "admin": {
     "dashboard": "Tableau de bord",
+    "user": "Utilisateur",
+    "type": "Type",
+    "content": "Contenu",
+    "status": "Statut",
+    "date": "Date",
+    "actions": "Actions",
+    "pending": "En attente",
+    "inProgress": "En cours",
+    "resolved": "Résolu",
     "totalUsers": "Utilisateurs",
     "totalNotes": "Notes",
     "totalFolders": "Dossiers",
@@ -264,5 +278,11 @@
     "addError": "Impossible d'ajouter aux favoris",
     "removeError": "Impossible de retirer des favoris",
     "noFavorites": "Aucun favori"
+  },
+  "delete": {
+    "note": {
+      "title": "Supprimer la note",
+      "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+    }
   }
 }
