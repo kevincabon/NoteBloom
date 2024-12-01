@@ -38,7 +38,8 @@ export const useImageHandling = (initialImages: string[] = []) => {
     try {
       const imageUrl = existingImages[index];
       // Only try to delete from storage if it's a Supabase storage URL
-      if (imageUrl.includes(supabase.storageUrl)) {
+      const storageUrl = supabase.storage.url;
+      if (imageUrl.includes(storageUrl)) {
         const path = imageUrl.split('/').pop();
         if (!path) return;
 
