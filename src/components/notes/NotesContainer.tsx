@@ -9,6 +9,8 @@ import { NoteMoveDialog } from "./NoteMoveDialog";
 import { NoteListControls } from "./NoteListControls";
 import { supabase } from "@/integrations/supabase/client";
 import { useNotes } from "@/hooks/useNotes";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -32,6 +34,7 @@ export const NotesContainer = ({
   const [sortBy, setSortBy] = useState<"date" | "title">("date");
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
@@ -61,6 +64,7 @@ export const NotesContainer = ({
 
     setTitle("");
     setContent("");
+    setIsFormVisible(false);
   };
 
   const handleUpdateNote = async (images: string[], audioUrl: string | null) => {
@@ -89,6 +93,7 @@ export const NotesContainer = ({
     setEditingNote(null);
     setTitle("");
     setContent("");
+    setIsFormVisible(false);
   };
 
   const handleMoveNote = async (note: Note, newFolderId: string | null) => {
@@ -113,6 +118,20 @@ export const NotesContainer = ({
     }
   };
 
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+    setTitle(note.title);
+    setContent(note.content || "");
+    setIsFormVisible(true);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNote(null);
+    setTitle("");
+    setContent("");
+    setIsFormVisible(false);
+  };
+
   const filteredAndSortedNotes = initialNotes
     .filter((note) => {
       const searchLower = searchQuery.toLowerCase();
@@ -131,19 +150,25 @@ export const NotesContainer = ({
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <NoteForm
-        title={title}
-        content={content}
-        editingNote={editingNote}
-        onTitleChange={setTitle}
-        onContentChange={setContent}
-        onCancelEdit={() => {
-          setEditingNote(null);
-          setTitle("");
-          setContent("");
-        }}
-        onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
-      />
+      {!isFormVisible ? (
+        <Button 
+          onClick={() => setIsFormVisible(true)}
+          className="w-full"
+        >
+          <Plus className="mr-2" />
+          {t('notes.create')}
+        </Button>
+      ) : (
+        <NoteForm
+          title={title}
+          content={content}
+          editingNote={editingNote}
+          onTitleChange={setTitle}
+          onContentChange={setContent}
+          onCancelEdit={handleCancelEdit}
+          onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
+        />
+      )}
 
       <NoteListControls
         searchQuery={searchQuery}
@@ -157,11 +182,7 @@ export const NotesContainer = ({
           <NoteCard
             key={note.id}
             note={note}
-            onEdit={(note) => {
-              setEditingNote(note);
-              setTitle(note.title);
-              setContent(note.content || "");
-            }}
+            onEdit={handleEditNote}
             onDelete={isGuestMode ? onDeleteNote : deleteNote}
             onMove={(note) => {
               setSelectedNote(note);
