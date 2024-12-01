@@ -34,6 +34,9 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
   const { data: folders = [], isLoading } = useQuery({
     queryKey: ["folders"],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { data, error } = await supabase
         .from("folders")
         .select("*")
@@ -54,9 +57,13 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
     }
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { error } = await supabase.from("folders").insert({
         name: newFolderName.trim(),
         description: newFolderDescription.trim() || null,
+        user_id: user.id,
       });
 
       if (error) throw error;

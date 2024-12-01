@@ -87,6 +87,7 @@ export const NotesContainer = ({
       phone,
       email,
       images,
+      folder_id: editingNote.folder_id,
     });
 
     setEditingNote(null);

@@ -9,4 +9,5 @@ export interface Note {
   email: string | null;
   is_public: boolean | null;
   images: string[] | null;
+  folder_id: string | null;
 }
