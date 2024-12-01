@@ -14,7 +14,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const { data: notes = initialNotes } = useQuery({
+  const { data: notes = initialNotes, refetch } = useQuery({
     queryKey: ["notes"],
     queryFn: async () => {
       console.log("Fetching notes...");
@@ -44,58 +44,46 @@ export const useNotes = (initialNotes: Note[] = []) => {
   });
 
   useEffect(() => {
-    const setupRealtimeSubscription = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      console.log("Setting up realtime subscription for user:", user.id);
-
-      const channel = supabase.channel('notes_db_changes')
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'notes',
-            filter: `user_id=eq.${user.id}`
-          },
-          async (payload) => {
-            console.log("Realtime change received:", payload);
-            
-            // Immédiatement invalider le cache pour forcer un refetch
-            await queryClient.invalidateQueries({ queryKey: ["notes"] });
-            
-            // Afficher une notification appropriée
-            let toastMessage;
-            switch (payload.eventType) {
-              case 'INSERT':
-                toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
-                break;
-              case 'UPDATE':
-                toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
-                break;
-              case 'DELETE':
-                toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
-                break;
-            }
-            
-            if (toastMessage) {
-              toast(toastMessage);
-            }
+    console.log("Setting up realtime subscription");
+    const channel = supabase.channel('notes_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notes'
+        },
+        async (payload) => {
+          console.log("Realtime change received:", payload);
+          await refetch();
+          
+          let toastMessage;
+          switch (payload.eventType) {
+            case 'INSERT':
+              toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
+              break;
+            case 'UPDATE':
+              toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
+              break;
+            case 'DELETE':
+              toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
+              break;
           }
-        )
-        .subscribe((status) => {
-          console.log("Channel subscription status:", status);
-        });
+          
+          if (toastMessage) {
+            toast(toastMessage);
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log("Channel subscription status:", status);
+      });
 
-      return () => {
-        console.log("Cleaning up realtime subscription");
-        supabase.removeChannel(channel);
-      };
+    return () => {
+      console.log("Cleaning up realtime subscription");
+      supabase.removeChannel(channel);
     };
-
-    setupRealtimeSubscription();
-  }, [queryClient, toast, t]);
+  }, [refetch, toast, t]);
 
   return {
     notes,
