@@ -6,6 +6,9 @@ import { NoteCard } from "@/components/notes/NoteCard";
 import { useGuestMode } from "@/contexts/GuestModeContext";
 import { useTranslation } from "react-i18next";
 import { parseContent } from "@/utils/contentParser";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search } from "lucide-react";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -23,6 +26,8 @@ export const NotesContainer = ({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"date" | "title">("date");
   const { toast } = useToast();
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
@@ -86,6 +91,22 @@ export const NotesContainer = ({
     setContent(note.content || "");
   };
 
+  const filteredAndSortedNotes = notes
+    .filter((note) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        note.title.toLowerCase().includes(searchLower) ||
+        (note.content?.toLowerCase() || "").includes(searchLower)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === "date") {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      } else {
+        return a.title.localeCompare(b.title);
+      }
+    });
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <NoteForm
@@ -102,8 +123,29 @@ export const NotesContainer = ({
         }}
       />
 
+      <div className="flex gap-4 items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            placeholder={t("notes.searchPlaceholder")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        <Select value={sortBy} onValueChange={(value: "date" | "title") => setSortBy(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder={t("notes.sortBy")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="date">{t("notes.sortByDate")}</SelectItem>
+            <SelectItem value="title">{t("notes.sortByTitle")}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="space-y-4">
-        {notes.map((note) => (
+        {filteredAndSortedNotes.map((note) => (
           <NoteCard
             key={note.id}
             note={note}

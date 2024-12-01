@@ -1,35 +1,52 @@
 {
-  "common": {
-    "save": "Enregistrer",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "cancel": "Annuler",
-    "loading": "Chargement...",
-    "logout": "Déconnexion"
-  },
-  "notes": {
-    "title": "Notes",
-    "newNote": "Nouvelle note",
-    "titlePlaceholder": "Titre de la note",
-    "contentPlaceholder": "Commencez à écrire...",
-    "created": "Note créée",
-    "updated": "Note modifiée",
-    "deleted": "Note supprimée",
+  "auth": {
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mot de passe",
+    "loginButton": "Se connecter",
+    "registerButton": "S'inscrire",
+    "googleButton": "Continuer avec Google",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetPasswordSuccess": "Un email de réinitialisation a été envoyé",
     "errors": {
-      "titleRequired": "Le titre est requis",
-      "createError": "Impossible de créer la note",
-      "updateError": "Impossible de modifier la note",
-      "deleteError": "Impossible de supprimer la note"
+      "invalidEmail": "Email invalide",
+      "invalidPassword": "Mot de passe invalide",
+      "generic": "Une erreur est survenue"
     }
   },
-  "auth": {
-    "switchToGuest": "Mode invité",
-    "switchToAuth": "Se connecter",
-    "guestMode": "Mode invité actif"
+  "notes": {
+    "newNote": "Nouvelle note",
+    "titlePlaceholder": "Titre",
+    "contentPlaceholder": "Contenu",
+    "saveButton": "Enregistrer",
+    "cancelButton": "Annuler",
+    "deleteButton": "Supprimer",
+    "editButton": "Modifier",
+    "created": "Note créée",
+    "updated": "Note mise à jour",
+    "deleted": "Note supprimée",
+    "searchPlaceholder": "Rechercher une note...",
+    "sortBy": "Trier par",
+    "sortByDate": "Date",
+    "sortByTitle": "Titre",
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "generic": "Une erreur est survenue"
+    }
   },
-  "theme": {
-    "light": "Clair",
-    "dark": "Sombre",
-    "system": "Système"
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat"
   }
 }
