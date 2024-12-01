@@ -10,11 +10,9 @@ export const useSharedNotes = () => {
         // Récupérer l'utilisateur courant
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-          console.log("No user found for shared notes");
           return [];
         }
 
-        console.log("Fetching shared notes for user:", user.id);
 
         // Récupérer d'abord les IDs des notes partagées avec l'utilisateur
         const { data: sharedNoteIds, error: sharesError } = await supabase
@@ -27,15 +25,11 @@ export const useSharedNotes = () => {
           throw sharesError;
         }
 
-        console.log("Found shared note IDs:", sharedNoteIds);
-
         if (!sharedNoteIds || sharedNoteIds.length === 0) {
-          console.log("No shared notes found");
           return [];
         }
 
         const noteIds = sharedNoteIds.map(share => share.note_id);
-        console.log("Mapped note IDs:", noteIds);
 
         // Récupérer les notes complètes
         const { data: notes, error: notesError } = await supabase
@@ -48,8 +42,6 @@ export const useSharedNotes = () => {
           throw notesError;
         }
 
-        console.log("Retrieved notes:", notes);
-
         if (!notes || notes.length < noteIds.length) {
           console.warn("Some shared notes were not found:", {
             requestedIds: noteIds,
@@ -57,10 +49,8 @@ export const useSharedNotes = () => {
           });
         }
 
-        // Pour chaque note, récupérer les informations du propriétaire
         const notesWithOwners = await Promise.all(
           (notes || []).map(async (note) => {
-            console.log("Fetching owner info for note:", note.id);
             const { data: ownerData, error: ownerError } = await supabase
               .from("profiles")
               .select("username")
@@ -80,7 +70,6 @@ export const useSharedNotes = () => {
           })
         );
 
-        console.log("Final shared notes with owners:", notesWithOwners);
         return notesWithOwners;
       } catch (error) {
         console.error("Error in useSharedNotes:", error);

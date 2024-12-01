@@ -29,7 +29,6 @@ export const useNoteOperations = ({
     audioUrl: string | null,
     folderId: string | null
   ) => {
-    console.log("NoteOperations - Creating note with content:", content);
     const { links, email, phone } = parseContent(content || "");
     
     const { data: { user } } = await supabase.auth.getUser();
@@ -47,7 +46,6 @@ export const useNoteOperations = ({
       user_id: user?.id || null,
     };
 
-    console.log("NoteOperations - Final note data:", noteData);
 
     if (isGuestMode) {
       propOnCreateNote(noteData);
@@ -57,7 +55,6 @@ export const useNoteOperations = ({
   };
 
   const handleUpdateNote = async (updatedNote: Note) => {
-    console.log("NoteOperations - Updating note with content:", updatedNote.content);
     const { links, email, phone } = parseContent(updatedNote.content || "");
 
     const noteToUpdate = {
@@ -67,8 +64,6 @@ export const useNoteOperations = ({
       phone,
       email,
     };
-
-    console.log("NoteOperations - Final update data:", noteToUpdate);
 
     if (isGuestMode) {
       propOnUpdateNote(noteToUpdate);

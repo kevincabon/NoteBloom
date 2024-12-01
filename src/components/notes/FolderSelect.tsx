@@ -17,14 +17,8 @@ export const FolderSelect = ({ selectedFolderId, onFolderChange }: FolderSelectP
   const { folders, isLoading } = useFolderHierarchy();
   const [internalValue, setInternalValue] = useState<string>(selectedFolderId || "no-folder");
 
-  // Log pour le débogage
-  console.log("FolderSelect - selectedFolderId:", selectedFolderId);
-  console.log("FolderSelect - internalValue:", internalValue);
-  console.log("FolderSelect - folders:", folders);
-
   // Mettre à jour la valeur interne quand selectedFolderId change
   useEffect(() => {
-    console.log("FolderSelect - selectedFolderId changed to:", selectedFolderId);
     setInternalValue(selectedFolderId || "no-folder");
   }, [selectedFolderId]);
 
@@ -61,13 +55,11 @@ export const FolderSelect = ({ selectedFolderId, onFolderChange }: FolderSelectP
   // Si le dossier sélectionné n'existe pas, réinitialiser à "no-folder"
   useEffect(() => {
     if (selectedFolderId && !folderExists(selectedFolderId)) {
-      console.log("Selected folder not found, resetting to no-folder");
       onFolderChange(null);
     }
   }, [selectedFolderId, folders]);
 
   const handleValueChange = (value: string) => {
-    console.log("FolderSelect - handleValueChange:", value);
     setInternalValue(value);
     onFolderChange(value === "no-folder" ? null : value);
   };

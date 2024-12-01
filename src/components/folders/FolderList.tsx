@@ -85,7 +85,6 @@ export const FolderList = ({
   };
 
   const handleCreateClick = () => {
-    console.log("Opening create dialog");
     setShowCreateDialog(true);
   };
 

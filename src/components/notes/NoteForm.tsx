@@ -39,9 +39,7 @@ export const NoteForm = ({
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(editingNote?.folder_id || null);
 
   useEffect(() => {
-    console.log("NoteForm - editingNote:", editingNote);
     if (editingNote?.folder_id !== undefined) {
-      console.log("NoteForm - Setting folder_id to:", editingNote.folder_id);
       setSelectedFolderId(editingNote.folder_id);
     }
   }, [editingNote?.folder_id]);

@@ -41,7 +41,6 @@ export const FolderDialog = ({
 
   // Mettre à jour les valeurs quand le dossier change ou quand le dialogue s'ouvre
   useEffect(() => {
-    console.log("FolderDialog - isOpen changed:", isOpen);
     if (isOpen) {
       setName(folder?.name || "");
       setColor(folder?.color || "#000000");
@@ -58,7 +57,6 @@ export const FolderDialog = ({
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    console.log("FolderDialog - handleSubmit called");
     e.preventDefault();
     onSubmit({ 
       name, 

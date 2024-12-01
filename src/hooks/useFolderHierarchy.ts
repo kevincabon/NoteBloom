@@ -9,11 +9,9 @@ export const useFolderHierarchy = () => {
     queryKey: ["folders", user?.id],
     queryFn: async () => {
       if (!user) {
-        console.log("No user found, returning empty folders array");
         return [];
       }
 
-      console.log("Fetching folders for user:", user.id);
       const { data, error } = await supabase
         .from("folders")
         .select("*")
@@ -26,7 +24,6 @@ export const useFolderHierarchy = () => {
         throw error;
       }
       
-      console.log("Folders fetched:", data);
       return buildFolderHierarchy(data);
     },
     enabled: !!user, 

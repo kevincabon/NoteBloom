@@ -21,7 +21,6 @@ export default function SharedNote() {
       try {
         // First, find the note_id from the share link using a direct query
         const cleanToken = token.replace('eq.', '');
-        console.log('Fetching share link with token:', cleanToken);
         
         const { data: shareLinks, error: shareError } = await supabase
           .rpc('get_share_link_by_token', {

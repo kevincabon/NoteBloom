@@ -28,7 +28,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
 
   // Fonction pour récupérer toutes les notes
   const fetchNotes = async (userId: string, folderId?: string | null) => {
-    console.log("Fetching notes for user:", userId, "folder:", folderId);
     
     // Si un dossier est sélectionné, récupérer d'abord tous les sous-dossiers
     let folderIds: string[] = [];
@@ -69,8 +68,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
       folder_name: note.folders?.name,
       folder_color: note.folders?.color,
     }));
-    
-    console.log("Notes fetched:", transformedData);
     return transformedData as Note[];
   };
 
@@ -97,7 +94,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
           table: 'notes'
         },
         async (payload: DatabaseChangesPayload) => {
-          console.log("Realtime change received:", payload);
           
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) return;
@@ -113,11 +109,9 @@ export const useNotes = (initialNotes: Note[] = []) => {
         }
       )
       .subscribe((status) => {
-        console.log("Channel subscription status:", status);
       });
 
     return () => {
-      console.log("Cleaning up realtime subscription");
       supabase.removeChannel(channel);
     };
   }, [queryClient, t]);

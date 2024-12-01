@@ -23,7 +23,6 @@ export const useNoteCrud = () => {
         user_id: user.id
       };
 
-      console.log("Creating note with data:", noteData);
 
       const { data, error } = await supabase
         .from("notes")
@@ -58,10 +57,8 @@ export const useNoteCrud = () => {
       const updateData = {
         ...noteData,
         content: noteData.content || null,
-        folder_id: noteData.folder_id || null // S'assurer que folder_id est inclus
+        folder_id: noteData.folder_id || null
       };
-
-      console.log("Updating note with data:", updateData);
 
       const { error } = await supabase
         .from("notes")
@@ -102,7 +99,6 @@ export const useNoteCrud = () => {
 
       // Si la note n'existe pas, on considère que la suppression est réussie
       if (!noteToDelete) {
-        console.log("Note already deleted or doesn't exist:", noteId);
         return;
       }
 
