@@ -1,18 +1,24 @@
-import { useState, useEffect } from "react";
 import { Note } from "@/types/note";
+import { useMemo } from "react";
 
 export const useLocalNotes = (
-  initialNotes: Note[],
+  notes: Note[],
   isGlobalSearch: boolean,
   searchQuery: string
 ) => {
-  const [localNotes, setLocalNotes] = useState<Note[]>(initialNotes);
+  const localNotes = useMemo(() => {
+    if (isGlobalSearch) return notes;
+    
+    return notes.filter((note) => {
+      if (!searchQuery) return true;
+      
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        note.title.toLowerCase().includes(searchLower) ||
+        (note.content?.toLowerCase() || "").includes(searchLower)
+      );
+    });
+  }, [notes, isGlobalSearch, searchQuery]);
 
-  useEffect(() => {
-    if (!isGlobalSearch || !searchQuery) {
-      setLocalNotes(initialNotes);
-    }
-  }, [initialNotes, isGlobalSearch, searchQuery]);
-
-  return { localNotes, setLocalNotes };
+  return { localNotes };
 };
