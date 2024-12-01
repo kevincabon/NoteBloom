@@ -33,6 +33,7 @@ const Profile = () => {
         .single();
 
       if (error) throw error;
+      setUsername(data.username || "");
       return { ...data, email: user.email };
     },
   });
