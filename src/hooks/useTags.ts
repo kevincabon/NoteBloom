@@ -4,6 +4,8 @@ import { Tag } from "@/types/tag";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 
+const MAX_TAGS = 8;
+
 export const useTags = () => {
   const { supabase } = useSupabase();
   const { t } = useTranslation();
@@ -28,6 +30,18 @@ export const useTags = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
+      // Vérifier le nombre de tags existants
+      const { count, error: countError } = await supabase
+        .from("tags")
+        .select("*", { count: "exact" })
+        .eq("user_id", user.id);
+
+      if (countError) throw countError;
+      
+      if (count && count >= MAX_TAGS) {
+        throw new Error("MAX_TAGS_REACHED");
+      }
+
       const { data, error } = await supabase
         .from("tags")
         .insert([{ ...newTag, user_id: user.id }])
@@ -43,11 +57,19 @@ export const useTags = () => {
       // Invalidate all note-tag queries
       queryClient.invalidateQueries({ queryKey: ["notes", "tags"] });
     },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: t("tags.errors.createError"),
-      });
+    onError: (error) => {
+      if (error instanceof Error && error.message === "MAX_TAGS_REACHED") {
+        toast({
+          variant: "destructive",
+          title: t("tags.errors.maxTagsReached"),
+          description: t("tags.errors.maxTagsReachedDescription", { max: MAX_TAGS }),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("tags.errors.createError"),
+        });
+      }
     },
   });
 

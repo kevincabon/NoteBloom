@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Tag } from "@/types/tag";
 import { cn } from "@/lib/utils";
 
+const MAX_TAGS = 8;
+
 interface TagPickerProps {
   tags: Tag[];
   selectedTags: Tag[];
@@ -36,14 +38,14 @@ export const TagPicker = ({
         </div>
       </Button>
       {open && (
-        <div className="absolute z-50 w-[200px] mt-2 rounded-md border bg-popover text-popover-foreground shadow-md">
+        <div className="absolute z-[9999] w-[200px] mt-2 rounded-md border bg-popover text-popover-foreground shadow-md">
           <div className="p-2">
             {tags.length === 0 ? (
               <div className="text-sm text-muted-foreground p-2">
                 {t("tags.noTags")}
               </div>
             ) : (
-              <div className="space-y-1">
+              <div className="space-y-1 max-h-[200px] overflow-y-auto">
                 {tags.map((tag) => {
                   const isSelected = selectedTags.some((t) => t.id === tag.id);
                   return (
@@ -69,7 +71,7 @@ export const TagPicker = ({
                 })}
               </div>
             )}
-            {onCreate && (
+            {onCreate && tags.length < MAX_TAGS ? (
               <button
                 className="flex items-center gap-2 w-full mt-2 px-2 py-1.5 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground"
                 onClick={() => {
@@ -80,7 +82,11 @@ export const TagPicker = ({
                 <Plus className="w-4 h-4" />
                 <span>{t("tags.create")}</span>
               </button>
-            )}
+            ) : tags.length >= MAX_TAGS ? (
+              <div className="text-sm text-muted-foreground px-2 py-1.5 mt-2">
+                {t("tags.limitReached")}
+              </div>
+            ) : null}
           </div>
         </div>
       )}

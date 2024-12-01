@@ -142,10 +142,13 @@
     "manage": "Gérer les tags",
     "deleteConfirmTitle": "Supprimer le tag",
     "deleteConfirmDescription": "Êtes-vous sûr de vouloir supprimer le tag \"{tag}\" ? Cette action est irréversible.",
+    "limitReached": "Limite de tags atteinte",
     "errors": {
       "createError": "Impossible de créer le tag",
       "updateError": "Impossible de modifier le tag",
-      "deleteError": "Impossible de supprimer le tag"
+      "deleteError": "Impossible de supprimer le tag",
+      "maxTagsReached": "Limite de tags atteinte",
+      "maxTagsReachedDescription": "Vous ne pouvez pas créer plus de {{max}} tags"
     }
   },
   "sharedNote": {
