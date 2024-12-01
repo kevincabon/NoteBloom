@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       folders: {
         Row: {
+          color: string
           created_at: string
           description: string | null
           id: string
@@ -19,6 +20,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          color?: string
           created_at?: string
           description?: string | null
           id?: string
@@ -27,6 +29,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          color?: string
           created_at?: string
           description?: string | null
           id?: string

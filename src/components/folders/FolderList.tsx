@@ -1,25 +1,18 @@
 import { useState } from "react";
-import { Folder, Plus, MoreVertical, FolderEdit, Trash2 } from "lucide-react";
+import { Plus, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { FolderItem } from "./FolderItem";
+import { FolderDialog } from "./FolderDialog";
 
 interface FolderType {
   id: string;
   name: string;
   description: string | null;
   created_at: string;
+  color: string;
 }
 
 export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: string | null) => void }) => {
@@ -28,10 +21,11 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
   const [selectedFolder, setSelectedFolder] = useState<FolderType | null>(null);
   const [newFolderName, setNewFolderName] = useState("");
   const [newFolderDescription, setNewFolderDescription] = useState("");
+  const [newFolderColor, setNewFolderColor] = useState("#e5e5e5");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: folders = [], isLoading } = useQuery({
+  const { data: folders = [] } = useQuery({
     queryKey: ["folders"],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -63,6 +57,7 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
       const { error } = await supabase.from("folders").insert({
         name: newFolderName.trim(),
         description: newFolderDescription.trim() || null,
+        color: newFolderColor,
         user_id: user.id,
       });
 
@@ -74,6 +69,7 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
 
       setNewFolderName("");
       setNewFolderDescription("");
+      setNewFolderColor("#e5e5e5");
       setIsCreateOpen(false);
       queryClient.invalidateQueries({ queryKey: ["folders"] });
     } catch (error) {
@@ -93,6 +89,7 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
         .update({
           name: newFolderName.trim(),
           description: newFolderDescription.trim() || null,
+          color: newFolderColor,
         })
         .eq("id", selectedFolder.id);
 
@@ -136,6 +133,7 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
     setSelectedFolder(folder);
     setNewFolderName(folder.name);
     setNewFolderDescription(folder.description || "");
+    setNewFolderColor(folder.color);
     setIsEditOpen(true);
   };
 
@@ -143,42 +141,10 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Dossiers</h2>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Nouveau dossier
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Créer un nouveau dossier</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nom</Label>
-                <Input
-                  id="name"
-                  value={newFolderName}
-                  onChange={(e) => setNewFolderName(e.target.value)}
-                  placeholder="Mon dossier"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description (optionnelle)</Label>
-                <Textarea
-                  id="description"
-                  value={newFolderDescription}
-                  onChange={(e) => setNewFolderDescription(e.target.value)}
-                  placeholder="Description du dossier..."
-                />
-              </div>
-              <Button onClick={handleCreateFolder} className="w-full">
-                Créer
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button variant="outline" size="sm" onClick={() => setIsCreateOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Nouveau dossier
+        </Button>
       </div>
 
       <div className="space-y-2">
@@ -192,71 +158,43 @@ export const FolderList = ({ onSelectFolder }: { onSelectFolder: (folderId: stri
         </Button>
         
         {folders.map((folder) => (
-          <div key={folder.id} className="flex items-center group">
-            <Button
-              variant="ghost"
-              className="flex-1 justify-start"
-              onClick={() => onSelectFolder(folder.id)}
-            >
-              <Folder className="h-4 w-4 mr-2" />
-              {folder.name}
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="opacity-0 group-hover:opacity-100"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => openEditDialog(folder)}>
-                  <FolderEdit className="h-4 w-4 mr-2" />
-                  Modifier
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-destructive"
-                  onClick={() => handleDeleteFolder(folder.id)}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Supprimer
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <FolderItem
+            key={folder.id}
+            folder={folder}
+            onSelect={() => onSelectFolder(folder.id)}
+            onEdit={openEditDialog}
+            onDelete={handleDeleteFolder}
+          />
         ))}
       </div>
 
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Modifier le dossier</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <div className="space-y-2">
-              <Label htmlFor="edit-name">Nom</Label>
-              <Input
-                id="edit-name"
-                value={newFolderName}
-                onChange={(e) => setNewFolderName(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Description (optionnelle)</Label>
-              <Textarea
-                id="edit-description"
-                value={newFolderDescription}
-                onChange={(e) => setNewFolderDescription(e.target.value)}
-              />
-            </div>
-            <Button onClick={handleUpdateFolder} className="w-full">
-              Mettre à jour
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <FolderDialog
+        isOpen={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        title="Créer un nouveau dossier"
+        folderName={newFolderName}
+        folderDescription={newFolderDescription}
+        folderColor={newFolderColor}
+        onNameChange={setNewFolderName}
+        onDescriptionChange={setNewFolderDescription}
+        onColorChange={setNewFolderColor}
+        onSubmit={handleCreateFolder}
+        submitLabel="Créer"
+      />
+
+      <FolderDialog
+        isOpen={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        title="Modifier le dossier"
+        folderName={newFolderName}
+        folderDescription={newFolderDescription}
+        folderColor={newFolderColor}
+        onNameChange={setNewFolderName}
+        onDescriptionChange={setNewFolderDescription}
+        onColorChange={setNewFolderColor}
+        onSubmit={handleUpdateFolder}
+        submitLabel="Mettre à jour"
+      />
     </div>
   );
 };

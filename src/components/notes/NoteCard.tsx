@@ -1,7 +1,5 @@
 import { Note } from "@/types/note";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Link, Mail, Phone, FolderEdit, Folder } from "lucide-react";
 import { formatContent } from "@/utils/contentParser";
 import { ImageGallery } from "./ImageGallery";
 import { useQuery } from "@tanstack/react-query";
@@ -13,12 +11,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { NoteActions } from "./NoteActions";
+import { NoteMetadata } from "./NoteMetadata";
+import { FolderBadge } from "./FolderBadge";
 
 interface NoteCardProps {
   note: Note;
@@ -36,7 +31,7 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
       if (!note.folder_id) return null;
       const { data } = await supabase
         .from('folders')
-        .select('name')
+        .select('name, color')
         .eq('id', note.folder_id)
         .single();
       return data;
@@ -62,44 +57,15 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
           <div className="space-y-2">
             <h3 className="text-lg font-medium">{note.title}</h3>
             {folder && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Folder className="h-4 w-4" />
-                <span>{folder.name}</span>
-              </div>
+              <FolderBadge name={folder.name} color={folder.color} />
             )}
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMove(note);
-              }}
-            >
-              <FolderEdit className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(note);
-              }}
-            >
-              <Edit className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(note.id);
-              }}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+          <NoteActions
+            note={note}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onMove={onMove}
+          />
         </div>
         <div 
           className="text-muted-foreground line-clamp-3"
@@ -108,77 +74,12 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
 
         <ImageGallery images={note.images || []} />
 
-        <div className="flex gap-4 mt-4">
-          {note.links && note.links.length > 0 && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
-                    <Link className="h-4 w-4" />
-                    {note.links.length}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <ul className="space-y-1">
-                    {note.links.map((link, index) => (
-                      <li key={index}>
-                        <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {link}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-          {note.email && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
-                    <Mail className="h-4 w-4" />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <a
-                    href={`mailto:${note.email}`}
-                    className="text-primary hover:underline"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {note.email}
-                  </a>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-          {note.phone && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer">
-                    <Phone className="h-4 w-4" />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <a
-                    href={`tel:${note.phone}`}
-                    className="text-primary hover:underline"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {note.phone}
-                  </a>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
+        <NoteMetadata
+          links={note.links}
+          email={note.email}
+          phone={note.phone}
+        />
+
         <time className="text-sm text-muted-foreground mt-4 block">
           {new Intl.DateTimeFormat("fr-FR", {
             dateStyle: "medium",
@@ -192,10 +93,7 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
           <SheetHeader>
             <SheetTitle>{note.title}</SheetTitle>
             {folder && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Folder className="h-4 w-4" />
-                <span>{folder.name}</span>
-              </div>
+              <FolderBadge name={folder.name} color={folder.color} />
             )}
           </SheetHeader>
           <div className="mt-6">
