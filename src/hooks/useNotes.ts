@@ -32,7 +32,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
 
       if (error) throw error;
       
-      // Transform the data to match the Note type
       const transformedData = data.map((note: any) => ({
         ...note,
         folder_name: note.folders?.name,
@@ -42,6 +41,8 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Notes fetched:", transformedData);
       return transformedData as Note[];
     },
+    staleTime: 1000,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -58,10 +59,10 @@ export const useNotes = (initialNotes: Note[] = []) => {
         async (payload) => {
           console.log("Notes change detected:", payload);
           
-          // Refetch notes to get the latest data including folder information
-          await refetch();
-
-          // Show appropriate toast notification based on the event type
+          // Immédiatement invalider le cache et forcer un refetch
+          await queryClient.invalidateQueries({ queryKey: ["notes"] });
+          
+          // Afficher la notification appropriée
           if (payload.eventType === 'INSERT') {
             toast({
               title: t('notes.created'),
@@ -88,7 +89,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Cleaning up notes channel");
       supabase.removeChannel(channel);
     };
-  }, [refetch, toast, t]);
+  }, [queryClient, toast, t]);
 
   return {
     notes,
