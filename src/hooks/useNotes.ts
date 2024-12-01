@@ -14,7 +14,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const { data: notes = initialNotes, refetch } = useQuery({
+  const { data: notes = initialNotes } = useQuery({
     queryKey: ["notes"],
     queryFn: async () => {
       console.log("Fetching notes...");
@@ -55,20 +55,40 @@ export const useNotes = (initialNotes: Note[] = []) => {
         },
         async (payload) => {
           console.log("Realtime change received:", payload);
-          await refetch();
           
+          // Récupérer les notes actuelles du cache
+          const currentNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
+          
+          let newNotes: Note[];
           let toastMessage;
+
           switch (payload.eventType) {
             case 'INSERT':
+              // Pour un INSERT, ajouter la nouvelle note au début du tableau
+              newNotes = [payload.new as Note, ...currentNotes];
               toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
               break;
+
             case 'UPDATE':
+              // Pour un UPDATE, remplacer la note existante
+              newNotes = currentNotes.map(note => 
+                note.id === payload.new.id ? payload.new as Note : note
+              );
               toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
               break;
+
             case 'DELETE':
+              // Pour un DELETE, retirer la note du tableau
+              newNotes = currentNotes.filter(note => note.id !== payload.old.id);
               toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
               break;
+
+            default:
+              return;
           }
+
+          // Mettre à jour le cache avec les nouvelles données
+          queryClient.setQueryData(["notes"], newNotes);
           
           if (toastMessage) {
             toast(toastMessage);
@@ -83,7 +103,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Cleaning up realtime subscription");
       supabase.removeChannel(channel);
     };
-  }, [refetch, toast, t]);
+  }, [queryClient, toast, t]);
 
   return {
     notes,
