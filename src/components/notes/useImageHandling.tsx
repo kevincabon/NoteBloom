@@ -10,7 +10,6 @@ export const useImageHandling = (initialImages: string[] = []) => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  // Synchroniser les images existantes lorsque initialImages change
   useEffect(() => {
     setExistingImages(initialImages);
   }, [initialImages]);
@@ -19,6 +18,10 @@ export const useImageHandling = (initialImages: string[] = []) => {
     const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...newPreviewUrls]);
     setFiles([...files, ...selectedFiles]);
+  };
+
+  const addImageUrl = (url: string) => {
+    setExistingImages([...existingImages, url]);
   };
 
   const removeNewImage = (index: number) => {
@@ -34,19 +37,22 @@ export const useImageHandling = (initialImages: string[] = []) => {
   const removeExistingImage = async (index: number) => {
     try {
       const imageUrl = existingImages[index];
-      const path = imageUrl.split('/').pop();
-      if (!path) return;
+      // Only try to delete from storage if it's a Supabase storage URL
+      if (imageUrl.includes(supabase.storageUrl)) {
+        const path = imageUrl.split('/').pop();
+        if (!path) return;
 
-      const { error: deleteError } = await supabase.storage
-        .from('notes-images')
-        .remove([path]);
+        const { error: deleteError } = await supabase.storage
+          .from('notes-images')
+          .remove([path]);
 
-      if (deleteError) {
-        toast({
-          title: t('notes.errors.imageDeleteFailed'),
-          variant: "destructive",
-        });
-        return;
+        if (deleteError) {
+          toast({
+            title: t('notes.errors.imageDeleteFailed'),
+            variant: "destructive",
+          });
+          return;
+        }
       }
 
       const newExistingImages = [...existingImages];
@@ -67,6 +73,7 @@ export const useImageHandling = (initialImages: string[] = []) => {
     handleNewFiles,
     removeNewImage,
     removeExistingImage,
+    addImageUrl,
     setFiles,
     setPreviewImages,
     setExistingImages,

@@ -45,6 +45,7 @@ export const NoteForm = ({
     handleNewFiles,
     removeNewImage,
     removeExistingImage,
+    addImageUrl,
   } = useImageHandling(editingNote?.images || []);
 
   const {
@@ -134,6 +135,7 @@ export const NoteForm = ({
         
         <ImageUploader
           onFilesSelected={handleNewFiles}
+          onUrlAdded={addImageUrl}
           disabled={uploading}
         />
       </div>
