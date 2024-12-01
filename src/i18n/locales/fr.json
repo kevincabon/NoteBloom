@@ -70,6 +70,9 @@
     "update": "Mettre à jour",
     "search": "Rechercher",
     "noResults": "Aucun résultat",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "backToHome": "Retour à l'accueil",
+    "theme": "Thème",
+    "language": "Langue"
   }
 }

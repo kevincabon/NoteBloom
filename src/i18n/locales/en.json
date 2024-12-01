@@ -5,7 +5,10 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "loading": "Loading...",
-    "logout": "Logout"
+    "logout": "Logout",
+    "backToHome": "Back to Home",
+    "theme": "Theme",
+    "language": "Language"
   },
   "notes": {
     "title": "Notes",
