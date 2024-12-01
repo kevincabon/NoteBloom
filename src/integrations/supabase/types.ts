@@ -9,11 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      folders: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notes: {
         Row: {
           content: string | null
           created_at: string
           email: string | null
+          folder_id: string | null
           id: string
           images: string[] | null
           is_public: boolean | null
@@ -27,6 +55,7 @@ export type Database = {
           content?: string | null
           created_at?: string
           email?: string | null
+          folder_id?: string | null
           id?: string
           images?: string[] | null
           is_public?: boolean | null
@@ -40,6 +69,7 @@ export type Database = {
           content?: string | null
           created_at?: string
           email?: string | null
+          folder_id?: string | null
           id?: string
           images?: string[] | null
           is_public?: boolean | null
@@ -49,7 +79,15 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notes_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {

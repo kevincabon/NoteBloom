@@ -9,9 +9,18 @@ import { parseContent } from "@/utils/contentParser";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface NotesContainerProps {
   notes: Note[];
+  selectedFolderId: string | null;
   onCreateNote: (note: Omit<Note, "id" | "created_at" | "updated_at">) => void;
   onUpdateNote: (note: Note) => void;
   onDeleteNote: (id: string) => void;
@@ -19,6 +28,7 @@ interface NotesContainerProps {
 
 export const NotesContainer = ({
   notes,
+  selectedFolderId,
   onCreateNote,
   onUpdateNote,
   onDeleteNote,
@@ -28,6 +38,8 @@ export const NotesContainer = ({
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "title">("date");
+  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const { toast } = useToast();
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
@@ -51,6 +63,7 @@ export const NotesContainer = ({
       email,
       is_public: false,
       images,
+      folder_id: selectedFolderId,
     });
 
     setTitle("");
@@ -89,6 +102,34 @@ export const NotesContainer = ({
     setEditingNote(note);
     setTitle(note.title);
     setContent(note.content || "");
+  };
+
+  const handleMoveNote = async (note: Note, newFolderId: string | null) => {
+    try {
+      const { error } = await supabase
+        .from("notes")
+        .update({ folder_id: newFolderId })
+        .eq("id", note.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Note déplacée avec succès",
+      });
+
+      // Update the local state
+      onUpdateNote({
+        ...note,
+        folder_id: newFolderId,
+      });
+
+      setIsMoveDialogOpen(false);
+    } catch (error) {
+      toast({
+        title: "Erreur lors du déplacement de la note",
+        variant: "destructive",
+      });
+    }
   };
 
   const filteredAndSortedNotes = notes
@@ -151,9 +192,42 @@ export const NotesContainer = ({
             note={note}
             onEdit={startEditing}
             onDelete={onDeleteNote}
+            onMove={(note) => {
+              setSelectedNote(note);
+              setIsMoveDialogOpen(true);
+            }}
           />
         ))}
       </div>
+
+      <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Déplacer la note</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-4">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => selectedNote && handleMoveNote(selectedNote, null)}
+            >
+              Toutes les notes
+            </Button>
+            {notes
+              .filter((note) => note.folder_id)
+              .map((folder) => (
+                <Button
+                  key={folder.id}
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => selectedNote && handleMoveNote(selectedNote, folder.id)}
+                >
+                  {folder.title}
+                </Button>
+              ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

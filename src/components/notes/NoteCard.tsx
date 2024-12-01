@@ -1,7 +1,7 @@
 import { Note } from "@/types/note";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Link, Mail, Phone } from "lucide-react";
+import { Edit, Trash2, Link, Mail, Phone, FolderEdit } from "lucide-react";
 import { formatContent } from "@/utils/contentParser";
 import { ImageGallery } from "./ImageGallery";
 import {
@@ -22,9 +22,10 @@ interface NoteCardProps {
   note: Note;
   onEdit: (note: Note) => void;
   onDelete: (id: string) => void;
+  onMove: (note: Note) => void;
 }
 
-export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
+export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -47,14 +48,30 @@ export const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => onEdit(note)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onMove(note);
+              }}
+            >
+              <FolderEdit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(note);
+              }}
             >
               <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => onDelete(note.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(note.id);
+              }}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

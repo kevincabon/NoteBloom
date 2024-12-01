@@ -7,9 +7,11 @@ import { Header } from "@/components/notes/Header";
 import { NotesContainer } from "@/components/notes/NotesContainer";
 import { useGuestMode } from "@/contexts/GuestModeContext";
 import { GuestModeToggle } from "@/components/GuestModeToggle";
+import { FolderList } from "@/components/folders/FolderList";
 
 const Index = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const Index = () => {
     if (!isGuestMode) {
       fetchNotes();
     }
-  }, [isGuestMode]);
+  }, [isGuestMode, selectedFolderId]);
 
   const fetchNotes = async () => {
     try {
@@ -29,11 +31,17 @@ const Index = () => {
         return;
       }
 
-      const { data, error } = await supabase
+      let query = supabase
         .from("notes")
         .select("*")
         .eq('user_id', user.id)
         .order("created_at", { ascending: false });
+
+      if (selectedFolderId) {
+        query = query.eq('folder_id', selectedFolderId);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setNotes(data || []);
@@ -142,12 +150,18 @@ const Index = () => {
       </Header>
 
       <main className="container pt-24 pb-16">
-        <NotesContainer
-          notes={isGuestMode ? guestNotes : notes}
-          onCreateNote={handleCreateNote}
-          onUpdateNote={handleUpdateNote}
-          onDeleteNote={handleDeleteNote}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8">
+          <aside className="space-y-4">
+            <FolderList onSelectFolder={setSelectedFolderId} />
+          </aside>
+          <NotesContainer
+            notes={isGuestMode ? guestNotes : notes}
+            selectedFolderId={selectedFolderId}
+            onCreateNote={handleCreateNote}
+            onUpdateNote={handleUpdateNote}
+            onDeleteNote={handleDeleteNote}
+          />
+        </div>
       </main>
     </div>
   );
