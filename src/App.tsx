@@ -10,6 +10,7 @@ import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import Landing from "./pages/Landing";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +28,27 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/landing" />;
+  }
+
+  return <>{children}</>;
+};
+
+const AuthRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+    });
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Chargement...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" />;
   }
 
   return <>{children}</>;
@@ -43,7 +64,22 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
-                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/landing"
+                  element={
+                    <AuthRoute>
+                      <Landing />
+                    </AuthRoute>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <AuthRoute>
+                      <Login />
+                    </AuthRoute>
+                  }
+                />
                 <Route
                   path="/"
                   element={
@@ -60,6 +96,7 @@ const App = () => (
                     </ProtectedRoute>
                   }
                 />
+                <Route path="*" element={<Navigate to="/landing" />} />
               </Routes>
             </BrowserRouter>
           </div>

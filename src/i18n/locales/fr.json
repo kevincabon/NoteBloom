@@ -29,11 +29,32 @@
   "auth": {
     "switchToGuest": "Mode invité",
     "switchToAuth": "Se connecter",
-    "guestMode": "Mode invité actif"
+    "guestMode": "Mode invité actif",
+    "signIn": "Connexion"
   },
   "theme": {
     "light": "Clair",
     "dark": "Sombre",
     "system": "Système"
+  },
+  "landing": {
+    "title": "Bienvenue sur Quick Note Garden",
+    "subtitle": "Organisez vos idées, créez des notes et gardez tout en ordre",
+    "getStarted": "Commencer",
+    "features": {
+      "title": "Fonctionnalités",
+      "notes": {
+        "title": "Prise de Notes Simple",
+        "description": "Créez et modifiez des notes rapidement avec notre éditeur intuitif"
+      },
+      "folders": {
+        "title": "Organisation par Dossiers",
+        "description": "Classez vos notes dans des dossiers personnalisables avec des couleurs"
+      },
+      "organization": {
+        "title": "Recherche Efficace",
+        "description": "Retrouvez facilement vos notes grâce à notre système de recherche"
+      }
+    }
   }
 }

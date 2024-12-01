@@ -29,11 +29,32 @@
   "auth": {
     "switchToGuest": "Guest mode",
     "switchToAuth": "Sign in",
-    "guestMode": "Guest mode active"
+    "guestMode": "Guest mode active",
+    "signIn": "Sign in"
   },
   "theme": {
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "landing": {
+    "title": "Welcome to Quick Note Garden",
+    "subtitle": "Organize your ideas, create notes, and keep everything in order",
+    "getStarted": "Get Started",
+    "features": {
+      "title": "Features",
+      "notes": {
+        "title": "Simple Note Taking",
+        "description": "Create and edit notes quickly with our intuitive editor"
+      },
+      "folders": {
+        "title": "Folder Organization",
+        "description": "Organize your notes in customizable folders with colors"
+      },
+      "organization": {
+        "title": "Efficient Search",
+        "description": "Find your notes easily with our search system"
+      }
+    }
   }
 }
