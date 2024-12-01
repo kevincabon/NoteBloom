@@ -12,6 +12,15 @@ import { useImageHandling } from "./useImageHandling";
 import { RichTextEditor } from "./RichTextEditor";
 import { AudioSection } from "./AudioSection";
 import { useAudioHandling } from "./useAudioHandling";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Folder } from "lucide-react";
 
 interface NoteFormProps {
   title: string;
@@ -20,7 +29,7 @@ interface NoteFormProps {
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
   onCancelEdit: () => void;
-  onSubmit: (images: string[], audioUrl: string | null) => void;
+  onSubmit: (images: string[], audioUrl: string | null, folderId: string | null) => void;
 }
 
 export const NoteForm = ({
@@ -35,7 +44,24 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(editingNote?.folder_id || null);
   
+  const { data: folders = [] } = useQuery({
+    queryKey: ["folders"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      const { data, error } = await supabase
+        .from("folders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const {
     existingImages,
     previewImages,
@@ -79,7 +105,7 @@ export const NoteForm = ({
         uploadedImageUrls.push(publicUrl);
       }
 
-      onSubmit(uploadedImageUrls, audioUrl);
+      onSubmit(uploadedImageUrls, audioUrl, selectedFolderId);
     } catch (error) {
       toast({
         title: t('notes.errors.imageUploadFailed'),
@@ -107,6 +133,28 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
+        <div className="flex items-center space-x-2">
+          <Folder className="h-4 w-4 text-muted-foreground" />
+          <Select
+            value={selectedFolderId || ""}
+            onValueChange={(value) => setSelectedFolderId(value || null)}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder={t('notes.selectFolder')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                {t('notes.noFolder')}
+              </SelectItem>
+              {folders.map((folder) => (
+                <SelectItem key={folder.id} value={folder.id}>
+                  {folder.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <AudioSection
           audioUrl={audioUrl}
           onNewAudio={handleNewAudio}
