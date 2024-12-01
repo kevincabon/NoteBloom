@@ -1,60 +1,21 @@
 {
-  "common": {
-    "save": "Enregistrer",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "cancel": "Annuler",
-    "loading": "Chargement...",
-    "logout": "Déconnexion",
-    "backToHome": "Retour à l'accueil",
-    "theme": "Thème",
-    "language": "Langue"
-  },
-  "notes": {
-    "title": "Notes",
-    "newNote": "Nouvelle note",
-    "titlePlaceholder": "Titre de la note",
-    "contentPlaceholder": "Commencez à écrire...",
-    "created": "Note créée",
-    "updated": "Note mise à jour",
-    "deleted": "Note supprimée",
-    "searchPlaceholder": "Rechercher des notes...",
-    "errors": {
-      "titleRequired": "Le titre est requis",
-      "createError": "Impossible de créer la note",
-      "updateError": "Impossible de modifier la note",
-      "deleteError": "Impossible de supprimer la note"
-    }
-  },
-  "auth": {
-    "switchToGuest": "Mode invité",
-    "switchToAuth": "Se connecter",
-    "guestMode": "Mode invité actif",
-    "signIn": "Connexion"
-  },
-  "theme": {
-    "light": "Clair",
-    "dark": "Sombre",
-    "system": "Système"
-  },
-  "landing": {
-    "title": "Bienvenue sur Quick Note Garden",
-    "subtitle": "Organisez vos idées, créez des notes et gardez tout en ordre",
-    "getStarted": "Commencer",
-    "features": {
-      "title": "Fonctionnalités",
-      "notes": {
-        "title": "Prise de Notes Simple",
-        "description": "Créez et modifiez des notes rapidement avec notre éditeur intuitif"
-      },
-      "folders": {
-        "title": "Organisation par Dossiers",
-        "description": "Classez vos notes dans des dossiers personnalisables avec des couleurs"
-      },
-      "organization": {
-        "title": "Recherche Efficace",
-        "description": "Retrouvez facilement vos notes grâce à notre système de recherche"
-      }
-    }
+  "feedback": {
+    "giveFeedback": "Donner un avis",
+    "title": "Votre avis nous intéresse",
+    "description": "Partagez vos suggestions, signalez un bug ou posez une question.",
+    "type": "Type",
+    "selectType": "Sélectionnez un type",
+    "types": {
+      "suggestion": "Suggestion",
+      "bug": "Bug",
+      "question": "Question"
+    },
+    "content": "Message",
+    "contentPlaceholder": "Décrivez votre suggestion, le bug rencontré ou votre question...",
+    "submit": "Envoyer",
+    "success": "Merci pour votre retour !",
+    "successDescription": "Nous avons bien reçu votre message.",
+    "error": "Une erreur est survenue",
+    "errorDescription": "Impossible d'envoyer votre message. Veuillez réessayer."
   }
 }

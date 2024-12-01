@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { GuestModeProvider } from "@/contexts/GuestModeContext";
 import { ThemeProvider } from "next-themes";
+import { Footer } from "@/components/layout/Footer";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
@@ -59,7 +60,7 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <GuestModeProvider>
-          <div className="min-h-screen bg-background">
+          <div className="min-h-screen bg-background flex flex-col">
             <Toaster />
             <Sonner />
             <BrowserRouter>
@@ -98,6 +99,7 @@ const App = () => (
                 />
                 <Route path="*" element={<Navigate to="/landing" />} />
               </Routes>
+              <Footer />
             </BrowserRouter>
           </div>
         </GuestModeProvider>
