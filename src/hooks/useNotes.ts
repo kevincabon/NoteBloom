@@ -14,7 +14,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const { data: notes = initialNotes, refetch } = useQuery({
+  const { data: notes = initialNotes } = useQuery({
     queryKey: ["notes"],
     queryFn: async () => {
       console.log("Fetching notes...");
@@ -41,12 +41,10 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Notes fetched:", transformedData);
       return transformedData as Note[];
     },
-    staleTime: 1000,
-    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
-    console.log("Setting up notes channel subscription");
+    // Créer un channel pour écouter les changements sur la table notes
     const channel = supabase
       .channel('notes_changes')
       .on(
@@ -54,15 +52,16 @@ export const useNotes = (initialNotes: Note[] = []) => {
         {
           event: '*',
           schema: 'public',
-          table: 'notes'
+          table: 'notes',
+          filter: `user_id=eq.${supabase.auth.getUser().then(({ data }) => data.user?.id)}`
         },
         async (payload) => {
           console.log("Notes change detected:", payload);
           
-          // Immédiatement invalider le cache et forcer un refetch
+          // Forcer un refetch immédiat des notes
           await queryClient.invalidateQueries({ queryKey: ["notes"] });
           
-          // Afficher la notification appropriée
+          // Afficher une notification appropriée
           if (payload.eventType === 'INSERT') {
             toast({
               title: t('notes.created'),
@@ -85,6 +84,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
         console.log("Notes channel status:", status);
       });
 
+    // Cleanup: se désabonner du channel quand le composant est démonté
     return () => {
       console.log("Cleaning up notes channel");
       supabase.removeChannel(channel);
