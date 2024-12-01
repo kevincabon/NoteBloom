@@ -11,6 +11,8 @@ export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<N
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    console.log("Setting up realtime subscription for notes");
+    
     const channel = supabase
       .channel('notes_changes')
       .on(
@@ -21,6 +23,8 @@ export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<N
           table: 'notes'
         },
         (payload) => {
+          console.log("Received realtime update:", payload);
+          
           if (payload.eventType === 'INSERT') {
             const newNote = payload.new as Note;
             setNotes(prev => {
@@ -51,12 +55,17 @@ export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<N
               description: t('notes.noteDeletedSuccess'),
             });
           }
+          
+          // Invalider le cache de react-query
           queryClient.invalidateQueries({ queryKey: ["notes"] });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Subscription status:", status);
+      });
 
     return () => {
+      console.log("Cleaning up realtime subscription");
       supabase.removeChannel(channel);
     };
   }, [queryClient, t, toast, setNotes]);

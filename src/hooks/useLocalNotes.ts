@@ -15,6 +15,7 @@ export const useLocalNotes = (
     }
   }, [initialNotes, isGlobalSearch, searchQuery]);
 
+  // Activer les mises à jour en temps réel
   useNotesRealtime(setLocalNotes, initialNotes);
 
   return { localNotes, setLocalNotes };
