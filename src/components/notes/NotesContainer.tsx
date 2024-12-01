@@ -37,17 +37,19 @@ export const NotesContainer = ({
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
   const queryClient = useQueryClient();
 
-  const handleCreateNote = async (images: string[], audioUrl: string | null) => {
+  const handleCreateNote = async (title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
+    const { links, email, phone } = parseContent(content || "");
+    
     const noteData = {
-      title: "",
-      content: "",
-      links: [],
-      phone: null,
-      email: null,
+      title,
+      content,
+      links,
+      phone,
+      email,
       is_public: false,
       images,
       audio_url: audioUrl,
-      folder_id: selectedFolderId,
+      folder_id: folderId || selectedFolderId,
     };
 
     if (isGuestMode) {
@@ -58,18 +60,21 @@ export const NotesContainer = ({
     }
   };
 
-  const handleUpdateNote = async (images: string[], audioUrl: string | null) => {
-    if (!selectedNote) return;
+  const handleUpdateNote = async (note: Note, title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
+    if (!note) return;
 
-    const { links, email, phone } = parseContent(selectedNote.content || "");
+    const { links, email, phone } = parseContent(content || "");
 
     const updatedNote = {
-      ...selectedNote,
+      ...note,
+      title,
+      content,
       links,
       phone,
       email,
       images,
       audio_url: audioUrl,
+      folder_id: folderId,
     };
 
     if (isGuestMode) {
@@ -168,7 +173,11 @@ export const NotesContainer = ({
         note={selectedNote}
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onUpdateNote={handleUpdateNote}
+        onUpdateNote={(images, audioUrl, folderId) => {
+          if (selectedNote) {
+            handleUpdateNote(selectedNote, selectedNote.title, selectedNote.content || "", images, audioUrl, folderId);
+          }
+        }}
       />
     </div>
   );

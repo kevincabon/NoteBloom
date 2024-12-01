@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { NoteForm } from "./NoteForm";
 
 interface CreateNoteSectionProps {
-  onCreateNote: (images: string[], audioUrl: string | null, folderId: string | null) => void;
+  onCreateNote: (title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => void;
 }
 
 export const CreateNoteSection = ({ onCreateNote }: CreateNoteSectionProps) => {
@@ -15,7 +15,7 @@ export const CreateNoteSection = ({ onCreateNote }: CreateNoteSectionProps) => {
   const { t } = useTranslation();
 
   const handleSubmit = async (images: string[], audioUrl: string | null, folderId: string | null) => {
-    await onCreateNote(images, audioUrl, folderId);
+    await onCreateNote(title, content, images, audioUrl, folderId);
     setIsFormVisible(false);
     setTitle("");
     setContent("");
