@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,11 @@ export const useImageHandling = (initialImages: string[] = []) => {
   const [files, setFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const { t } = useTranslation();
+
+  // Synchroniser les images existantes lorsque initialImages change
+  useEffect(() => {
+    setExistingImages(initialImages);
+  }, [initialImages]);
 
   const handleNewFiles = (selectedFiles: File[]) => {
     const newPreviewUrls = selectedFiles.map(file => URL.createObjectURL(file));
