@@ -10,9 +10,10 @@ export const useNotes = (initialNotes: Note[] = []) => {
   const { createNote, updateNote, deleteNote } = useNoteCrud();
   const queryClient = useQueryClient();
 
-  const { data: notes = initialNotes } = useQuery({
+  const { data: notes = initialNotes, refetch } = useQuery({
     queryKey: ["notes"],
     queryFn: async () => {
+      console.log("Fetching notes...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         navigate("/login");
@@ -26,11 +27,13 @@ export const useNotes = (initialNotes: Note[] = []) => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+      console.log("Notes fetched:", data);
       return data as Note[];
     },
   });
 
   useEffect(() => {
+    console.log("Setting up notes channel subscription");
     const channel = supabase
       .channel('notes_changes')
       .on(
@@ -40,16 +43,20 @@ export const useNotes = (initialNotes: Note[] = []) => {
           schema: 'public',
           table: 'notes'
         },
-        (payload) => {
-          queryClient.invalidateQueries({ queryKey: ["notes"] });
+        async (payload) => {
+          console.log("Notes change detected:", payload);
+          await refetch();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log("Notes channel status:", status);
+      });
 
     return () => {
+      console.log("Cleaning up notes channel");
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [refetch]);
 
   return {
     notes,
