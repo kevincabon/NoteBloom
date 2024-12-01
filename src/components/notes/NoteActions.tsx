@@ -5,7 +5,6 @@ import { useState } from "react";
 import { NoteShareDialog } from "./NoteShareDialog";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { useTranslation } from "react-i18next";
-import { FavoriteButton } from "./FavoriteButton";
 
 interface NoteActionsProps {
   note: Note;
@@ -25,7 +24,6 @@ export const NoteActions = ({
   return (
     <>
       <div className="flex gap-2">
-        <FavoriteButton noteId={note.id} />
         <Button
           variant="ghost"
           size="icon"
