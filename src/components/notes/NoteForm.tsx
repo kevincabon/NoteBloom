@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Note } from "@/types/note";
 import { useTranslation } from "react-i18next";
@@ -10,6 +9,7 @@ import { useState } from "react";
 import { ImageUploader } from "./ImageUploader";
 import { ImageList } from "./ImageList";
 import { useImageHandling } from "./useImageHandling";
+import { RichTextEditor } from "./RichTextEditor";
 
 interface NoteFormProps {
   title: string;
@@ -91,12 +91,11 @@ export const NoteForm = ({
         className="text-lg font-medium"
         maxLength={100}
       />
-      <Textarea
+      
+      <RichTextEditor
+        content={content}
+        onChange={onContentChange}
         placeholder={t('notes.contentPlaceholder')}
-        value={content}
-        onChange={(e) => onContentChange(e.target.value)}
-        className="min-h-[200px] resize-none"
-        maxLength={1000}
       />
       
       <div className="space-y-4">

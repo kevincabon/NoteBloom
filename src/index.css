@@ -80,3 +80,27 @@
     transform: translateY(0);
   }
 }
+
+.ProseMirror {
+  @apply min-h-[200px] p-4;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  @apply text-muted-foreground;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror h1 {
+  @apply text-2xl font-bold mb-4;
+}
+
+.ProseMirror ul {
+  @apply list-disc pl-6 mb-4;
+}
+
+.ProseMirror p {
+  @apply mb-2;
+}
