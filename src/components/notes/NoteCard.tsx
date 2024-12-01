@@ -60,18 +60,21 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>{note.title}</SheetTitle>
+            <SheetTitle className="text-xl font-bold">{note.title}</SheetTitle>
             {note.folder_id && note.folder_name && (
               <FolderBadge name={note.folder_name} color={note.folder_color || "#e5e5e5"} />
             )}
           </SheetHeader>
-          <div className="mt-6 prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none">
+          <div className="mt-6">
             <NoteContent 
               content={formattedContent} 
               audioUrl={note.audio_url}
               images={note.images}
+              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none"
             />
-            <NoteTimestamps createdAt={note.created_at} updatedAt={note.updated_at} />
+            <div className="mt-4 pt-4 border-t">
+              <NoteTimestamps createdAt={note.created_at} updatedAt={note.updated_at} />
+            </div>
           </div>
         </SheetContent>
       </Sheet>
