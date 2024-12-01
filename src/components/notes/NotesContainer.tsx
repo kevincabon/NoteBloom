@@ -14,9 +14,11 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -43,6 +45,23 @@ export const NotesContainer = ({
   const { toast } = useToast();
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
+
+  // Fetch folders for the move dialog
+  const { data: folders = [] } = useQuery({
+    queryKey: ["folders"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      const { data, error } = await supabase
+        .from("folders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const handleCreateNote = async (images: string[]) => {
     if (!title.trim()) {
@@ -115,7 +134,7 @@ export const NotesContainer = ({
       if (error) throw error;
 
       toast({
-        title: "Note déplacée avec succès",
+        title: t("notes.moved"),
       });
 
       // Update the local state
@@ -127,7 +146,7 @@ export const NotesContainer = ({
       setIsMoveDialogOpen(false);
     } catch (error) {
       toast({
-        title: "Erreur lors du déplacement de la note",
+        title: t("notes.errors.moveFailed"),
         variant: "destructive",
       });
     }
@@ -204,7 +223,10 @@ export const NotesContainer = ({
       <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Déplacer la note</DialogTitle>
+            <DialogTitle>{t("notes.moveNote")}</DialogTitle>
+            <DialogDescription>
+              {t("notes.selectDestination")}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-4">
             <Button
@@ -212,20 +234,18 @@ export const NotesContainer = ({
               className="w-full justify-start"
               onClick={() => selectedNote && handleMoveNote(selectedNote, null)}
             >
-              Toutes les notes
+              {t("notes.allNotes")}
             </Button>
-            {notes
-              .filter((note) => note.folder_id)
-              .map((folder) => (
-                <Button
-                  key={folder.id}
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => selectedNote && handleMoveNote(selectedNote, folder.id)}
-                >
-                  {folder.title}
-                </Button>
-              ))}
+            {folders.map((folder) => (
+              <Button
+                key={folder.id}
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => selectedNote && handleMoveNote(selectedNote, folder.id)}
+              >
+                {folder.name}
+              </Button>
+            ))}
           </div>
         </DialogContent>
       </Dialog>
