@@ -22,11 +22,22 @@ export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<N
           schema: 'public',
           table: 'notes'
         },
-        (payload) => {
+        async (payload) => {
           console.log("Received realtime update:", payload);
           
           if (payload.eventType === 'INSERT') {
             const newNote = payload.new as Note;
+            if (newNote.folder_id) {
+              const { data: folder } = await supabase
+                .from('folders')
+                .select('name, color')
+                .eq('id', newNote.folder_id)
+                .single();
+              if (folder) {
+                newNote.folder_name = folder.name;
+                newNote.folder_color = folder.color;
+              }
+            }
             setNotes(prev => {
               // Vérifier si la note existe déjà
               if (prev.some(note => note.id === newNote.id)) {
@@ -40,6 +51,17 @@ export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<N
             });
           } else if (payload.eventType === 'UPDATE') {
             const updatedNote = payload.new as Note;
+            if (updatedNote.folder_id) {
+              const { data: folder } = await supabase
+                .from('folders')
+                .select('name, color')
+                .eq('id', updatedNote.folder_id)
+                .single();
+              if (folder) {
+                updatedNote.folder_name = folder.name;
+                updatedNote.folder_color = folder.color;
+              }
+            }
             setNotes(prev => prev.map(note => 
               note.id === updatedNote.id ? updatedNote : note
             ));
