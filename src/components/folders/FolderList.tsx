@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { FolderDialog } from "./FolderDialog";
 import { FolderTreeItem } from "./FolderTreeItem";
 import { useFolderHierarchy } from "@/hooks/useFolderHierarchy";
+import { useFolders } from "@/hooks/useFolders"; // Import the new hook
 import { Folder } from "@/types/folder";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,7 @@ export const FolderList = ({
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingFolder, setEditingFolder] = useState<Folder | null>(null);
   const { folders, isLoading } = useFolderHierarchy();
+  const { createFolder, updateFolder, deleteFolder } = useFolders(); // Use the new hook
 
   // Utiliser localStorage pour persister l'état des dossiers développés
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(() => {
@@ -97,7 +99,8 @@ export const FolderList = ({
           onSelect={() => onSelectFolder(folder.id)}
           onToggleExpand={() => handleToggleExpand(folder.id)}
           onEdit={() => setEditingFolder(folder)}
-          onDelete={() => onDeleteFolder(folder.id)}
+          onDelete={() => handleDeleteFolder(folder.id)} // Use the new delete function
+          subFolders={folders}
         >
           {hasChildren && (
             <ChevronRight 
@@ -121,6 +124,10 @@ export const FolderList = ({
         )}
       </div>
     );
+  };
+
+  const handleDeleteFolder = async (folderId: string) => {
+    await deleteFolder(folderId);
   };
 
   const rootFolderCount = folders.filter(f => !f.parent_id).length;
@@ -184,7 +191,7 @@ export const FolderList = ({
           isOpen={!!editingFolder}
           onOpenChange={() => setEditingFolder(null)}
           onSubmit={(data) => {
-            onUpdateFolder(editingFolder.id, data);
+            updateFolder(editingFolder.id, data);
             setEditingFolder(null);
           }}
           folders={folders.filter(f => f.id !== editingFolder.id)}
