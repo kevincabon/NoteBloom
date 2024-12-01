@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -24,7 +23,7 @@ type Feedback = {
   user_id: string;
   profiles: {
     username: string;
-  } | null;
+  };
 };
 
 export const FeedbackManager = () => {
@@ -38,9 +37,7 @@ export const FeedbackManager = () => {
         .from("feedback")
         .select(`
           *,
-          profiles (
-            username
-          )
+          profiles:user_id(username)
         `)
         .order("created_at", { ascending: false });
 
@@ -105,7 +102,7 @@ export const FeedbackManager = () => {
                         ? "secondary"
                         : feedback.status === "in_progress"
                         ? "default"
-                        : "success"
+                        : "outline"
                     }
                   >
                     {feedback.status}
