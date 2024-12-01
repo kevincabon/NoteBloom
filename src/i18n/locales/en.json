@@ -133,6 +133,9 @@
     "removeFromNote": "Remove Tag",
     "noTags": "No tags",
     "searchPlaceholder": "Search tags...",
+    "manage": "Manage Tags",
+    "deleteConfirmTitle": "Delete Tag",
+    "deleteConfirmDescription": "Are you sure you want to delete the tag \"{tag}\"? This action cannot be undone.",
     "errors": {
       "createError": "Could not create tag",
       "updateError": "Could not update tag",

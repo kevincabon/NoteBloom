@@ -139,6 +139,9 @@
     "removeFromNote": "Retirer le tag",
     "noTags": "Aucun tag",
     "searchPlaceholder": "Rechercher un tag...",
+    "manage": "Gérer les tags",
+    "deleteConfirmTitle": "Supprimer le tag",
+    "deleteConfirmDescription": "Êtes-vous sûr de vouloir supprimer le tag \"{tag}\" ? Cette action est irréversible.",
     "errors": {
       "createError": "Impossible de créer le tag",
       "updateError": "Impossible de modifier le tag",

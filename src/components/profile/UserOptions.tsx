@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { TagManager } from "@/components/tags/TagManager";
 
 export const UserOptions = () => {
   const { t } = useTranslation();
@@ -20,6 +21,10 @@ export const UserOptions = () => {
         <div className="space-y-2">
           <Label>{t("common.language")}</Label>
           <LanguageSelector />
+        </div>
+        <div className="space-y-2">
+          <Label>{t("tags.manage")}</Label>
+          <TagManager />
         </div>
       </CardContent>
     </Card>

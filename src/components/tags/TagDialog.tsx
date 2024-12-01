@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,16 @@ export const TagDialog = ({
   const { t } = useTranslation();
   const [name, setName] = useState(tag?.name || "");
   const [color, setColor] = useState(tag?.color || "#000000");
+
+  useEffect(() => {
+    if (tag) {
+      setName(tag.name);
+      setColor(tag.color);
+    } else {
+      setName("");
+      setColor("#000000");
+    }
+  }, [tag]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
