@@ -1,5 +1,6 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
 import { Toggle } from "@/components/ui/toggle";
 import { 
   Bold, 
@@ -22,7 +23,13 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
   const { t } = useTranslation();
   
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right'],
+      }),
+    ],
     content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
