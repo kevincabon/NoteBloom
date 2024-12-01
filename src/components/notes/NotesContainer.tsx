@@ -40,26 +40,38 @@ export const NotesContainer = ({
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
   const queryClient = useQueryClient();
 
+  // Mise à jour des notes locales quand les notes initiales changent
   useEffect(() => {
-    if (!isGlobalSearch) {
+    if (!isGlobalSearch || !searchQuery) {
       setLocalNotes(initialNotes);
     }
-  }, [initialNotes, isGlobalSearch]);
+  }, [initialNotes, isGlobalSearch, searchQuery]);
 
   useNotesRealtime(setLocalNotes, initialNotes);
 
+  // Gestion de la recherche globale
   useEffect(() => {
     const fetchAllNotes = async () => {
-      if (isGlobalSearch && searchQuery && !isGuestMode) {
+      if (isGlobalSearch && !isGuestMode) {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const { data } = await supabase
+        let query = supabase
           .from("notes")
           .select("*")
           .eq("user_id", user.id)
-          .ilike("title", `%${searchQuery}%`)
           .order("created_at", { ascending: false });
+
+        if (searchQuery) {
+          query = query.ilike("title", `%${searchQuery}%`);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error("Error fetching notes:", error);
+          return;
+        }
 
         if (data) {
           setLocalNotes(data);
