@@ -32,6 +32,8 @@ export const useNoteOperations = ({
     console.log("NoteOperations - Creating note with content:", content);
     const { links, email, phone } = parseContent(content || "");
     
+    const { data: { user } } = await supabase.auth.getUser();
+    
     const noteData = {
       title,
       content: content || null,
@@ -42,6 +44,7 @@ export const useNoteOperations = ({
       images,
       audio_url: audioUrl,
       folder_id: folderId || selectedFolderId,
+      user_id: user?.id || null,
     };
 
     console.log("NoteOperations - Final note data:", noteData);
