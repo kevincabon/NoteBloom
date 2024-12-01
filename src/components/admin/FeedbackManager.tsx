@@ -25,7 +25,7 @@ type Feedback = {
   status: string;
   created_at: string;
   user_id: string;
-  profiles: Profile;
+  profiles: Profile | null;
 };
 
 export const FeedbackManager = () => {
@@ -37,7 +37,10 @@ export const FeedbackManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("feedback")
-        .select("*, profiles:user_id(username)")
+        .select(`
+          *,
+          profiles:profiles(username)
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
