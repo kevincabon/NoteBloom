@@ -6,11 +6,12 @@ import { NoteListControls } from "./NoteListControls";
 import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
 import { NoteEditDialog } from "./NoteEditDialog";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useLocalNotes } from "@/hooks/useLocalNotes";
 import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import { useNoteOperations } from "./NoteOperations";
 import { CurrentFolderHeader } from "./CurrentFolderHeader";
+import { useToast } from "@/components/ui/use-toast";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -35,6 +36,7 @@ export const NotesContainer = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { localNotes } = useLocalNotes(initialNotes, isGlobalSearch, searchQuery);
   const globalSearchResults = useGlobalSearch(searchQuery, isGlobalSearch);
@@ -50,6 +52,40 @@ export const NotesContainer = ({
     onCreateNote,
     onUpdateNote,
     onDeleteNote,
+  });
+
+  // Mutations pour les opérations CRUD
+  const createNoteMutation = useMutation({
+    mutationFn: handleCreateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      toast({
+        title: t("notes.created"),
+        description: t("notes.noteCreatedSuccess"),
+      });
+    },
+  });
+
+  const updateNoteMutation = useMutation({
+    mutationFn: handleUpdateNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      toast({
+        title: t("notes.updated"),
+        description: t("notes.noteUpdatedSuccess"),
+      });
+    },
+  });
+
+  const deleteNoteMutation = useMutation({
+    mutationFn: handleDeleteNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      toast({
+        title: t("notes.deleted"),
+        description: t("notes.noteDeletedSuccess"),
+      });
+    },
   });
 
   const handleEditNote = (note: Note) => {
@@ -82,7 +118,11 @@ export const NotesContainer = ({
     <div className="max-w-2xl mx-auto space-y-8">
       <CurrentFolderHeader selectedFolderId={selectedFolderId} />
       
-      <CreateNoteSection onCreateNote={handleCreateNote} />
+      <CreateNoteSection 
+        onCreateNote={async (...args) => {
+          await createNoteMutation.mutateAsync(...args);
+        }} 
+      />
 
       <NoteListControls
         searchQuery={searchQuery}
@@ -96,7 +136,9 @@ export const NotesContainer = ({
       <NoteList
         notes={filteredAndSortedNotes}
         onEdit={handleEditNote}
-        onDelete={handleDeleteNote}
+        onDelete={async (id) => {
+          await deleteNoteMutation.mutateAsync(id);
+        }}
         onMove={(note) => {
           setSelectedNote(note);
           setIsMoveDialogOpen(true);
@@ -114,7 +156,9 @@ export const NotesContainer = ({
         note={selectedNote}
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onUpdateNote={handleUpdateNote}
+        onUpdateNote={async (note) => {
+          await updateNoteMutation.mutateAsync(note);
+        }}
       />
     </div>
   );

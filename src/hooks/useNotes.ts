@@ -57,10 +57,16 @@ export const useNotes = (initialNotes: Note[] = []) => {
         async (payload) => {
           console.log("Realtime change received:", payload);
           
-          const currentNotes = queryClient.getQueryData<Note[]>(["notes"]) || [];
-          let newNotes: Note[];
-          let toastMessage;
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) return;
 
+          // Vérifier si la note appartient à l'utilisateur actuel
+          if (payload.new && payload.new.user_id !== user.id) {
+            console.log("Note doesn't belong to current user, ignoring");
+            return;
+          }
+
+          // Récupérer les informations du dossier si nécessaire
           const getFolderInfo = async (folderId: string | null) => {
             if (!folderId) return null;
             const { data } = await supabase
@@ -75,55 +81,41 @@ export const useNotes = (initialNotes: Note[] = []) => {
             switch (payload.eventType) {
               case 'INSERT': {
                 const folder = await getFolderInfo(payload.new.folder_id);
-                const newNote = {
-                  ...payload.new,
-                  folder_name: folder?.name,
-                  folder_color: folder?.color,
-                } as Note;
-                
-                // Vérifier si la note appartient à l'utilisateur actuel
-                const { data: { user } } = await supabase.auth.getUser();
-                if (user && newNote.user_id === user.id) {
-                  newNotes = [newNote, ...currentNotes];
-                  toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
-                  queryClient.setQueryData(["notes"], newNotes);
-                }
+                queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
+                  const newNote = {
+                    ...payload.new,
+                    folder_name: folder?.name,
+                    folder_color: folder?.color,
+                  } as Note;
+                  return [newNote, ...oldNotes];
+                });
                 break;
               }
               case 'UPDATE': {
                 const folder = await getFolderInfo(payload.new.folder_id);
-                const updatedNote = {
-                  ...payload.new,
-                  folder_name: folder?.name,
-                  folder_color: folder?.color,
-                } as Note;
-                
-                // Mettre à jour uniquement si la note existe dans la liste actuelle
-                if (currentNotes.some(note => note.id === updatedNote.id)) {
-                  newNotes = currentNotes.map(note => 
-                    note.id === updatedNote.id ? updatedNote : note
+                queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
+                  return oldNotes.map(note => 
+                    note.id === payload.new.id 
+                      ? {
+                          ...payload.new,
+                          folder_name: folder?.name,
+                          folder_color: folder?.color,
+                        } as Note
+                      : note
                   );
-                  toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
-                  queryClient.setQueryData(["notes"], newNotes);
-                }
+                });
                 break;
               }
               case 'DELETE': {
-                // Supprimer uniquement si la note existe dans la liste actuelle
-                if (currentNotes.some(note => note.id === payload.old.id)) {
-                  newNotes = currentNotes.filter(note => note.id !== payload.old.id);
-                  toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
-                  queryClient.setQueryData(["notes"], newNotes);
-                }
+                queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
+                  return oldNotes.filter(note => note.id !== payload.old.id);
+                });
                 break;
               }
             }
-            
-            if (toastMessage) {
-              toast(toastMessage);
-            }
           } catch (error) {
             console.error("Error handling realtime update:", error);
+            queryClient.invalidateQueries({ queryKey: ["notes"] });
           }
         }
       )
@@ -135,7 +127,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Cleaning up realtime subscription");
       supabase.removeChannel(channel);
     };
-  }, [queryClient, toast, t]);
+  }, [queryClient, t]);
 
   return {
     notes,
