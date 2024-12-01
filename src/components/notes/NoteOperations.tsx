@@ -24,16 +24,17 @@ export const useNoteOperations = ({
 
   const handleCreateNote = async (
     title: string,
-    content: string,
+    content: string | null,
     images: string[],
     audioUrl: string | null,
     folderId: string | null
   ) => {
+    console.log("NoteOperations - Creating note with content:", content);
     const { links, email, phone } = parseContent(content || "");
     
     const noteData = {
       title,
-      content,
+      content: content || null,
       links,
       phone,
       email,
@@ -43,6 +44,8 @@ export const useNoteOperations = ({
       folder_id: folderId || selectedFolderId,
     };
 
+    console.log("NoteOperations - Final note data:", noteData);
+
     if (isGuestMode) {
       propOnCreateNote(noteData);
     } else {
@@ -51,14 +54,18 @@ export const useNoteOperations = ({
   };
 
   const handleUpdateNote = async (updatedNote: Note) => {
+    console.log("NoteOperations - Updating note with content:", updatedNote.content);
     const { links, email, phone } = parseContent(updatedNote.content || "");
 
     const noteToUpdate = {
       ...updatedNote,
+      content: updatedNote.content || null,
       links,
       phone,
       email,
     };
+
+    console.log("NoteOperations - Final update data:", noteToUpdate);
 
     if (isGuestMode) {
       propOnUpdateNote(noteToUpdate);

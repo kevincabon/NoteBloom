@@ -15,7 +15,10 @@ export const CreateNoteSection = ({ onCreateNote }: CreateNoteSectionProps) => {
   const { t } = useTranslation();
 
   const handleSubmit = async (images: string[], audioUrl: string | null, folderId: string | null) => {
-    await onCreateNote(title, content, images, audioUrl, folderId);
+    console.log("CreateNoteSection - Submitting with content:", content);
+    // S'assurer que le contenu n'est jamais une chaîne vide
+    const finalContent = content.trim() || null;
+    await onCreateNote(title, finalContent, images, audioUrl, folderId);
     setIsFormVisible(false);
     setTitle("");
     setContent("");
