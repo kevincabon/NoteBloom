@@ -44,51 +44,57 @@ export const useNotes = (initialNotes: Note[] = []) => {
   });
 
   useEffect(() => {
-    // Créer un channel pour écouter les changements sur la table notes
-    const channel = supabase
-      .channel('notes_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'notes',
-          filter: `user_id=eq.${supabase.auth.getUser().then(({ data }) => data.user?.id)}`
-        },
-        async (payload) => {
-          console.log("Notes change detected:", payload);
-          
-          // Forcer un refetch immédiat des notes
-          await queryClient.invalidateQueries({ queryKey: ["notes"] });
-          
-          // Afficher une notification appropriée
-          if (payload.eventType === 'INSERT') {
-            toast({
-              title: t('notes.created'),
-              description: t('notes.noteCreatedSuccess'),
-            });
-          } else if (payload.eventType === 'UPDATE') {
-            toast({
-              title: t('notes.updated'),
-              description: t('notes.noteUpdatedSuccess'),
-            });
-          } else if (payload.eventType === 'DELETE') {
-            toast({
-              title: t('notes.deleted'),
-              description: t('notes.noteDeletedSuccess'),
-            });
-          }
-        }
-      )
-      .subscribe((status) => {
-        console.log("Notes channel status:", status);
-      });
+    const setupRealtimeSubscription = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    // Cleanup: se désabonner du channel quand le composant est démonté
-    return () => {
-      console.log("Cleaning up notes channel");
-      supabase.removeChannel(channel);
+      console.log("Setting up realtime subscription for user:", user.id);
+
+      const channel = supabase.channel('notes_db_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'notes',
+            filter: `user_id=eq.${user.id}`
+          },
+          async (payload) => {
+            console.log("Realtime change received:", payload);
+            
+            // Immédiatement invalider le cache pour forcer un refetch
+            await queryClient.invalidateQueries({ queryKey: ["notes"] });
+            
+            // Afficher une notification appropriée
+            let toastMessage;
+            switch (payload.eventType) {
+              case 'INSERT':
+                toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
+                break;
+              case 'UPDATE':
+                toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
+                break;
+              case 'DELETE':
+                toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
+                break;
+            }
+            
+            if (toastMessage) {
+              toast(toastMessage);
+            }
+          }
+        )
+        .subscribe((status) => {
+          console.log("Channel subscription status:", status);
+        });
+
+      return () => {
+        console.log("Cleaning up realtime subscription");
+        supabase.removeChannel(channel);
+      };
     };
+
+    setupRealtimeSubscription();
   }, [queryClient, toast, t]);
 
   return {
