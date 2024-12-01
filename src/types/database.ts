@@ -1,3 +1,5 @@
+import { FeedbackTable, FoldersTable, NotesTable, ProfilesTable } from './tables';
+
 export type Json =
   | string
   | number
