@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Note } from "@/types/note";
-import { useGuestMode } from "@/contexts/GuestModeContext";
 import { useTranslation } from "react-i18next";
-import { parseContent } from "@/utils/contentParser";
 import { NoteMoveDialog } from "./NoteMoveDialog";
 import { NoteListControls } from "./NoteListControls";
-import { supabase } from "@/integrations/supabase/client";
-import { useNotes } from "@/hooks/useNotes";
 import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
 import { NoteEditDialog } from "./NoteEditDialog";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNotesRealtime } from "@/hooks/useNotesRealtime";
+import { useLocalNotes } from "@/hooks/useLocalNotes";
+import { useGlobalSearch } from "@/hooks/useGlobalSearch";
+import { useNoteOperations } from "./NoteOperations";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -34,135 +32,36 @@ export const NotesContainer = ({
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [localNotes, setLocalNotes] = useState<Note[]>(initialNotes);
   const { t } = useTranslation();
-  const { isGuestMode } = useGuestMode();
-  const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
   const queryClient = useQueryClient();
 
-  // Mise à jour des notes locales quand les notes initiales changent
-  useEffect(() => {
-    if (!isGlobalSearch || !searchQuery) {
-      setLocalNotes(initialNotes);
-    }
-  }, [initialNotes, isGlobalSearch, searchQuery]);
-
-  useNotesRealtime(setLocalNotes, initialNotes);
-
-  // Gestion de la recherche globale
-  useEffect(() => {
-    const fetchAllNotes = async () => {
-      if (isGlobalSearch && !isGuestMode) {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        let query = supabase
-          .from("notes")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false });
-
-        if (searchQuery) {
-          query = query.ilike("title", `%${searchQuery}%`);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-          console.error("Error fetching notes:", error);
-          return;
-        }
-
-        if (data) {
-          setLocalNotes(data);
-        }
-      }
-    };
-
-    fetchAllNotes();
-  }, [isGlobalSearch, searchQuery, isGuestMode]);
-
-  const handleCreateNote = async (title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
-    const { links, email, phone } = parseContent(content || "");
-    
-    const noteData = {
-      title,
-      content,
-      links,
-      phone,
-      email,
-      is_public: false,
-      images,
-      audio_url: audioUrl,
-      folder_id: folderId || selectedFolderId,
-    };
-
-    if (isGuestMode) {
-      onCreateNote(noteData);
-    } else {
-      await createNote(noteData);
-    }
-  };
-
-  const handleUpdateNote = async (updatedNote: Note) => {
-    const { links, email, phone } = parseContent(updatedNote.content || "");
-
-    const noteToUpdate = {
-      ...updatedNote,
-      links,
-      phone,
-      email,
-    };
-
-    if (isGuestMode) {
-      onUpdateNote(noteToUpdate);
-    } else {
-      await updateNote(noteToUpdate);
-    }
-
-    setSelectedNote(null);
-    setIsEditDialogOpen(false);
-  };
-
-  const handleMoveNote = async (note: Note, newFolderId: string | null) => {
-    try {
-      const { error } = await supabase
-        .from("notes")
-        .update({ folder_id: newFolderId })
-        .eq('id', note.id);
-
-      if (error) throw error;
-
-      const updatedNote = { ...note, folder_id: newFolderId };
-      if (isGuestMode) {
-        onUpdateNote(updatedNote);
-      } else {
-        await updateNote(updatedNote);
-      }
-
-      setIsMoveDialogOpen(false);
-    } catch (error) {
-      console.error("Error moving note:", error);
-    }
-  };
+  const { localNotes } = useLocalNotes(initialNotes, isGlobalSearch, searchQuery);
+  const globalSearchResults = useGlobalSearch(searchQuery, isGlobalSearch);
+  
+  const {
+    handleCreateNote,
+    handleUpdateNote,
+    handleMoveNote,
+    handleDeleteNote,
+  } = useNoteOperations({
+    initialNotes,
+    selectedFolderId,
+    onCreateNote,
+    onUpdateNote,
+    onDeleteNote,
+  });
 
   const handleEditNote = (note: Note) => {
     setSelectedNote(note);
     setIsEditDialogOpen(true);
   };
 
-  const handleDeleteNoteWithRefresh = async (id: string) => {
-    if (isGuestMode) {
-      onDeleteNote(id);
-    } else {
-      await deleteNote(id);
-    }
-  };
+  const currentNotes = isGlobalSearch ? globalSearchResults : localNotes;
 
-  const filteredAndSortedNotes = localNotes
+  const filteredAndSortedNotes = currentNotes
     .filter((note) => {
       if (!searchQuery) return true;
-      if (isGlobalSearch) return true; // Déjà filtré par la requête Supabase
+      if (isGlobalSearch) return true;
       
       const searchLower = searchQuery.toLowerCase();
       return (
@@ -194,7 +93,7 @@ export const NotesContainer = ({
       <NoteList
         notes={filteredAndSortedNotes}
         onEdit={handleEditNote}
-        onDelete={handleDeleteNoteWithRefresh}
+        onDelete={handleDeleteNote}
         onMove={(note) => {
           setSelectedNote(note);
           setIsMoveDialogOpen(true);
