@@ -229,6 +229,8 @@
   "admin": {
     "dashboard": "Tableau de bord",
     "user": "Utilisateur",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
     "type": "Type",
     "content": "Contenu",
     "status": "Statut",
@@ -242,12 +244,24 @@
     "totalFolders": "Dossiers",
     "pendingFeedback": "Avis en attente",
     "feedbackList": "Liste des avis",
+    "userList": "Liste des utilisateurs",
+    "role": "Rôle",
+    "roles": {
+      "user": "Utilisateur",
+      "admin": "Administrateur",
+      "superadmin": "Super administrateur"
+    },
+    "selectRole": "Sélectionner un rôle",
+    "createdAt": "Date de création",
+    "lastSignIn": "Dernière connexion",
     "unauthorized": "Non autorisé",
     "unauthorizedDescription": "Vous n'avez pas la permission d'accéder à cette page",
     "error": "Erreur",
     "updateError": "Impossible de mettre à jour le statut",
+    "roleUpdateError": "Impossible de mettre à jour le rôle",
     "success": "Succès",
-    "statusUpdated": "Statut mis à jour"
+    "statusUpdated": "Statut mis à jour",
+    "roleUpdated": "Rôle mis à jour"
   },
   "landing": {
     "title": "Bienvenue sur Quick Note Garden",
@@ -264,8 +278,8 @@
         "description": "Organisez vos notes dans des dossiers personnalisables avec des couleurs"
       },
       "organization": {
-        "title": "Recherche efficace",
-        "description": "Retrouvez vos notes facilement avec notre système de recherche"
+        "title": "Partage de notes",
+        "description": "Partagez vos notes facilement avec d'autres personnes"
       }
     }
   },
@@ -283,6 +297,20 @@
     "note": {
       "title": "Supprimer la note",
       "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+    }
+  },
+  "limits": {
+    "currentUsage": "{{current}} sur {{max}} {{type}} utilisés",
+    "maxRootFoldersReached": "Limite de dossiers racine atteinte ({{max}})",
+    "maxSubFoldersReached": "Limite de sous-dossiers atteinte ({{max}})",
+    "maxNotesReached": "Limite de notes atteinte ({{max}})",
+    "maxTagsReached": "Limite de tags atteinte ({{max}})",
+    "maxFileSizeReached": "Taille maximale de fichier atteinte ({{max}})",
+    "types": {
+      "rootFolders": "dossiers racine",
+      "subFolders": "sous-dossiers",
+      "notes": "notes",
+      "tags": "tags"
     }
   }
 }

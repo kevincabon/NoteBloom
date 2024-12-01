@@ -237,26 +237,40 @@
   },
   "admin": {
     "dashboard": "Panel de control",
-    "totalUsers": "Usuarios",
-    "totalNotes": "Notas",
-    "totalFolders": "Carpetas",
-    "pendingFeedback": "Retroalimentación pendiente",
-    "feedbackList": "Lista de retroalimentación",
-    "unauthorized": "No autorizado",
-    "unauthorizedDescription": "No tienes permiso para acceder a esta página",
-    "error": "Error",
-    "updateError": "No se pudo actualizar el estado",
-    "success": "Éxito",
-    "statusUpdated": "Estado actualizado",
     "user": "Usuario",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
     "type": "Tipo",
     "content": "Contenido",
     "status": "Estado",
     "date": "Fecha",
     "actions": "Acciones",
     "pending": "Pendiente",
-    "inProgress": "En proceso",
-    "resolved": "Resuelto"
+    "inProgress": "En progreso",
+    "resolved": "Resuelto",
+    "totalUsers": "Usuarios",
+    "totalNotes": "Notas",
+    "totalFolders": "Carpetas",
+    "pendingFeedback": "Comentarios pendientes",
+    "feedbackList": "Lista de comentarios",
+    "userList": "Lista de usuarios",
+    "role": "Rol",
+    "roles": {
+      "user": "Usuario",
+      "admin": "Administrador",
+      "superadmin": "Super Administrador"
+    },
+    "selectRole": "Seleccionar un rol",
+    "createdAt": "Fecha de creación",
+    "lastSignIn": "Último acceso",
+    "unauthorized": "No autorizado",
+    "unauthorizedDescription": "No tienes permiso para acceder a esta página",
+    "error": "Error",
+    "updateError": "No se pudo actualizar el estado",
+    "roleUpdateError": "No se pudo actualizar el rol",
+    "success": "Éxito",
+    "statusUpdated": "Estado actualizado",
+    "roleUpdated": "Rol actualizado"
   },
   "landing": {
     "title": "Bienvenido a Quick Note Garden",
@@ -273,8 +287,8 @@
         "description": "Organiza tus notas en carpetas personalizables con colores"
       },
       "organization": {
-        "title": "Búsqueda eficiente",
-        "description": "Encuentra tus notas fácilmente con nuestro sistema de búsqueda"
+        "title": "Compartir notas",
+        "description": "Comparte tus notas fácilmente con otros"
       }
     }
   },

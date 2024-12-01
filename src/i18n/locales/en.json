@@ -229,6 +229,8 @@
   "admin": {
     "dashboard": "Dashboard",
     "user": "User",
+    "username": "Username",
+    "email": "Email",
     "type": "Type",
     "content": "Content",
     "status": "Status",
@@ -242,12 +244,24 @@
     "totalFolders": "Folders",
     "pendingFeedback": "Pending Feedback",
     "feedbackList": "Feedback List",
+    "userList": "User List",
+    "role": "Role",
+    "roles": {
+      "user": "User",
+      "admin": "Administrator",
+      "superadmin": "Super Administrator"
+    },
+    "selectRole": "Select a role",
+    "createdAt": "Created At",
+    "lastSignIn": "Last Sign In",
     "unauthorized": "Unauthorized",
     "unauthorizedDescription": "You don't have permission to access this page",
     "error": "Error",
     "updateError": "Could not update status",
+    "roleUpdateError": "Could not update role",
     "success": "Success",
-    "statusUpdated": "Status updated"
+    "statusUpdated": "Status updated",
+    "roleUpdated": "Role updated"
   },
   "landing": {
     "title": "Welcome to Quick Note Garden",
@@ -264,8 +278,8 @@
         "description": "Organize your notes in customizable folders with colors"
       },
       "organization": {
-        "title": "Efficient Search",
-        "description": "Find your notes easily with our search system"
+        "title": "Note Sharing",
+        "description": "Share your notes easily with others"
       }
     }
   },
@@ -287,5 +301,19 @@
     "addError": "Could not add to favorites",
     "removeError": "Could not remove from favorites",
     "noFavorites": "No favorites"
+  },
+  "limits": {
+    "currentUsage": "{{current}} of {{max}} {{type}} used",
+    "maxTagsReached": "You've reached the tag limit. Upgrade to VIP to create more!",
+    "maxRootFoldersReached": "You've reached the root folders limit. Upgrade to VIP to create more!",
+    "maxSubFoldersReached": "You've reached the subfolder limit. Upgrade to VIP to create more!",
+    "maxNotesReached": "You've reached the note limit. Upgrade to VIP to create more!",
+    "upgradeNeeded": "Upgrade to VIP to unlock this feature",
+    "types": {
+      "tags": "tags",
+      "rootFolders": "root folders",
+      "subFolders": "subfolders",
+      "notes": "notes"
+    }
   }
 }
