@@ -17,7 +17,6 @@ export const useNoteCrud = () => {
         return;
       }
 
-      // S'assurer que content n'est jamais une chaîne vide
       const noteData = {
         ...note,
         content: note.content || null,
@@ -54,7 +53,6 @@ export const useNoteCrud = () => {
 
   const updateNote = async (note: Note) => {
     try {
-      // S'assurer que content n'est jamais une chaîne vide
       const noteData = {
         ...note,
         content: note.content || null
@@ -87,24 +85,34 @@ export const useNoteCrud = () => {
 
   const deleteNote = async (noteId: string) => {
     try {
+      // Vérifier d'abord si la note existe
       const { data: noteToDelete, error: fetchError } = await supabase
         .from("notes")
         .select("*")
         .eq('id', noteId)
-        .single();
+        .maybeSingle();  // Utiliser maybeSingle au lieu de single
 
-      if (fetchError) throw fetchError;
-
-      if (noteToDelete) {
-        await deleteStorageFiles(noteToDelete);
+      if (fetchError) {
+        console.error("Error fetching note:", fetchError);
+        throw fetchError;
       }
 
-      const { error } = await supabase
+      // Si la note n'existe pas, on considère que la suppression est réussie
+      if (!noteToDelete) {
+        console.log("Note already deleted or doesn't exist:", noteId);
+        return;
+      }
+
+      // Supprimer les fichiers associés
+      await deleteStorageFiles(noteToDelete);
+
+      // Supprimer la note
+      const { error: deleteError } = await supabase
         .from("notes")
         .delete()
         .eq('id', noteId);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
       
       toast({
         title: "Note supprimée",
