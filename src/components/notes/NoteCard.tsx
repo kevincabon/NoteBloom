@@ -15,6 +15,7 @@ import { NoteActions } from "./NoteActions";
 import { NoteMetadata } from "./NoteMetadata";
 import { FolderBadge } from "./FolderBadge";
 import { AudioPlayer } from "./AudioPlayer";
+import { Calendar, RefreshCw } from "lucide-react";
 
 interface NoteCardProps {
   note: Note;
@@ -88,12 +89,22 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
           phone={note.phone}
         />
 
-        <time className="text-sm text-muted-foreground mt-4 block">
-          {new Intl.DateTimeFormat("fr-FR", {
-            dateStyle: "medium",
-            timeStyle: "short",
-          }).format(new Date(note.created_at))}
-        </time>
+        <div className="flex flex-col gap-2 mt-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <span>Créé le {new Intl.DateTimeFormat("fr-FR", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            }).format(new Date(note.created_at))}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <RefreshCw className="h-4 w-4" />
+            <span>Modifié le {new Intl.DateTimeFormat("fr-FR", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            }).format(new Date(note.updated_at))}</span>
+          </div>
+        </div>
       </Card>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -119,6 +130,22 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
                 <ImageGallery images={note.images} />
               </div>
             )}
+            <div className="flex flex-col gap-2 mt-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>Créé le {new Intl.DateTimeFormat("fr-FR", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                }).format(new Date(note.created_at))}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4" />
+                <span>Modifié le {new Intl.DateTimeFormat("fr-FR", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                }).format(new Date(note.updated_at))}</span>
+              </div>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
