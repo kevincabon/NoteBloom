@@ -14,6 +14,10 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+type Profile = {
+  username: string | null;
+};
+
 type Feedback = {
   id: string;
   type: string;
@@ -21,9 +25,7 @@ type Feedback = {
   status: string;
   created_at: string;
   user_id: string;
-  profiles: {
-    username: string;
-  };
+  profiles: Profile;
 };
 
 export const FeedbackManager = () => {
@@ -35,10 +37,7 @@ export const FeedbackManager = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("feedback")
-        .select(`
-          *,
-          profiles:user_id(username)
-        `)
+        .select("*, profiles:user_id(username)")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
