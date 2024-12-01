@@ -63,7 +63,7 @@ export const useSharedNotes = () => {
             console.log("Fetching owner info for note:", note.id);
             const { data: ownerData, error: ownerError } = await supabase
               .from("profiles")
-              .select("email, display_name")
+              .select("username")
               .eq("id", note.user_id)
               .single();
 
@@ -75,7 +75,7 @@ export const useSharedNotes = () => {
               ...note,
               folder_name: note.folders?.name,
               folder_color: note.folders?.color,
-              owner: ownerData?.display_name || ownerData?.email || "Unknown",
+              owner: ownerData?.username || "Unknown",
             };
           })
         );

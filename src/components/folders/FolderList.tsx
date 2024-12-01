@@ -84,6 +84,11 @@ export const FolderList = ({
     );
   };
 
+  const handleCreateClick = () => {
+    console.log("Opening create dialog");
+    setShowCreateDialog(true);
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -96,7 +101,7 @@ export const FolderList = ({
           className={`w-full justify-start ${selectedFolderId === null && !isSharedNotesSelected ? 'bg-accent' : ''}`}
           onClick={() => onSelectFolder(null)}
         >
-          {t('folders.allNotes', 'Toutes les notes')}
+          {t('folders.all')}
         </Button>
         
         {onSelectSharedNotes && (
@@ -106,7 +111,7 @@ export const FolderList = ({
             onClick={onSelectSharedNotes}
           >
             <Share2 className="mr-2 h-4 w-4" />
-            {t('folders.sharedWithMe', 'Notes partagées avec moi')}
+            {t('folders.sharedWithMe')}
           </Button>
         )}
 
@@ -114,10 +119,10 @@ export const FolderList = ({
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() => setShowCreateDialog(true)}
+          onClick={handleCreateClick}
         >
           <Plus className="mr-2 h-4 w-4" />
-          {t('folders.createFolder', 'Créer un dossier')}
+          {t('folders.createFolder')}
         </Button>
       </div>
 
@@ -127,7 +132,7 @@ export const FolderList = ({
 
       {showCreateDialog && (
         <FolderDialog
-          open={showCreateDialog}
+          isOpen={showCreateDialog}
           onOpenChange={setShowCreateDialog}
           onSubmit={onCreateFolder}
           folders={folders}
@@ -136,7 +141,7 @@ export const FolderList = ({
 
       {editingFolder && (
         <FolderDialog
-          open={!!editingFolder}
+          isOpen={!!editingFolder}
           onOpenChange={() => setEditingFolder(null)}
           onSubmit={(data) => {
             onUpdateFolder(editingFolder.id, data);

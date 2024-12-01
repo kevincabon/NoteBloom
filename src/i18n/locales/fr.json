@@ -30,6 +30,7 @@
     "edit": "Modifier le dossier",
     "delete": "Supprimer le dossier",
     "name": "Nom",
+    "createFolder": "Créer un dossier",
     "description": "Description",
     "color": "Couleur",
     "namePlaceholder": "Mon dossier",
@@ -40,6 +41,7 @@
     "updated": "Dossier mis à jour",
     "deleted": "Dossier supprimé",
     "empty": "Aucun dossier",
+    "sharedWithMe": "Notes partagées avec moi",
     "errors": {
       "nameRequired": "Le nom est requis",
       "createError": "Impossible de créer le dossier",
