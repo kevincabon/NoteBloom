@@ -4,7 +4,7 @@ import { Note } from "@/types/note";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ImageUploader } from "./ImageUploader";
 import { ImageList } from "./ImageList";
 import { useImageHandling } from "./useImageHandling";
@@ -37,6 +37,14 @@ export const NoteForm = ({
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(editingNote?.folder_id || null);
+
+  useEffect(() => {
+    console.log("NoteForm - editingNote:", editingNote);
+    if (editingNote?.folder_id !== undefined) {
+      console.log("NoteForm - Setting folder_id to:", editingNote.folder_id);
+      setSelectedFolderId(editingNote.folder_id);
+    }
+  }, [editingNote?.folder_id]);
 
   const {
     existingImages,

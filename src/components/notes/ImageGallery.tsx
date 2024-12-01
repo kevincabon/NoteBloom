@@ -30,7 +30,7 @@ export const ImageGallery = ({ images }: ImageGalleryProps) => {
                 className="w-20 h-20 object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity"
               />
             </DialogTrigger>
-            <DialogContent className="max-w-3xl">
+            <DialogContent className="max-w-3xl z-[9999]">
               <img
                 src={image}
                 alt=""

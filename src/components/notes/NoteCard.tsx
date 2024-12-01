@@ -18,16 +18,22 @@ import { Edit, X } from "lucide-react";
 
 interface NoteCardProps {
   note: Note;
-  onEdit: (note: Note) => void;
-  onDelete: (id: string) => void;
-  onMove: (note: Note) => void;
+  onEdit?: (note: Note) => void;
+  onDelete?: (id: string) => void;
+  isSharedView?: boolean;
 }
 
-export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
+export const NoteCard = ({ 
+  note, 
+  onEdit, 
+  onDelete, 
+  isSharedView = false 
+}: NoteCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const formattedContent = formatContent(note.content || "");
 
   const handleCardClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('[role="dialog"]')) return;
     if (!(e.target as HTMLElement).closest('button') && !(e.target as HTMLElement).closest('a')) {
       setIsOpen(true);
     }
@@ -39,42 +45,54 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
         className="p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300 fade-in"
         onClick={handleCardClick}
       >
-        <NoteHeader note={note} onEdit={onEdit} onDelete={onDelete} onMove={onMove} />
-        
-        <div className="max-h-[200px] overflow-hidden relative">
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-note-50 dark:from-note-800 to-transparent" />
-          <NoteContent 
-            content={formattedContent} 
-            audioUrl={note.audio_url}
+        <NoteHeader 
+          note={note} 
+          onEdit={onEdit}
+          onDelete={onDelete}
+          isSharedView={isSharedView}
+        />
+        <div className="mt-4">
+          <NoteContent content={formattedContent} />
+        </div>
+        <div className="mt-4">
+          <NoteMetadata 
+            links={note.links}
+            email={note.email}
+            phone={note.phone}
             images={note.images}
+            isSharedView={isSharedView}
           />
         </div>
-
-        <NoteMetadata
-          links={note.links}
-          email={note.email}
-          phone={note.phone}
-        />
-
-        <NoteTimestamps createdAt={note.created_at} updatedAt={note.updated_at} />
+        <div className="mt-2">
+          <NoteTimestamps 
+            createdAt={note.created_at}
+            updatedAt={note.updated_at}
+            owner={note.owner}
+          />
+        </div>
       </Card>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto">
+        <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto" aria-describedby="note-content-description">
           <SheetHeader className="space-y-4">
             <div className="flex justify-between items-start gap-4">
               <SheetTitle className="text-xl font-bold">{note.title}</SheetTitle>
+              <div id="note-content-description" className="sr-only">
+                Contenu détaillé de la note {note.title}
+              </div>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setIsOpen(false);
-                    onEdit(note);
-                  }}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
+                {!isSharedView && onEdit && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setIsOpen(false);
+                      onEdit(note);
+                    }}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -96,10 +114,22 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
               content={formattedContent} 
               audioUrl={note.audio_url}
               images={note.images}
-              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none"
+              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none no-truncate"
+              fullContent
             />
             <div className="mt-4 pt-4 border-t">
-              <NoteTimestamps createdAt={note.created_at} updatedAt={note.updated_at} />
+              <NoteMetadata
+                links={note.links}
+                email={note.email}
+                phone={note.phone}
+                images={note.images}
+                isSharedView={isSharedView}
+              />
+              <NoteTimestamps 
+                createdAt={note.created_at}
+                updatedAt={note.updated_at}
+                owner={isSharedView ? note.owner : undefined}
+              />
             </div>
           </div>
         </SheetContent>

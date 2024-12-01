@@ -14,4 +14,6 @@ export interface Note {
   folder_name?: string;
   folder_color?: string;
   user_id: string | null;
+  owner?: string;
+  tags?: Tag[];
 }

@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
-import { Note } from "@/types/note";
+import { Note } from "@/types";
 
-export type CreateNoteParams = {
+interface CreateNoteParams {
   title: string;
   content: string | null;
   images: string[];
   audioUrl: string | null;
   folderId: string | null;
-};
+}
 
 export const useNoteMutations = (
   handleCreateNote: (title: string, content: string | null, images: string[], audioUrl: string | null, folderId: string | null) => Promise<void>,
@@ -27,6 +27,7 @@ export const useNoteMutations = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.refetchQueries({ queryKey: ["notes"] });
       toast({
         title: t("notes.created"),
         description: t("notes.noteCreatedSuccess"),
@@ -38,6 +39,7 @@ export const useNoteMutations = (
     mutationFn: handleUpdateNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.refetchQueries({ queryKey: ["notes"] });
       toast({
         title: t("notes.updated"),
         description: t("notes.noteUpdatedSuccess"),
@@ -49,6 +51,7 @@ export const useNoteMutations = (
     mutationFn: handleDeleteNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.refetchQueries({ queryKey: ["notes"] });
       toast({
         title: t("notes.deleted"),
         description: t("notes.noteDeletedSuccess"),

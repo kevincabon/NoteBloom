@@ -27,13 +27,40 @@ export const useNotes = (initialNotes: Note[] = []) => {
   const { t } = useTranslation();
 
   // Fonction pour récupérer toutes les notes
-  const fetchNotes = async (userId: string) => {
-    console.log("Fetching notes for user:", userId);
-    const { data, error } = await supabase
+  const fetchNotes = async (userId: string, folderId?: string | null) => {
+    console.log("Fetching notes for user:", userId, "folder:", folderId);
+    
+    // Si un dossier est sélectionné, récupérer d'abord tous les sous-dossiers
+    let folderIds: string[] = [];
+    if (folderId) {
+      const { data: folders } = await supabase
+        .from("folders")
+        .select("id, parent_id");
+
+      const getSubFolderIds = (parentId: string): string[] => {
+        const subFolders = folders?.filter(f => f.parent_id === parentId) || [];
+        return [
+          parentId,
+          ...subFolders.flatMap(f => getSubFolderIds(f.id))
+        ];
+      };
+
+      folderIds = getSubFolderIds(folderId);
+    }
+
+    // Construire la requête
+    let query = supabase
       .from("notes")
       .select("*, folders(name, color)")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
+
+    // Si un dossier est sélectionné, filtrer par tous les dossiers (parent + enfants)
+    if (folderId !== undefined && folderIds.length > 0) {
+      query = query.in("folder_id", folderIds);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     
@@ -47,17 +74,17 @@ export const useNotes = (initialNotes: Note[] = []) => {
     return transformedData as Note[];
   };
 
-  const { data: notes = initialNotes } = useQuery({
+  const { data: notes, isLoading } = useQuery<Note[]>({
     queryKey: ["notes"],
     queryFn: async () => {
-      console.log("Initial notes fetch...");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         navigate("/login");
-        return initialNotes;
+        return [];
       }
       return fetchNotes(user.id);
     },
+    initialData: initialNotes,
   });
 
   useEffect(() => {

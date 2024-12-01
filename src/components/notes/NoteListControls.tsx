@@ -4,14 +4,20 @@ import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Tag } from "@/types/tag";
+import { TagFilter } from "@/components/tags/TagFilter";
 
 interface NoteListControlsProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  sortBy: "date" | "title";
-  onSortChange: (value: "date" | "title") => void;
+  sortBy: string;
+  onSortChange: (value: string) => void;
   isGlobalSearch: boolean;
   onGlobalSearchChange: (value: boolean) => void;
+  selectedTags: Tag[];
+  onSelectTag: (tag: Tag) => void;
+  onRemoveTag: (tagId: string) => void;
+  showGlobalSearch?: boolean;
 }
 
 export const NoteListControls = ({
@@ -21,6 +27,10 @@ export const NoteListControls = ({
   onSortChange,
   isGlobalSearch,
   onGlobalSearchChange,
+  selectedTags,
+  onSelectTag,
+  onRemoveTag,
+  showGlobalSearch = true,
 }: NoteListControlsProps) => {
   const { t } = useTranslation();
 
@@ -46,14 +56,23 @@ export const NoteListControls = ({
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="global-search"
-          checked={isGlobalSearch}
-          onCheckedChange={onGlobalSearchChange}
-        />
-        <Label htmlFor="global-search">Rechercher dans tous les dossiers</Label>
-      </div>
+
+      <TagFilter
+        selectedTags={selectedTags}
+        onSelectTag={onSelectTag}
+        onRemoveTag={onRemoveTag}
+      />
+
+      {showGlobalSearch && (
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="global-search"
+            checked={isGlobalSearch}
+            onCheckedChange={onGlobalSearchChange}
+          />
+          <Label htmlFor="global-search">{t("notes.searchInAllFolders")}</Label>
+        </div>
+      )}
     </div>
   );
 };

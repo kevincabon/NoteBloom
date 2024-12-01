@@ -7,9 +7,10 @@ interface NoteContentProps {
   audioUrl?: string | null;
   images?: string[];
   className?: string;
+  fullContent?: boolean;
 }
 
-export const NoteContent = ({ content, audioUrl, images, className }: NoteContentProps) => {
+export const NoteContent = ({ content, audioUrl, images, className, fullContent = false }: NoteContentProps) => {
   return (
     <div className={cn("space-y-4", className)}>
       {audioUrl && (
@@ -18,7 +19,11 @@ export const NoteContent = ({ content, audioUrl, images, className }: NoteConten
         </div>
       )}
       <div 
-        className={cn("prose dark:prose-invert max-w-none", className)}
+        className={cn(
+          "prose dark:prose-invert max-w-none",
+          !fullContent && "line-clamp-4",
+          className
+        )}
         dangerouslySetInnerHTML={{ __html: content }}
       />
       {images && images.length > 0 && (

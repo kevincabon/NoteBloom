@@ -53,16 +53,19 @@ export const useNoteCrud = () => {
 
   const updateNote = async (note: Note) => {
     try {
-      const noteData = {
-        ...note,
-        content: note.content || null
+      // Exclure les champs qui ne sont pas dans la table notes
+      const { tags, folders, ...noteData } = note;
+      const updateData = {
+        ...noteData,
+        content: noteData.content || null,
+        folder_id: noteData.folder_id || null // S'assurer que folder_id est inclus
       };
 
-      console.log("Updating note with data:", noteData);
+      console.log("Updating note with data:", updateData);
 
       const { error } = await supabase
         .from("notes")
-        .update(noteData)
+        .update(updateData)
         .eq('id', note.id);
 
       if (error) {

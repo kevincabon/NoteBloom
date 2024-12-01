@@ -1,7 +1,7 @@
 import { Link } from "lucide-react";
 
 export const parseContent = (content: string) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s<>]+)/g;
   const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g;
   const phoneRegex = /(\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9})/g;
 
@@ -17,8 +17,11 @@ export const formatContent = (content: string): string => {
 
   let formattedContent = content;
 
+  // Remplacer d'abord les retours à la ligne par des <br>
+  formattedContent = formattedContent.replace(/\n/g, '<br>');
+  
   // Format URLs
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s<>]+)/g;
   formattedContent = formattedContent.replace(urlRegex, (url) => {
     return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline" onclick="event.stopPropagation()">${url}</a>`;
   });
@@ -34,9 +37,6 @@ export const formatContent = (content: string): string => {
   formattedContent = formattedContent.replace(phoneRegex, (phone) => {
     return `<a href="tel:${phone}" class="text-primary hover:underline" onclick="event.stopPropagation()">${phone}</a>`;
   });
-
-  // Remplacer les retours à la ligne par des <br>
-  formattedContent = formattedContent.replace(/\n/g, '<br>');
 
   return formattedContent;
 };

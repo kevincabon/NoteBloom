@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Note } from "@/types/note";
-import { NoteMoveDialog } from "./NoteMoveDialog";
 import { NoteListControls } from "./NoteListControls";
 import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
@@ -9,7 +8,9 @@ import { useLocalNotes } from "@/hooks/useLocalNotes";
 import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import { useNoteOperations } from "./NoteOperations";
 import { CurrentFolderHeader } from "./CurrentFolderHeader";
-import { useNoteMutations, CreateNoteParams } from "@/hooks/useNoteMutations";
+import { useNoteMutations } from "@/hooks/useNoteMutations";
+import { useSharedNotes } from "@/hooks/useSharedNotes";
+import { Tag } from "@/types/tag";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -17,6 +18,17 @@ interface NotesContainerProps {
   onCreateNote: (note: Omit<Note, "id" | "created_at" | "updated_at">) => void;
   onUpdateNote: (note: Note) => void;
   onDeleteNote: (id: string) => void;
+  // Search and filter props
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  isGlobalSearch: boolean;
+  onGlobalSearchChange: (value: boolean) => void;
+  selectedTags: Tag[];
+  onSelectTag: (tag: Tag) => void;
+  onRemoveTag: (tagId: string) => void;
+  isSharedView?: boolean;
 }
 
 export const NotesContainer = ({
@@ -25,21 +37,30 @@ export const NotesContainer = ({
   onCreateNote,
   onUpdateNote,
   onDeleteNote,
+  // Search and filter props
+  searchQuery,
+  onSearchChange,
+  sortBy,
+  onSortChange,
+  isGlobalSearch,
+  onGlobalSearchChange,
+  selectedTags,
+  onSelectTag,
+  onRemoveTag,
+  isSharedView = false,
 }: NotesContainerProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isGlobalSearch, setIsGlobalSearch] = useState(false);
-  const [sortBy, setSortBy] = useState<"date" | "title">("date");
-  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  const { localNotes } = useLocalNotes(initialNotes, isGlobalSearch, searchQuery);
+  // Récupérer les notes partagées
+  const { data: sharedNotes = [] } = useSharedNotes();
+
+  const { localNotes } = useLocalNotes(initialNotes, isGlobalSearch, searchQuery, selectedTags);
   const globalSearchResults = useGlobalSearch(searchQuery, isGlobalSearch);
   
   const {
     handleCreateNote,
     handleUpdateNote,
-    handleMoveNote,
     handleDeleteNote,
   } = useNoteOperations({
     initialNotes,
@@ -60,7 +81,12 @@ export const NotesContainer = ({
     setIsEditDialogOpen(true);
   };
 
-  const currentNotes = isGlobalSearch ? globalSearchResults : localNotes;
+  // Utiliser les notes partagées si isSharedView est true
+  const currentNotes = isSharedView 
+    ? sharedNotes 
+    : isGlobalSearch 
+      ? globalSearchResults 
+      : localNotes;
 
   const filteredAndSortedNotes = currentNotes
     .filter((note) => {
@@ -85,25 +111,31 @@ export const NotesContainer = ({
     <div className="max-w-2xl mx-auto space-y-8">
       <CurrentFolderHeader selectedFolderId={selectedFolderId} />
       
-      <CreateNoteSection 
-        onCreateNote={async (title, content, images, audioUrl, folderId) => {
-          await createNoteMutation.mutateAsync({
-            title,
-            content,
-            images,
-            audioUrl,
-            folderId
-          });
-        }} 
-      />
+      {!isSharedView && (
+        <CreateNoteSection 
+          onCreateNote={async (title, content, images, audioUrl, folderId) => {
+            await createNoteMutation.mutateAsync({
+              title,
+              content,
+              images,
+              audioUrl,
+              folderId
+            });
+          }} 
+        />
+      )}
 
       <NoteListControls
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={onSearchChange}
         sortBy={sortBy}
-        onSortChange={(value: "date" | "title") => setSortBy(value)}
+        onSortChange={onSortChange}
         isGlobalSearch={isGlobalSearch}
-        onGlobalSearchChange={setIsGlobalSearch}
+        onGlobalSearchChange={onGlobalSearchChange}
+        selectedTags={selectedTags}
+        onSelectTag={onSelectTag}
+        onRemoveTag={onRemoveTag}
+        showGlobalSearch={!isSharedView}
       />
 
       <NoteList
@@ -112,27 +144,19 @@ export const NotesContainer = ({
         onDelete={async (id) => {
           await deleteNoteMutation.mutateAsync(id);
         }}
-        onMove={(note) => {
-          setSelectedNote(note);
-          setIsMoveDialogOpen(true);
-        }}
+        isSharedView={isSharedView}
       />
 
-      <NoteMoveDialog
-        isOpen={isMoveDialogOpen}
-        onOpenChange={setIsMoveDialogOpen}
-        selectedNote={selectedNote}
-        onMoveNote={handleMoveNote}
-      />
-
-      <NoteEditDialog
-        note={selectedNote}
-        isOpen={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-        onUpdateNote={async (note) => {
-          await updateNoteMutation.mutateAsync(note);
-        }}
-      />
+      {!isSharedView && (
+        <NoteEditDialog
+          note={selectedNote}
+          isOpen={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+          onUpdateNote={async (note) => {
+            await updateNoteMutation.mutateAsync(note);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,172 @@
 {
+  "common": {
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "logout": "Déconnexion",
+    "backToHome": "Retour à l'accueil",
+    "theme": "Thème",
+    "language": "Langue",
+    "uploading": "Envoi en cours...",
+    "description": "Description",
+    "optional": "optionnel",
+    "createdAt": "Créé le",
+    "updatedAt": "Modifié le",
+    "unknown": "Date inconnue",
+    "add": "Ajouter",
+    "copy": "Copier",
+    "share": "Partager",
+    "copied": "Copié !",
+    "email": "Email"
+  },
+  "folders": {
+    "title": "Dossiers",
+    "all": "Toutes les notes",
+    "loading": "Chargement...",
+    "newFolder": "Nouveau dossier",
+    "create": "Créer",
+    "edit": "Modifier le dossier",
+    "delete": "Supprimer le dossier",
+    "name": "Nom",
+    "description": "Description",
+    "color": "Couleur",
+    "namePlaceholder": "Mon dossier",
+    "descriptionPlaceholder": "Description du dossier",
+    "searchPlaceholder": "Rechercher dans les dossiers...",
+    "colorPlaceholder": "Couleur du dossier",
+    "created": "Dossier créé",
+    "updated": "Dossier mis à jour",
+    "deleted": "Dossier supprimé",
+    "empty": "Aucun dossier",
+    "errors": {
+      "nameRequired": "Le nom est requis",
+      "createError": "Impossible de créer le dossier",
+      "updateError": "Impossible de modifier le dossier",
+      "deleteError": "Impossible de supprimer le dossier"
+    },
+    "delete": {
+      "title": "Supprimer le dossier",
+      "description": "Êtes-vous sûr de vouloir supprimer ce dossier ? Toutes les notes qu'il contient seront également supprimées. Cette action est irréversible."
+    }
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "Nouvelle note",
+    "create": "Créer",
+    "edit": "Modifier la note",
+    "titlePlaceholder": "Titre de la note",
+    "contentPlaceholder": "Commencez à écrire...",
+    "created": "Note créée",
+    "updated": "Note mise à jour",
+    "deleted": "Note supprimée",
+    "searchPlaceholder": "Rechercher des notes...",
+    "sortBy": "Trier par",
+    "sortByDate": "Date",
+    "sortByTitle": "Titre",
+    "empty": "Ce dossier ne contient aucune note",
+    "audioRecording": "Enregistrement audio",
+    "existingImages": "Images existantes",
+    "newImages": "Nouvelles images",
+    "allNotes": "Toutes les notes",
+    "noFolder": "Sans dossier",
+    "addImage": "Ajouter une image",
+    "addImageUrl": "Ajouter une image depuis une URL",
+    "imageUrlPlaceholder": "Collez l'URL de l'image ici",
+    "moveNote": "Déplacer la note",
+    "selectDestination": "Sélectionnez le dossier de destination",
+    "shared": {
+      "title": "Notes partagées avec moi",
+      "empty": "Aucune note partagée",
+      "owner": "Partagée par",
+      "indicator": "Cette note est partagée",
+      "with": "Partagée avec"
+    },
+    "sharing": {
+      "title": "Partager la note",
+      "description": "Partagez votre note avec d'autres utilisateurs",
+      "makePublic": "Rendre la note publique",
+      "generateLink": "Générer un lien de partage",
+      "expiration": "Durée de validité",
+      "expirations": {
+        "1hour": "1 heure",
+        "1day": "1 jour",
+        "7days": "7 jours",
+        "30days": "30 jours"
+      },
+      "expiresInHours": "Expire dans {{hours}} heure(s)",
+      "expiresInDays": "Expire dans {{days}} jour(s)",
+      "success": {
+        "madePublic": "La note est maintenant publique",
+        "madePrivate": "La note est maintenant privée",
+        "shared": "Note partagée avec succès",
+        "deleted": "Partage supprimé",
+        "linkCopied": "Lien copié dans le presse-papiers"
+      },
+      "errors": {
+        "updateError": "Erreur lors de la mise à jour de la visibilité",
+        "shareError": "Erreur lors du partage de la note",
+        "deleteError": "Erreur lors de la suppression du partage",
+        "linkError": "Erreur lors de la génération du lien",
+        "copyError": "Erreur lors de la copie du lien",
+        "userNotFound": "Utilisateur non trouvé",
+        "alreadyShared": "La note est déjà partagée avec cet utilisateur"
+      }
+    },
+    "errors": {
+      "titleRequired": "Le titre est requis",
+      "createError": "Impossible de créer la note",
+      "updateError": "Impossible de modifier la note",
+      "deleteError": "Impossible de supprimer la note",
+      "imageUploadFailed": "Impossible d'envoyer l'image"
+    },
+    "delete": {
+      "title": "Supprimer la note",
+      "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+    }
+  },
+  "tags": {
+    "title": "Tags",
+    "create": "Créer un tag",
+    "edit": "Modifier le tag",
+    "delete": "Supprimer le tag",
+    "name": "Nom",
+    "color": "Couleur",
+    "addToNote": "Ajouter un tag",
+    "removeFromNote": "Retirer le tag",
+    "noTags": "Aucun tag",
+    "searchPlaceholder": "Rechercher un tag...",
+    "errors": {
+      "createError": "Impossible de créer le tag",
+      "updateError": "Impossible de modifier le tag",
+      "deleteError": "Impossible de supprimer le tag"
+    }
+  },
+  "sharedNote": {
+    "errors": {
+      "error": "Une erreur est survenue",
+      "fetchError": "Impossible de récupérer la note partagée",
+      "linkNotFound": "Le lien de partage est invalide ou a expiré",
+      "linkExpired": "Ce lien de partage a expiré",
+      "noteNotFound": "La note n'a pas été trouvée"
+    }
+  },
+  "auth": {
+    "switchToGuest": "Mode invité",
+    "switchToAuth": "Se connecter",
+    "guestMode": "Mode invité actif",
+    "signIn": "Se connecter",
+    "notAuthenticated": "Vous devez être connecté"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
   "feedback": {
     "giveFeedback": "Donner un avis",
-    "title": "Votre avis nous intéresse",
+    "title": "Votre avis compte",
     "description": "Partagez vos suggestions, signalez un bug ou posez une question.",
     "type": "Type",
     "selectType": "Sélectionnez un type",
@@ -11,11 +176,71 @@
       "question": "Question"
     },
     "content": "Message",
-    "contentPlaceholder": "Décrivez votre suggestion, le bug rencontré ou votre question...",
+    "contentPlaceholder": "Décrivez votre suggestion, bug ou question...",
     "submit": "Envoyer",
     "success": "Merci pour votre retour !",
     "successDescription": "Nous avons bien reçu votre message.",
     "error": "Une erreur est survenue",
-    "errorDescription": "Impossible d'envoyer votre message. Veuillez réessayer."
+    "errorDescription": "Impossible d'envoyer votre message. Veuillez réessayer.",
+    "notAuthenticated": "Vous devez être connecté pour donner un avis"
+  },
+  "profile": {
+    "title": "Profil",
+    "email": "Email",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Entrez votre nom d'utilisateur",
+    "updated": "Profil mis à jour",
+    "statistics": "Statistiques",
+    "recentActivity": "Activité récente",
+    "options": "Options",
+    "totalNotes": "Total des notes",
+    "totalFolders": "Total des dossiers",
+    "errors": {
+      "updateFailed": "Impossible de mettre à jour le profil"
+    }
+  },
+  "admin": {
+    "dashboard": "Tableau de bord",
+    "totalUsers": "Utilisateurs",
+    "totalNotes": "Notes",
+    "totalFolders": "Dossiers",
+    "pendingFeedback": "Avis en attente",
+    "feedbackList": "Liste des avis",
+    "unauthorized": "Non autorisé",
+    "unauthorizedDescription": "Vous n'avez pas la permission d'accéder à cette page",
+    "error": "Erreur",
+    "updateError": "Impossible de mettre à jour le statut",
+    "success": "Succès",
+    "statusUpdated": "Statut mis à jour"
+  },
+  "landing": {
+    "title": "Bienvenue sur Quick Note Garden",
+    "subtitle": "Organisez vos idées, créez des notes et gardez tout en ordre",
+    "getStarted": "Commencer",
+    "features": {
+      "title": "Fonctionnalités",
+      "notes": {
+        "title": "Prise de notes simple",
+        "description": "Créez et modifiez des notes rapidement avec notre éditeur intuitif"
+      },
+      "folders": {
+        "title": "Organisation en dossiers",
+        "description": "Organisez vos notes dans des dossiers personnalisables avec des couleurs"
+      },
+      "organization": {
+        "title": "Recherche efficace",
+        "description": "Retrouvez vos notes facilement avec notre système de recherche"
+      }
+    }
+  },
+  "favorites": {
+    "title": "Favoris",
+    "addToFavorites": "Ajouter aux favoris",
+    "removeFromFavorites": "Retirer des favoris",
+    "addSuccess": "Note ajoutée aux favoris",
+    "removeSuccess": "Note retirée des favoris",
+    "addError": "Impossible d'ajouter aux favoris",
+    "removeError": "Impossible de retirer des favoris",
+    "noFavorites": "Aucun favori"
   }
 }

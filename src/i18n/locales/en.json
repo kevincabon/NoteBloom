@@ -8,34 +8,197 @@
     "logout": "Logout",
     "backToHome": "Back to Home",
     "theme": "Theme",
-    "language": "Language"
+    "language": "Language",
+    "uploading": "Uploading...",
+    "description": "Description",
+    "optional": "optional",
+    "createdAt": "Created on",
+    "updatedAt": "Modified on",
+    "unknown": "Unknown date",
+    "add": "Add",
+    "copy": "Copy",
+    "share": "Share",
+    "copied": "Copied!",
+    "email": "Email"
+  },
+  "folders": {
+    "title": "Folders",
+    "newFolder": "New Folder",
+    "create": "Create",
+    "edit": "Edit Folder",
+    "delete": "Delete Folder",
+    "searchPlaceholder": "Search in folders...",
+    "namePlaceholder": "Folder name",
+    "colorPlaceholder": "Folder color",
+    "descriptionPlaceholder": "Folder description...",
+    "created": "Folder created",
+    "updated": "Folder updated",
+    "deleted": "Folder deleted",
+    "empty": "No folders",
+    "errors": {
+      "nameRequired": "Name is required",
+      "createError": "Could not create folder",
+      "updateError": "Could not update folder",
+      "deleteError": "Could not delete folder"
+    }
   },
   "notes": {
     "title": "Notes",
-    "newNote": "New note",
+    "newNote": "New Note",
+    "create": "Create",
+    "edit": "Edit Note",
     "titlePlaceholder": "Note title",
     "contentPlaceholder": "Start writing...",
     "created": "Note created",
     "updated": "Note updated",
     "deleted": "Note deleted",
     "searchPlaceholder": "Search notes...",
+    "sortBy": "Sort by",
+    "sortByDate": "Date",
+    "sortByTitle": "Title",
+    "empty": "No notes",
+    "audioRecording": "Audio recording",
+    "existingImages": "Existing images",
+    "newImages": "New images",
+    "allNotes": "All notes",
+    "noFolder": "No folder",
+    "addImage": "Add image",
+    "addImageUrl": "Add image from URL",
+    "imageUrlPlaceholder": "Paste image URL here",
+    "moveNote": "Move note",
+    "selectDestination": "Select destination folder",
+    "sharing": {
+      "title": "Share Note",
+      "public": "Visibility",
+      "shareWithUsers": "Share with Users",
+      "generateLink": "Share Link",
+      "publicNote": "Public Note",
+      "privateNote": "Private Note",
+      "publicDescription": "Anyone with the link can view this note",
+      "privateDescription": "Only you can view this note",
+      "userEmailPlaceholder": "Enter email address",
+      "sharedWith": "Shared with",
+      "noShares": "This note hasn't been shared with anyone yet",
+      "linkExpiration": "Link Expiration",
+      "expiresInHours": "Expires in {{hours}} hours",
+      "expiresInDays": "Expires in {{days}} days",
+      "success": {
+        "madePublic": "Note is now public",
+        "madePrivate": "Note is now private",
+        "shared": "Note shared successfully",
+        "deleted": "Share removed successfully",
+        "linkCopied": "Share link copied to clipboard"
+      },
+      "errors": {
+        "userNotFound": "User not found",
+        "alreadyShared": "Note is already shared with this user",
+        "shareError": "Error sharing note",
+        "visibilityError": "Error updating note visibility",
+        "loadError": "Error loading shared users"
+      }
+    },
+    "shared": {
+      "title": "Shared with me",
+      "empty": "No shared notes yet",
+      "owner": "Shared by {{username}}",
+      "indicator": "This note is shared",
+      "with": "Shared with"
+    },
     "errors": {
       "titleRequired": "Title is required",
       "createError": "Could not create note",
       "updateError": "Could not update note",
-      "deleteError": "Could not delete note"
+      "deleteError": "Could not delete note",
+      "imageUploadFailed": "Could not upload image"
+    },
+    "delete": {
+      "note": {
+        "title": "Delete Note",
+        "description": "Are you sure you want to delete this note? This action cannot be undone."
+      },
+      "folder": {
+        "title": "Delete Folder",
+        "description": "Are you sure you want to delete this folder? All notes inside it will also be deleted. This action cannot be undone."
+      }
+    }
+  },
+  "tags": {
+    "title": "Tags",
+    "create": "Create Tag",
+    "edit": "Edit Tag",
+    "delete": "Delete Tag",
+    "name": "Name",
+    "color": "Color",
+    "addToNote": "Add Tag",
+    "removeFromNote": "Remove Tag",
+    "noTags": "No tags",
+    "searchPlaceholder": "Search tags...",
+    "errors": {
+      "createError": "Could not create tag",
+      "updateError": "Could not update tag",
+      "deleteError": "Could not delete tag"
     }
   },
   "auth": {
-    "switchToGuest": "Guest mode",
-    "switchToAuth": "Sign in",
-    "guestMode": "Guest mode active",
-    "signIn": "Sign in"
+    "switchToGuest": "Guest Mode",
+    "switchToAuth": "Sign In",
+    "guestMode": "Guest Mode Active",
+    "signIn": "Sign In",
+    "notAuthenticated": "You must be signed in"
   },
   "theme": {
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "feedback": {
+    "giveFeedback": "Give Feedback",
+    "title": "Your Feedback Matters",
+    "description": "Share your suggestions, report a bug, or ask a question.",
+    "type": "Type",
+    "selectType": "Select a type",
+    "types": {
+      "suggestion": "Suggestion",
+      "bug": "Bug",
+      "question": "Question"
+    },
+    "content": "Message",
+    "contentPlaceholder": "Describe your suggestion, bug, or question...",
+    "submit": "Submit",
+    "success": "Thank you for your feedback!",
+    "successDescription": "We have received your message.",
+    "error": "An error occurred",
+    "errorDescription": "Could not send your message. Please try again.",
+    "notAuthenticated": "You must be signed in to give feedback"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "updated": "Profile updated",
+    "statistics": "Statistics",
+    "recentActivity": "Recent Activity",
+    "options": "Options",
+    "totalNotes": "Total Notes",
+    "totalFolders": "Total Folders",
+    "errors": {
+      "updateFailed": "Could not update profile"
+    }
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "totalUsers": "Users",
+    "totalNotes": "Notes",
+    "totalFolders": "Folders",
+    "pendingFeedback": "Pending Feedback",
+    "feedbackList": "Feedback List",
+    "unauthorized": "Unauthorized",
+    "unauthorizedDescription": "You don't have permission to access this page",
+    "error": "Error",
+    "updateError": "Could not update status",
+    "success": "Success",
+    "statusUpdated": "Status updated"
   },
   "landing": {
     "title": "Welcome to Quick Note Garden",
@@ -56,5 +219,24 @@
         "description": "Find your notes easily with our search system"
       }
     }
+  },
+  "sharedNote": {
+    "errors": {
+      "error": "An error occurred",
+      "fetchError": "Unable to retrieve the shared note",
+      "linkNotFound": "The share link is invalid or has expired",
+      "linkExpired": "This share link has expired",
+      "noteNotFound": "Note not found"
+    }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "addSuccess": "Note added to favorites",
+    "removeSuccess": "Note removed from favorites",
+    "addError": "Could not add to favorites",
+    "removeError": "Could not remove from favorites",
+    "noFavorites": "No favorites"
   }
 }

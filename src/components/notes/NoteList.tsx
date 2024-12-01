@@ -6,16 +6,23 @@ interface NoteListProps {
   notes: Note[];
   onEdit: (note: Note) => void;
   onDelete: (id: string) => void;
-  onMove: (note: Note) => void;
+  isSharedView?: boolean;
 }
 
-export const NoteList = ({ notes, onEdit, onDelete, onMove }: NoteListProps) => {
+export const NoteList = ({ 
+  notes, 
+  onEdit, 
+  onDelete, 
+  isSharedView = false 
+}: NoteListProps) => {
   const { t } = useTranslation();
 
   if (notes.length === 0) {
     return (
       <div className="text-center p-8 text-muted-foreground">
-        {t('notes.empty', 'Ce dossier ne contient aucune note')}
+        {isSharedView 
+          ? t('notes.shared.empty', 'Aucune note partagée')
+          : t('notes.empty', 'Ce dossier ne contient aucune note')}
       </div>
     );
   }
@@ -26,9 +33,9 @@ export const NoteList = ({ notes, onEdit, onDelete, onMove }: NoteListProps) => 
         <NoteCard
           key={note.id}
           note={note}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          onMove={onMove}
+          onEdit={isSharedView ? undefined : onEdit}
+          onDelete={isSharedView ? undefined : onDelete}
+          isSharedView={isSharedView}
         />
       ))}
     </div>

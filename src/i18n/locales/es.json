@@ -8,34 +8,128 @@
     "logout": "Cerrar sesión",
     "backToHome": "Volver al inicio",
     "theme": "Tema",
-    "language": "Idioma"
+    "language": "Idioma",
+    "uploading": "Subiendo...",
+    "description": "Descripción",
+    "optional": "opcional",
+    "createdAt": "Creado el",
+    "updatedAt": "Modificado el",
+    "add": "Añadir"
+  },
+  "folders": {
+    "title": "Carpetas",
+    "newFolder": "Nueva carpeta",
+    "create": "Crear",
+    "edit": "Editar carpeta",
+    "delete": "Eliminar carpeta",
+    "searchPlaceholder": "Buscar en carpetas...",
+    "namePlaceholder": "Nombre de la carpeta",
+    "colorPlaceholder": "Color de la carpeta",
+    "descriptionPlaceholder": "Descripción de la carpeta...",
+    "created": "Carpeta creada",
+    "updated": "Carpeta actualizada",
+    "deleted": "Carpeta eliminada",
+    "empty": "Sin carpetas",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio",
+      "createError": "No se pudo crear la carpeta",
+      "updateError": "No se pudo actualizar la carpeta",
+      "deleteError": "No se pudo eliminar la carpeta"
+    }
   },
   "notes": {
     "title": "Notas",
     "newNote": "Nueva nota",
+    "create": "Crear",
+    "edit": "Editar nota",
     "titlePlaceholder": "Título de la nota",
     "contentPlaceholder": "Empieza a escribir...",
     "created": "Nota creada",
     "updated": "Nota actualizada",
     "deleted": "Nota eliminada",
     "searchPlaceholder": "Buscar notas...",
+    "sortBy": "Ordenar por",
+    "sortByDate": "Fecha",
+    "sortByTitle": "Título",
+    "empty": "Sin notas",
+    "audioRecording": "Grabación de audio",
+    "existingImages": "Imágenes existentes",
+    "newImages": "Nuevas imágenes",
+    "allNotes": "Todas las notas",
+    "noFolder": "Sin carpeta",
+    "addImage": "Añadir imagen",
+    "addImageUrl": "Añadir imagen desde URL",
+    "imageUrlPlaceholder": "Pega la URL de la imagen aquí",
+    "moveNote": "Mover nota",
+    "selectDestination": "Seleccionar carpeta de destino",
     "errors": {
       "titleRequired": "El título es obligatorio",
       "createError": "No se pudo crear la nota",
       "updateError": "No se pudo actualizar la nota",
-      "deleteError": "No se pudo eliminar la nota"
+      "deleteError": "No se pudo eliminar la nota",
+      "imageUploadFailed": "No se pudo subir la imagen"
     }
   },
   "auth": {
     "switchToGuest": "Modo invitado",
     "switchToAuth": "Iniciar sesión",
     "guestMode": "Modo invitado activo",
-    "signIn": "Iniciar sesión"
+    "signIn": "Iniciar sesión",
+    "notAuthenticated": "Debes iniciar sesión"
   },
   "theme": {
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema"
+  },
+  "feedback": {
+    "giveFeedback": "Dar retroalimentación",
+    "title": "Tu opinión importa",
+    "description": "Comparte tus sugerencias, reporta un error o haz una pregunta.",
+    "type": "Tipo",
+    "selectType": "Selecciona un tipo",
+    "types": {
+      "suggestion": "Sugerencia",
+      "bug": "Error",
+      "question": "Pregunta"
+    },
+    "content": "Mensaje",
+    "contentPlaceholder": "Describe tu sugerencia, error o pregunta...",
+    "submit": "Enviar",
+    "success": "¡Gracias por tu retroalimentación!",
+    "successDescription": "Hemos recibido tu mensaje.",
+    "error": "Ocurrió un error",
+    "errorDescription": "No se pudo enviar tu mensaje. Por favor, inténtalo de nuevo.",
+    "notAuthenticated": "Debes iniciar sesión para dar retroalimentación"
+  },
+  "profile": {
+    "title": "Perfil",
+    "email": "Correo electrónico",
+    "username": "Nombre de usuario",
+    "usernamePlaceholder": "Ingresa tu nombre de usuario",
+    "updated": "Perfil actualizado",
+    "statistics": "Estadísticas",
+    "recentActivity": "Actividad reciente",
+    "options": "Opciones",
+    "totalNotes": "Total de notas",
+    "totalFolders": "Total de carpetas",
+    "errors": {
+      "updateFailed": "No se pudo actualizar el perfil"
+    }
+  },
+  "admin": {
+    "dashboard": "Panel de control",
+    "totalUsers": "Usuarios",
+    "totalNotes": "Notas",
+    "totalFolders": "Carpetas",
+    "pendingFeedback": "Retroalimentación pendiente",
+    "feedbackList": "Lista de retroalimentación",
+    "unauthorized": "No autorizado",
+    "unauthorizedDescription": "No tienes permiso para acceder a esta página",
+    "error": "Error",
+    "updateError": "No se pudo actualizar el estado",
+    "success": "Éxito",
+    "statusUpdated": "Estado actualizado"
   },
   "landing": {
     "title": "Bienvenido a Quick Note Garden",
@@ -44,15 +138,15 @@
     "features": {
       "title": "Características",
       "notes": {
-        "title": "Toma de Notas Simple",
+        "title": "Toma de notas simple",
         "description": "Crea y edita notas rápidamente con nuestro editor intuitivo"
       },
       "folders": {
-        "title": "Organización por Carpetas",
+        "title": "Organización en carpetas",
         "description": "Organiza tus notas en carpetas personalizables con colores"
       },
       "organization": {
-        "title": "Búsqueda Eficiente",
+        "title": "Búsqueda eficiente",
         "description": "Encuentra tus notas fácilmente con nuestro sistema de búsqueda"
       }
     }
