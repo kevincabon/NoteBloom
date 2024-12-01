@@ -122,7 +122,7 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
               </div>
             )}
             <div 
-              className="whitespace-pre-wrap"
+              className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: formattedContent }}
             />
             {note.images && note.images.length > 0 && (
