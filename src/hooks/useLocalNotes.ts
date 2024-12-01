@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Note } from "@/types/note";
-import { useNotesRealtime } from "./useNotesRealtime";
 
 export const useLocalNotes = (
   initialNotes: Note[],
@@ -14,9 +13,6 @@ export const useLocalNotes = (
       setLocalNotes(initialNotes);
     }
   }, [initialNotes, isGlobalSearch, searchQuery]);
-
-  // Activer les mises à jour en temps réel
-  useNotesRealtime(setLocalNotes, initialNotes);
 
   return { localNotes, setLocalNotes };
 };
