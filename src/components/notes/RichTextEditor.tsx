@@ -12,6 +12,7 @@ import {
   List
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
 interface RichTextEditorProps {
   content: string;
@@ -30,7 +31,7 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
         alignments: ['left', 'center', 'right'],
       }),
     ],
-    content,
+    content: content || '',
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
@@ -41,6 +42,12 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
       },
     },
   });
+
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || '');
+    }
+  }, [content, editor]);
 
   if (!editor) {
     return null;
