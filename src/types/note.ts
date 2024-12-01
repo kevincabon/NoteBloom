@@ -10,4 +10,5 @@ export interface Note {
   is_public: boolean | null;
   images: string[] | null;
   folder_id: string | null;
+  audio_url: string | null;
 }
