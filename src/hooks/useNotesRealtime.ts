@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const useNotesRealtime = (onNoteChange: (notes: Note[]) => void, initialNotes: Note[]) => {
+export const useNotesRealtime = (setNotes: React.Dispatch<React.SetStateAction<Note[]>>, initialNotes: Note[]) => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export const useNotesRealtime = (onNoteChange: (notes: Note[]) => void, initialN
         (payload) => {
           if (payload.eventType === 'INSERT') {
             const newNote = payload.new as Note;
-            onNoteChange(prev => {
+            setNotes(prev => {
               // Vérifier si la note existe déjà
               if (prev.some(note => note.id === newNote.id)) {
                 return prev;
@@ -36,7 +36,7 @@ export const useNotesRealtime = (onNoteChange: (notes: Note[]) => void, initialN
             });
           } else if (payload.eventType === 'UPDATE') {
             const updatedNote = payload.new as Note;
-            onNoteChange(prev => prev.map(note => 
+            setNotes(prev => prev.map(note => 
               note.id === updatedNote.id ? updatedNote : note
             ));
             toast({
@@ -45,7 +45,7 @@ export const useNotesRealtime = (onNoteChange: (notes: Note[]) => void, initialN
             });
           } else if (payload.eventType === 'DELETE') {
             const deletedNote = payload.old as Note;
-            onNoteChange(prev => prev.filter(note => note.id !== deletedNote.id));
+            setNotes(prev => prev.filter(note => note.id !== deletedNote.id));
             toast({
               title: t('notes.deleted'),
               description: t('notes.noteDeletedSuccess'),
@@ -59,5 +59,5 @@ export const useNotesRealtime = (onNoteChange: (notes: Note[]) => void, initialN
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [queryClient, t, toast, onNoteChange]);
+  }, [queryClient, t, toast, setNotes]);
 };
