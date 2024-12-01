@@ -10,6 +10,7 @@ import { useNotes } from "@/hooks/useNotes";
 import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
 import { NoteEditDialog } from "./NoteEditDialog";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -34,6 +35,7 @@ export const NotesContainer = ({
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
+  const queryClient = useQueryClient();
 
   const handleCreateNote = async (images: string[], audioUrl: string | null) => {
     const noteData = {
@@ -52,6 +54,7 @@ export const NotesContainer = ({
       onCreateNote(noteData);
     } else {
       await createNote(noteData);
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     }
   };
 
@@ -73,6 +76,7 @@ export const NotesContainer = ({
       onUpdateNote(updatedNote);
     } else {
       await updateNote(updatedNote);
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     }
 
     setSelectedNote(null);
@@ -93,6 +97,7 @@ export const NotesContainer = ({
         onUpdateNote(updatedNote);
       } else {
         await updateNote(updatedNote);
+        queryClient.invalidateQueries({ queryKey: ["notes"] });
       }
 
       setIsMoveDialogOpen(false);
@@ -104,6 +109,15 @@ export const NotesContainer = ({
   const handleEditNote = (note: Note) => {
     setSelectedNote(note);
     setIsEditDialogOpen(true);
+  };
+
+  const handleDeleteNoteWithRefresh = async (id: string) => {
+    if (isGuestMode) {
+      onDeleteNote(id);
+    } else {
+      await deleteNote(id);
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    }
   };
 
   const filteredAndSortedNotes = initialNotes
@@ -136,7 +150,7 @@ export const NotesContainer = ({
       <NoteList
         notes={filteredAndSortedNotes}
         onEdit={handleEditNote}
-        onDelete={isGuestMode ? onDeleteNote : deleteNote}
+        onDelete={handleDeleteNoteWithRefresh}
         onMove={(note) => {
           setSelectedNote(note);
           setIsMoveDialogOpen(true);
