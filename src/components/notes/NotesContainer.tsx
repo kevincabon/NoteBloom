@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Note } from "@/types/note";
-import { useTranslation } from "react-i18next";
 import { NoteMoveDialog } from "./NoteMoveDialog";
 import { NoteListControls } from "./NoteListControls";
 import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
 import { NoteEditDialog } from "./NoteEditDialog";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useLocalNotes } from "@/hooks/useLocalNotes";
 import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import { useNoteOperations } from "./NoteOperations";
 import { CurrentFolderHeader } from "./CurrentFolderHeader";
-import { useToast } from "@/components/ui/use-toast";
+import { useNoteMutations, CreateNoteParams } from "@/hooks/useNoteMutations";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -20,14 +18,6 @@ interface NotesContainerProps {
   onUpdateNote: (note: Note) => void;
   onDeleteNote: (id: string) => void;
 }
-
-type CreateNoteParams = {
-  title: string;
-  content: string | null;
-  images: string[];
-  audioUrl: string | null;
-  folderId: string | null;
-};
 
 export const NotesContainer = ({
   notes: initialNotes,
@@ -42,9 +32,6 @@ export const NotesContainer = ({
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   const { localNotes } = useLocalNotes(initialNotes, isGlobalSearch, searchQuery);
   const globalSearchResults = useGlobalSearch(searchQuery, isGlobalSearch);
@@ -62,42 +49,11 @@ export const NotesContainer = ({
     onDeleteNote,
   });
 
-  // Mutations pour les opérations CRUD
-  const createNoteMutation = useMutation({
-    mutationFn: async (params: CreateNoteParams) => {
-      const { title, content, images, audioUrl, folderId } = params;
-      await handleCreateNote(title, content, images, audioUrl, folderId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      toast({
-        title: t("notes.created"),
-        description: t("notes.noteCreatedSuccess"),
-      });
-    },
-  });
-
-  const updateNoteMutation = useMutation({
-    mutationFn: handleUpdateNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      toast({
-        title: t("notes.updated"),
-        description: t("notes.noteUpdatedSuccess"),
-      });
-    },
-  });
-
-  const deleteNoteMutation = useMutation({
-    mutationFn: handleDeleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      toast({
-        title: t("notes.deleted"),
-        description: t("notes.noteDeletedSuccess"),
-      });
-    },
-  });
+  const {
+    createNoteMutation,
+    updateNoteMutation,
+    deleteNoteMutation,
+  } = useNoteMutations(handleCreateNote, handleUpdateNote, handleDeleteNote);
 
   const handleEditNote = (note: Note) => {
     setSelectedNote(note);

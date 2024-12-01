@@ -6,6 +6,14 @@ import { useNoteCrud } from "./useNoteCrud";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+
+interface RealtimeNote extends Note {
+  folders?: {
+    name: string;
+    color: string;
+  };
+}
 
 export const useNotes = (initialNotes: Note[] = []) => {
   const navigate = useNavigate();
@@ -32,7 +40,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
 
       if (error) throw error;
       
-      const transformedData = data.map((note: any) => ({
+      const transformedData = data.map((note: RealtimeNote) => ({
         ...note,
         folder_name: note.folders?.name,
         folder_color: note.folders?.color,
@@ -54,19 +62,17 @@ export const useNotes = (initialNotes: Note[] = []) => {
           schema: 'public',
           table: 'notes'
         },
-        async (payload: any) => {
+        async (payload: RealtimePostgresChangesPayload<RealtimeNote>) => {
           console.log("Realtime change received:", payload);
           
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) return;
 
-          // Vérifier si la note appartient à l'utilisateur actuel
           if (payload.new && payload.new.user_id !== user.id) {
             console.log("Note doesn't belong to current user, ignoring");
             return;
           }
 
-          // Récupérer les informations du dossier si nécessaire
           const getFolderInfo = async (folderId: string | null) => {
             if (!folderId) return null;
             const { data } = await supabase
