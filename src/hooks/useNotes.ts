@@ -54,7 +54,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
           schema: 'public',
           table: 'notes'
         },
-        async (payload) => {
+        async (payload: any) => {
           console.log("Realtime change received:", payload);
           
           const { data: { user } } = await supabase.auth.getUser();

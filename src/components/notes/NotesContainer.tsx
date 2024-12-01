@@ -21,6 +21,14 @@ interface NotesContainerProps {
   onDeleteNote: (id: string) => void;
 }
 
+type CreateNoteParams = {
+  title: string;
+  content: string | null;
+  images: string[];
+  audioUrl: string | null;
+  folderId: string | null;
+};
+
 export const NotesContainer = ({
   notes: initialNotes,
   selectedFolderId,
@@ -56,7 +64,10 @@ export const NotesContainer = ({
 
   // Mutations pour les opérations CRUD
   const createNoteMutation = useMutation({
-    mutationFn: handleCreateNote,
+    mutationFn: async (params: CreateNoteParams) => {
+      const { title, content, images, audioUrl, folderId } = params;
+      await handleCreateNote(title, content, images, audioUrl, folderId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       toast({
@@ -119,8 +130,14 @@ export const NotesContainer = ({
       <CurrentFolderHeader selectedFolderId={selectedFolderId} />
       
       <CreateNoteSection 
-        onCreateNote={async (...args) => {
-          await createNoteMutation.mutateAsync(...args);
+        onCreateNote={async (title, content, images, audioUrl, folderId) => {
+          await createNoteMutation.mutateAsync({
+            title,
+            content,
+            images,
+            audioUrl,
+            folderId
+          });
         }} 
       />
 
