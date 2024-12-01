@@ -13,4 +13,5 @@ export interface Note {
   audio_url: string | null;
   folder_name?: string;
   folder_color?: string;
+  user_id: string | null;
 }
