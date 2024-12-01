@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useLocalNotes } from "@/hooks/useLocalNotes";
 import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import { useNoteOperations } from "./NoteOperations";
+import { CurrentFolderHeader } from "./CurrentFolderHeader";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -79,6 +80,8 @@ export const NotesContainer = ({
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
+      <CurrentFolderHeader selectedFolderId={selectedFolderId} />
+      
       <CreateNoteSection onCreateNote={handleCreateNote} />
 
       <NoteListControls
