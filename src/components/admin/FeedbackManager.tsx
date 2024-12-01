@@ -17,7 +17,7 @@ export const FeedbackManager = () => {
         .from("feedback")
         .select(`
           *,
-          profile:profiles!feedback_user_id_fkey(username)
+          profile:profiles(username)
         `)
         .order("created_at", { ascending: false });
 
