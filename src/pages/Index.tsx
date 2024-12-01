@@ -93,9 +93,10 @@ const Index = () => {
 
         const { data, error } = await supabase
           .from("folders")
-          .select("*")
+          .select("id, name, description, color, user_id, parent_id, created_at, updated_at")
           .eq('user_id', user.id)
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .returns<Folder[]>();
 
         if (error) throw error;
         return data || [];

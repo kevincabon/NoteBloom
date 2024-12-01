@@ -3,6 +3,7 @@ import { useSupabase } from "@/components/auth/supabase-provider";
 import { Tag } from "@/types/tag";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { useRoleLimits } from "./useRoleLimits";
 
 const MAX_TAGS = 8;
 
@@ -11,6 +12,7 @@ export const useTags = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { canCreateMoreTags } = useRoleLimits();
 
   const { data: tags, isLoading } = useQuery<Tag[]>({
     queryKey: ["tags"],
@@ -38,7 +40,7 @@ export const useTags = () => {
 
       if (countError) throw countError;
       
-      if (count && count >= MAX_TAGS) {
+      if (count !== null && !canCreateMoreTags(count)) {
         throw new Error("MAX_TAGS_REACHED");
       }
 
@@ -51,25 +53,29 @@ export const useTags = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
-      // Invalidate all tag-related queries
-      queryClient.invalidateQueries({ queryKey: ["tags"] });
-      // Invalidate all note-tag queries
-      queryClient.invalidateQueries({ queryKey: ["notes", "tags"] });
-    },
     onError: (error) => {
-      if (error instanceof Error && error.message === "MAX_TAGS_REACHED") {
-        toast({
-          variant: "destructive",
-          title: t("tags.errors.maxTagsReached"),
-          description: t("tags.errors.maxTagsReachedDescription", { max: MAX_TAGS }),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("tags.errors.createError"),
-        });
+      if (error instanceof Error) {
+        if (error.message === "MAX_TAGS_REACHED") {
+          toast({
+            title: t("error.title"),
+            description: t("limits.maxTagsReached"),
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: t("error.title"),
+            description: t("tags.createError"),
+            variant: "destructive",
+          });
+        }
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+      toast({
+        title: t("success.title"),
+        description: t("tags.createSuccess"),
+      });
     },
   });
 
