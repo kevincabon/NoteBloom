@@ -82,19 +82,6 @@ export const FolderDialog = ({
     ? getSubFolderCount(selectedParentId)
     : 0;
 
-  console.log("Folder counts:", {
-    currentRootCount,
-    currentSubFolderCount,
-    selectedParentId,
-    parentFolder: selectedParentId ? folders.find(f => f.id === selectedParentId) : null,
-    folders: folders.map(f => ({
-      id: f.id,
-      name: f.name,
-      parent_id: f.parent_id,
-      user_id: f.user_id
-    }))
-  });
-
   const maxRootFolders = limits?.max_root_folders ?? 6;
   const maxSubFolders = limits?.max_subfolders ?? 3;
 
@@ -105,20 +92,6 @@ export const FolderDialog = ({
   // Afficher les limites appropriées
   const showRootFolderLimit = isCreatingRootFolder || (!folder && !selectedParentId);
   const showSubFolderLimit = isCreatingSubFolder || (folder && folder.parent_id);
-
-  console.log("FolderDialog state:", {
-    mode: folder ? "edit" : "create",
-    isCreatingRootFolder,
-    isCreatingSubFolder,
-    showRootFolderLimit,
-    showSubFolderLimit,
-    selectedParentId,
-    currentRootCount,
-    currentSubFolderCount,
-    folderParentId: folder?.parent_id,
-    maxRootFolders,
-    maxSubFolders
-  });
 
   const canCreateInCurrentContext = isCreatingSubFolder
     ? currentSubFolderCount < maxSubFolders
@@ -164,11 +137,6 @@ export const FolderDialog = ({
             <Select
               value={form.watch("parent_id") || "none"}
               onValueChange={(value) => {
-                console.log("Parent selection changed:", {
-                  newValue: value,
-                  oldValue: form.watch("parent_id"),
-                  isRoot: value === "none"
-                });
                 form.setValue("parent_id", value === "none" ? null : value);
               }}
             >

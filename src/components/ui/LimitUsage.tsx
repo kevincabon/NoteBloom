@@ -17,15 +17,6 @@ export const LimitUsage = ({ current, max, className, type = "rootFolders" }: Li
   const percentage = Math.min((current / max) * 100, 100);
   const isNearLimit = percentage >= 80;
 
-  console.log("LimitUsage render:", {
-    type,
-    current,
-    max,
-    percentage,
-    isNearLimit,
-    translatedType: t(`limits.types.${type}`)
-  });
-
   return (
     <div className={cn("space-y-2", className)}>
       <div className={cn(

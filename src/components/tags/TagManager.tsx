@@ -35,12 +35,6 @@ export const TagManager = () => {
   const [tagToDelete, setTagToDelete] = useState<Tag | null>(null);
   const { limits, isLoading, canCreateMoreTags } = useRoleLimits();
 
-  console.log("TagManager state:", {
-    tagsCount: tags.length,
-    limits,
-    isLoading
-  });
-
   const handleCreateTag = (newTag: Pick<Tag, "name" | "color">) => {
     createTag(newTag);
     setIsCreateDialogOpen(false);

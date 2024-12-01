@@ -21,7 +21,6 @@ export const useRoleLimits = () => {
           .single();
 
         if (!profile) throw new Error("Profile not found");
-        console.log("Current user role:", profile.role);
 
         // Récupérer les limites pour ce rôle
         const { data: roleLimits, error } = await supabase
@@ -43,7 +42,6 @@ export const useRoleLimits = () => {
 
         // Si pas de limites trouvées, utiliser les limites par défaut pour le rôle "user"
         if (!roleLimits) {
-          console.log("No limits found, using defaults for role:", profile.role);
           return {
             role: profile.role,
             max_root_folders: profile.role === 'user' ? 6 : null,
@@ -67,7 +65,6 @@ export const useRoleLimits = () => {
           throw error;
         }
 
-        console.log("Role limits fetched:", roleLimits);
         return roleLimits;
       } catch (error) {
         console.error("Error in role limits query:", error);
@@ -90,33 +87,18 @@ export const useRoleLimits = () => {
 
   const canCreateMoreTags = (currentCount: number) => {
     const maxTags = limits?.max_tags ?? (limits?.role === 'user' ? 8 : null);
-    console.log("Checking tag limits:", {
-      currentCount,
-      maxTags,
-      canCreate: maxTags === null || currentCount < maxTags
-    });
     if (maxTags === null) return true; // Pas de limite
     return currentCount < maxTags;
   };
 
   const canCreateMoreRootFolders = (currentCount: number) => {
     const maxRootFolders = limits?.max_root_folders ?? (limits?.role === 'user' ? 6 : null);
-    console.log("Checking root folder limits:", {
-      currentCount,
-      maxRootFolders,
-      canCreate: maxRootFolders === null || currentCount < maxRootFolders
-    });
     if (maxRootFolders === null) return true; // Pas de limite
     return currentCount < maxRootFolders;
   };
 
   const canCreateMoreSubfolders = (currentCount: number) => {
     const maxSubfolders = limits?.max_subfolders ?? (limits?.role === 'user' ? 3 : null);
-    console.log("Checking subfolder limits:", {
-      currentCount,
-      maxSubfolders,
-      canCreate: maxSubfolders === null || currentCount < maxSubfolders
-    });
     if (maxSubfolders === null) return true; // Pas de limite
     return currentCount < maxSubfolders;
   };

@@ -9,7 +9,6 @@ const Progress = React.forwardRef<
     indicatorClassName?: string;
   }
 >(({ className, value, indicatorClassName, ...props }, ref) => {
-  console.log("Progress component:", { value, className, indicatorClassName });
   
   return (
     <ProgressPrimitive.Root
