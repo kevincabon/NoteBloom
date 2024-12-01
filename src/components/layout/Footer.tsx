@@ -8,7 +8,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -45,9 +44,21 @@ export const Footer = () => {
 
   const onSubmit = async (data: FeedbackForm) => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: t("feedback.error"),
+          description: t("feedback.notAuthenticated"),
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { error } = await supabase.from("feedback").insert({
         type: data.type,
         content: data.content,
+        user_id: user.id,  // Ajout du user_id
       });
 
       if (error) throw error;
