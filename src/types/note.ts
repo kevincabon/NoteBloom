@@ -11,4 +11,6 @@ export interface Note {
   images: string[] | null;
   folder_id: string | null;
   audio_url: string | null;
+  folder_name?: string;
+  folder_color?: string;
 }
