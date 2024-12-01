@@ -30,7 +30,7 @@ const Profile = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return { ...data, email: user.email };
     },
   });
 
@@ -85,7 +85,7 @@ const Profile = () => {
             <Input
               id="email"
               type="email"
-              value={profile?.id || ""}
+              value={profile?.email || ""}
               disabled
               className="bg-muted"
             />
