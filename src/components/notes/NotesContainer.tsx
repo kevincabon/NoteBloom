@@ -29,6 +29,7 @@ export const NotesContainer = ({
   onDeleteNote,
 }: NotesContainerProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [isGlobalSearch, setIsGlobalSearch] = useState(false);
   const [sortBy, setSortBy] = useState<"date" | "title">("date");
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -40,10 +41,34 @@ export const NotesContainer = ({
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    setLocalNotes(initialNotes);
-  }, [initialNotes]);
+    if (!isGlobalSearch) {
+      setLocalNotes(initialNotes);
+    }
+  }, [initialNotes, isGlobalSearch]);
 
   useNotesRealtime(setLocalNotes, initialNotes);
+
+  useEffect(() => {
+    const fetchAllNotes = async () => {
+      if (isGlobalSearch && searchQuery && !isGuestMode) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data } = await supabase
+          .from("notes")
+          .select("*")
+          .eq("user_id", user.id)
+          .ilike("title", `%${searchQuery}%`)
+          .order("created_at", { ascending: false });
+
+        if (data) {
+          setLocalNotes(data);
+        }
+      }
+    };
+
+    fetchAllNotes();
+  }, [isGlobalSearch, searchQuery, isGuestMode]);
 
   const handleCreateNote = async (title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
     const { links, email, phone } = parseContent(content || "");
@@ -124,6 +149,9 @@ export const NotesContainer = ({
 
   const filteredAndSortedNotes = localNotes
     .filter((note) => {
+      if (!searchQuery) return true;
+      if (isGlobalSearch) return true; // Déjà filtré par la requête Supabase
+      
       const searchLower = searchQuery.toLowerCase();
       return (
         note.title.toLowerCase().includes(searchLower) ||
@@ -147,6 +175,8 @@ export const NotesContainer = ({
         onSearchChange={setSearchQuery}
         sortBy={sortBy}
         onSortChange={(value: "date" | "title") => setSortBy(value)}
+        isGlobalSearch={isGlobalSearch}
+        onGlobalSearchChange={setIsGlobalSearch}
       />
 
       <NoteList
