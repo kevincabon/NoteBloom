@@ -23,6 +23,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useRoleLimits } from "@/hooks/useRoleLimits";
+import { LimitUsage } from "@/components/ui/LimitUsage";
 
 export const TagManager = () => {
   const { t } = useTranslation();
@@ -31,9 +33,17 @@ export const TagManager = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
   const [tagToDelete, setTagToDelete] = useState<Tag | null>(null);
+  const { limits, isLoading, canCreateMoreTags } = useRoleLimits();
+
+  console.log("TagManager state:", {
+    tagsCount: tags.length,
+    limits,
+    isLoading
+  });
 
   const handleCreateTag = (newTag: Pick<Tag, "name" | "color">) => {
     createTag(newTag);
+    setIsCreateDialogOpen(false);
   };
 
   const handleUpdateTag = (updates: Pick<Tag, "name" | "color">) => {
@@ -54,12 +64,30 @@ export const TagManager = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">{t("tags.manage")}</h2>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
+        <h2 className="text-2xl font-bold">{t("tags.title")}</h2>
+        <Button
+          onClick={() => setIsCreateDialogOpen(true)}
+          disabled={isLoading || !canCreateMoreTags(tags.length)}
+        >
           <Plus className="w-4 h-4 mr-2" />
           {t("tags.create")}
         </Button>
       </div>
+
+      {!isLoading && (
+        <LimitUsage
+          current={tags.length}
+          max={limits?.max_tags ?? 0}
+          className="mb-4"
+          type={t("limits.types.tags")}
+        />
+      )}
+
+      {!isLoading && !canCreateMoreTags(tags.length) && (
+        <div className="text-sm text-destructive mb-4">
+          {t("limits.maxTagsReached")}
+        </div>
+      )}
 
       <Table>
         <TableHeader>

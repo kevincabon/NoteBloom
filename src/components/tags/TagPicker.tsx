@@ -4,6 +4,8 @@ import { Check, Plus, Tag as TagIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Tag } from "@/types/tag";
 import { cn } from "@/lib/utils";
+import { useRoleLimits } from "@/hooks/useRoleLimits";
+import { LimitUsage } from "@/components/ui/LimitUsage";
 
 const MAX_TAGS = 8;
 
@@ -24,6 +26,9 @@ export const TagPicker = ({
 }: TagPickerProps) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const { limits, canCreateMoreTags } = useRoleLimits();
+
+  const showCreateButton = onCreate && canCreateMoreTags(tags.length);
 
   return (
     <div className="relative">
@@ -45,48 +50,55 @@ export const TagPicker = ({
                 {t("tags.noTags")}
               </div>
             ) : (
-              <div className="space-y-1 max-h-[200px] overflow-y-auto">
-                {tags.map((tag) => {
-                  const isSelected = selectedTags.some((t) => t.id === tag.id);
-                  return (
-                    <button
-                      key={tag.id}
-                      className={cn(
-                        "flex items-center w-full gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                        isSelected && "bg-accent"
-                      )}
-                      onClick={() => {
-                        onSelect(tag);
-                        setOpen(false);
-                      }}
-                    >
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: tag.color }}
-                      />
-                      <span className="flex-1">{tag.name}</span>
-                      {isSelected && <Check className="w-4 h-4" />}
-                    </button>
-                  );
-                })}
+              <div className="space-y-1">
+                <div className="max-h-[200px] overflow-y-auto">
+                  {tags.map((tag) => {
+                    const isSelected = selectedTags.some((t) => t.id === tag.id);
+                    return (
+                      <Button
+                        key={tag.id}
+                        variant={isSelected ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                        onClick={() => onSelect(tag)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            isSelected ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {tag.name}
+                      </Button>
+                    );
+                  })}
+                </div>
+                {limits?.max_tags && (
+                  <LimitUsage
+                    current={tags.length}
+                    max={limits.max_tags}
+                    className="mt-2 px-2"
+                  />
+                )}
               </div>
             )}
-            {onCreate && tags.length < MAX_TAGS ? (
-              <button
-                className="flex items-center gap-2 w-full mt-2 px-2 py-1.5 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground"
+            {showCreateButton && (
+              <Button
+                variant="outline"
+                className="w-full mt-2"
                 onClick={() => {
-                  onCreate();
                   setOpen(false);
+                  onCreate();
                 }}
               >
-                <Plus className="w-4 h-4" />
-                <span>{t("tags.create")}</span>
-              </button>
-            ) : tags.length >= MAX_TAGS ? (
-              <div className="text-sm text-muted-foreground px-2 py-1.5 mt-2">
-                {t("tags.limitReached")}
+                <Plus className="mr-2 h-4 w-4" />
+                {t("tags.createNew")}
+              </Button>
+            )}
+            {!showCreateButton && tags.length >= (limits?.max_tags ?? 0) && (
+              <div className="text-sm text-muted-foreground p-2 border-t mt-2">
+                {t("limits.maxTagsReached")}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       )}
