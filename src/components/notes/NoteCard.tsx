@@ -14,7 +14,7 @@ import { NoteContent } from "./NoteContent";
 import { NoteTimestamps } from "./NoteTimestamps";
 import { FolderBadge } from "./FolderBadge";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { Edit, X } from "lucide-react";
 
 interface NoteCardProps {
   note: Note;
@@ -62,21 +62,30 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto">
           <SheetHeader className="space-y-4">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-4">
               <SheetTitle className="text-xl font-bold">{note.title}</SheetTitle>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setIsOpen(false);
-                  onEdit(note);
-                }}
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    setIsOpen(false);
+                    onEdit(note);
+                  }}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
             {note.folder_id && note.folder_name && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mt-2">
                 <span className="text-sm text-muted-foreground">Dossier:</span>
                 <FolderBadge name={note.folder_name} color={note.folder_color || "#e5e5e5"} />
               </div>
