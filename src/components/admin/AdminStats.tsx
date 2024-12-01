@@ -16,11 +16,12 @@ export const AdminStats = () => {
         { count: foldersCount },
         { count: pendingFeedbackCount }
       ] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("notes").select("*", { count: "exact", head: true }),
-        supabase.from("folders").select("*", { count: "exact", head: true }),
-        supabase.from("feedback").select("*", { count: "exact", head: true })
-          .eq("status", "pending"),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).returns<{ id: string }>(),
+        supabase.from("notes").select("id", { count: "exact", head: true }).returns<{ id: string }>(),
+        supabase.from("folders").select("id", { count: "exact", head: true }).returns<{ id: string }>(),
+        supabase.from("feedback").select("id", { count: "exact", head: true })
+          .eq("status", "pending")
+          .returns<{ id: string }>(),
       ]);
 
       return {

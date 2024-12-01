@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminStats } from "@/components/admin/AdminStats";
 import { FeedbackManager } from "@/components/admin/FeedbackManager";
+import { UserManager } from "@/components/admin/UserManager";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,7 @@ const Admin = () => {
         </Button>
       </div>
       <AdminStats />
+      <UserManager />
       <FeedbackManager />
     </div>
   );
