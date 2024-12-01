@@ -80,8 +80,51 @@ export const useNotes = (initialNotes: Note[] = []) => {
     }
   };
 
+  const deleteStorageFiles = async (note: Note) => {
+    // Supprimer les images
+    if (note.images && note.images.length > 0) {
+      const imagePaths = note.images.map(url => url.split('/').pop());
+      const { error: imageError } = await supabase.storage
+        .from('notes-images')
+        .remove(imagePaths as string[]);
+
+      if (imageError) {
+        console.error("Error deleting images:", imageError);
+      }
+    }
+
+    // Supprimer l'audio
+    if (note.audio_url) {
+      const audioPath = note.audio_url.split('/').pop();
+      if (audioPath) {
+        const { error: audioError } = await supabase.storage
+          .from('notes-audio')
+          .remove([audioPath]);
+
+        if (audioError) {
+          console.error("Error deleting audio:", audioError);
+        }
+      }
+    }
+  };
+
   const deleteNote = async (noteId: string) => {
     try {
+      // Récupérer la note avant de la supprimer
+      const { data: noteToDelete, error: fetchError } = await supabase
+        .from("notes")
+        .select("*")
+        .eq('id', noteId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Supprimer les fichiers associés
+      if (noteToDelete) {
+        await deleteStorageFiles(noteToDelete);
+      }
+
+      // Supprimer la note
       const { error } = await supabase
         .from("notes")
         .delete()
