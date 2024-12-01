@@ -1,9 +1,11 @@
 import { Note } from "@/types/note";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Link, Mail, Phone, FolderEdit } from "lucide-react";
+import { Edit, Trash2, Link, Mail, Phone, FolderEdit, Folder } from "lucide-react";
 import { formatContent } from "@/utils/contentParser";
 import { ImageGallery } from "./ImageGallery";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sheet,
   SheetContent,
@@ -28,6 +30,20 @@ interface NoteCardProps {
 export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { data: folder } = useQuery({
+    queryKey: ['folder', note.folder_id],
+    queryFn: async () => {
+      if (!note.folder_id) return null;
+      const { data } = await supabase
+        .from('folders')
+        .select('name')
+        .eq('id', note.folder_id)
+        .single();
+      return data;
+    },
+    enabled: !!note.folder_id,
+  });
+
   const handleCardClick = (e: React.MouseEvent) => {
     if (!(e.target as HTMLElement).closest('button') && !(e.target as HTMLElement).closest('a')) {
       setIsOpen(true);
@@ -43,7 +59,15 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
         onClick={handleCardClick}
       >
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-lg font-medium">{note.title}</h3>
+          <div className="space-y-2">
+            <h3 className="text-lg font-medium">{note.title}</h3>
+            {folder && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Folder className="h-4 w-4" />
+                <span>{folder.name}</span>
+              </div>
+            )}
+          </div>
           <div className="flex gap-2">
             <Button
               variant="ghost"
@@ -167,6 +191,12 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
         <SheetContent className="w-[90vw] sm:max-w-[600px] overflow-y-auto">
           <SheetHeader>
             <SheetTitle>{note.title}</SheetTitle>
+            {folder && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Folder className="h-4 w-4" />
+                <span>{folder.name}</span>
+              </div>
+            )}
           </SheetHeader>
           <div className="mt-6">
             <div 
