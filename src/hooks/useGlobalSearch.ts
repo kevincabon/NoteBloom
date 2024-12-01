@@ -9,18 +9,17 @@ export const useGlobalSearch = (searchQuery: string, isGlobalSearch: boolean) =>
 
   useEffect(() => {
     const fetchAllNotes = async () => {
-      if (isGlobalSearch && !isGuestMode) {
+      if (!isGuestMode && isGlobalSearch) {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
         let query = supabase
           .from("notes")
           .select("*")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false });
+          .eq("user_id", user.id);
 
         if (searchQuery) {
-          query = query.ilike("title", `%${searchQuery}%`);
+          query = query.or(`title.ilike.%${searchQuery}%, content.ilike.%${searchQuery}%`);
         }
 
         const { data, error } = await query;
@@ -33,6 +32,8 @@ export const useGlobalSearch = (searchQuery: string, isGlobalSearch: boolean) =>
         if (data) {
           setGlobalSearchResults(data);
         }
+      } else {
+        setGlobalSearchResults([]);
       }
     };
 
