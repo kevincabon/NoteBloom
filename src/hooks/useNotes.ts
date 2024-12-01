@@ -15,6 +15,8 @@ interface RealtimeNote extends Note {
   };
 }
 
+type RealtimePayload = RealtimePostgresChangesPayload<RealtimeNote>;
+
 export const useNotes = (initialNotes: Note[] = []) => {
   const navigate = useNavigate();
   const { createNote, updateNote, deleteNote } = useNoteCrud();
@@ -62,13 +64,19 @@ export const useNotes = (initialNotes: Note[] = []) => {
           schema: 'public',
           table: 'notes'
         },
-        async (payload: RealtimePostgresChangesPayload<RealtimeNote>) => {
+        async (payload: RealtimePayload) => {
           console.log("Realtime change received:", payload);
           
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) return;
 
-          if (payload.new && payload.new.user_id !== user.id) {
+          // Type guard to ensure payload.new exists and has user_id
+          if (!payload.new || typeof payload.new.user_id === 'undefined') {
+            console.log("Invalid payload received");
+            return;
+          }
+
+          if (payload.new.user_id !== user.id) {
             console.log("Note doesn't belong to current user, ignoring");
             return;
           }
@@ -114,7 +122,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
               }
               case 'DELETE': {
                 queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
-                  return oldNotes.filter(note => note.id !== payload.old.id);
+                  return oldNotes.filter(note => note.id !== payload.old?.id);
                 });
                 break;
               }
