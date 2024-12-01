@@ -70,15 +70,17 @@ export const useNotes = (initialNotes: Note[] = []) => {
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) return;
 
-          // Type guard to ensure payload.new exists and has user_id
-          if (!payload.new || typeof payload.new.user_id === 'undefined') {
-            console.log("Invalid payload received");
-            return;
-          }
+          // Type guard to ensure payload.new exists and has user_id for INSERT and UPDATE events
+          if (payload.eventType !== 'DELETE') {
+            if (!payload.new || typeof payload.new.user_id === 'undefined') {
+              console.log("Invalid payload received");
+              return;
+            }
 
-          if (payload.new.user_id !== user.id) {
-            console.log("Note doesn't belong to current user, ignoring");
-            return;
+            if (payload.new.user_id !== user.id) {
+              console.log("Note doesn't belong to current user, ignoring");
+              return;
+            }
           }
 
           const getFolderInfo = async (folderId: string | null) => {
