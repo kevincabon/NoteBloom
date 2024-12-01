@@ -14,6 +14,7 @@ import { useState } from "react";
 import { NoteActions } from "./NoteActions";
 import { NoteMetadata } from "./NoteMetadata";
 import { FolderBadge } from "./FolderBadge";
+import { AudioPlayer } from "./AudioPlayer";
 
 interface NoteCardProps {
   note: Note;
@@ -67,6 +68,13 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
             onMove={onMove}
           />
         </div>
+
+        {note.audio_url && (
+          <div className="mb-4">
+            <AudioPlayer url={note.audio_url} />
+          </div>
+        )}
+
         <div 
           className="text-muted-foreground line-clamp-3"
           dangerouslySetInnerHTML={{ __html: formattedContent }}
@@ -97,6 +105,11 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
             )}
           </SheetHeader>
           <div className="mt-6">
+            {note.audio_url && (
+              <div className="mb-6">
+                <AudioPlayer url={note.audio_url} />
+              </div>
+            )}
             <div 
               className="whitespace-pre-wrap"
               dangerouslySetInnerHTML={{ __html: formattedContent }}

@@ -46,7 +46,6 @@ export const NotesContainer = ({
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
 
-  // Fetch folders for the move dialog
   const { data: folders = [] } = useQuery({
     queryKey: ["folders"],
     queryFn: async () => {
@@ -63,7 +62,7 @@ export const NotesContainer = ({
     },
   });
 
-  const handleCreateNote = async (images: string[]) => {
+  const handleCreateNote = async (images: string[], audioUrl: string | null) => {
     if (!title.trim()) {
       toast({
         title: t("notes.errors.titleRequired"),
@@ -82,6 +81,7 @@ export const NotesContainer = ({
       email,
       is_public: false,
       images,
+      audio_url: audioUrl,
       folder_id: selectedFolderId,
     });
 
@@ -93,7 +93,7 @@ export const NotesContainer = ({
     });
   };
 
-  const handleUpdateNote = async (images: string[]) => {
+  const handleUpdateNote = async (images: string[], audioUrl: string | null) => {
     if (!editingNote) return;
 
     const { links, email, phone } = parseContent(content);
@@ -106,6 +106,7 @@ export const NotesContainer = ({
       phone,
       email,
       images,
+      audio_url: audioUrl,
       folder_id: editingNote.folder_id,
     });
 
@@ -137,7 +138,6 @@ export const NotesContainer = ({
         title: t("notes.moved"),
       });
 
-      // Update the local state
       onUpdateNote({
         ...note,
         folder_id: newFolderId,
@@ -176,7 +176,7 @@ export const NotesContainer = ({
         editingNote={editingNote}
         onTitleChange={setTitle}
         onContentChange={setContent}
-        onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
+        onSubmit={handleUpdateNote}
         onCancelEdit={() => {
           setEditingNote(null);
           setTitle("");

@@ -10,6 +10,8 @@ import { ImageUploader } from "./ImageUploader";
 import { ImageList } from "./ImageList";
 import { useImageHandling } from "./useImageHandling";
 import { RichTextEditor } from "./RichTextEditor";
+import { AudioRecorder } from "./AudioRecorder";
+import { AudioPlayer } from "./AudioPlayer";
 
 interface NoteFormProps {
   title: string;
@@ -18,7 +20,7 @@ interface NoteFormProps {
   onTitleChange: (value: string) => void;
   onContentChange: (value: string) => void;
   onCancelEdit: () => void;
-  onSubmit: (images: string[]) => void;
+  onSubmit: (images: string[], audioUrl: string | null) => void;
 }
 
 export const NoteForm = ({
@@ -33,6 +35,7 @@ export const NoteForm = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(editingNote?.audio_url || null);
   
   const {
     existingImages,
@@ -71,7 +74,7 @@ export const NoteForm = ({
         uploadedImageUrls.push(publicUrl);
       }
 
-      onSubmit(uploadedImageUrls);
+      onSubmit(uploadedImageUrls, audioUrl);
     } catch (error) {
       toast({
         title: t('notes.errors.imageUploadFailed'),
@@ -80,6 +83,10 @@ export const NoteForm = ({
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleDeleteAudio = () => {
+    setAudioUrl(null);
   };
 
   return (
@@ -99,6 +106,15 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-medium">{t('notes.audioRecording')}</h3>
+          {audioUrl ? (
+            <AudioPlayer url={audioUrl} onDelete={handleDeleteAudio} />
+          ) : (
+            <AudioRecorder onAudioSaved={setAudioUrl} />
+          )}
+        </div>
+
         <ImageList
           title={t('notes.existingImages')}
           images={existingImages}

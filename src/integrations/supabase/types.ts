@@ -41,6 +41,7 @@ export type Database = {
       }
       notes: {
         Row: {
+          audio_url: string | null
           content: string | null
           created_at: string
           email: string | null
@@ -55,6 +56,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          audio_url?: string | null
           content?: string | null
           created_at?: string
           email?: string | null
@@ -69,6 +71,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          audio_url?: string | null
           content?: string | null
           created_at?: string
           email?: string | null
