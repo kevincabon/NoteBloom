@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Note } from "@/types/note";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
@@ -12,15 +11,8 @@ import { useImageHandling } from "./useImageHandling";
 import { RichTextEditor } from "./RichTextEditor";
 import { AudioSection } from "./AudioSection";
 import { useAudioHandling } from "./useAudioHandling";
-import { useQuery } from "@tanstack/react-query";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Folder } from "lucide-react";
+import { FolderSelect } from "./FolderSelect";
+import { NoteFormActions } from "./NoteFormActions";
 
 interface NoteFormProps {
   title: string;
@@ -45,22 +37,6 @@ export const NoteForm = ({
   const { toast } = useToast();
   const [uploading, setUploading] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(editingNote?.folder_id || null);
-  
-  const { data: folders = [] } = useQuery({
-    queryKey: ["folders"],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
-      const { data, error } = await supabase
-        .from("folders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-  });
 
   const {
     existingImages,
@@ -133,27 +109,10 @@ export const NoteForm = ({
       />
       
       <div className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <Folder className="h-4 w-4 text-muted-foreground" />
-          <Select
-            value={selectedFolderId || "no-folder"}
-            onValueChange={(value) => setSelectedFolderId(value === "no-folder" ? null : value)}
-          >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder={t('notes.selectFolder')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="no-folder">
-                {t('notes.noFolder')}
-              </SelectItem>
-              {folders.map((folder) => (
-                <SelectItem key={folder.id} value={folder.id}>
-                  {folder.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <FolderSelect
+          selectedFolderId={selectedFolderId}
+          onFolderChange={setSelectedFolderId}
+        />
 
         <AudioSection
           audioUrl={audioUrl}
@@ -179,23 +138,12 @@ export const NoteForm = ({
         />
       </div>
 
-      <div className="flex justify-end gap-2">
-        {editingNote && (
-          <Button 
-            variant="ghost" 
-            onClick={onCancelEdit}
-            disabled={uploading}
-          >
-            {t('common.cancel')}
-          </Button>
-        )}
-        <Button 
-          onClick={handleSubmit}
-          disabled={uploading}
-        >
-          {uploading ? t('common.uploading') : editingNote ? t('common.save') : t('notes.create')}
-        </Button>
-      </div>
+      <NoteFormActions
+        isEditing={!!editingNote}
+        isUploading={uploading}
+        onCancel={onCancelEdit}
+        onSubmit={handleSubmit}
+      />
     </Card>
   );
 };
