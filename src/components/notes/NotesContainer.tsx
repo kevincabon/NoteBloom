@@ -11,7 +11,7 @@ import { CreateNoteSection } from "./CreateNoteSection";
 import { NoteList } from "./NoteList";
 import { NoteEditDialog } from "./NoteEditDialog";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/components/ui/use-toast";
+import { useNotesRealtime } from "@/hooks/useNotesRealtime";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -38,56 +38,12 @@ export const NotesContainer = ({
   const { isGuestMode } = useGuestMode();
   const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   useEffect(() => {
     setLocalNotes(initialNotes);
   }, [initialNotes]);
 
-  useEffect(() => {
-    const channel = supabase
-      .channel('notes_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'notes'
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            const newNote = payload.new as Note;
-            setLocalNotes(prev => [newNote, ...prev]);
-            toast({
-              title: t('notes.created'),
-              description: t('notes.noteCreatedSuccess'),
-            });
-          } else if (payload.eventType === 'UPDATE') {
-            const updatedNote = payload.new as Note;
-            setLocalNotes(prev => prev.map(note => 
-              note.id === updatedNote.id ? updatedNote : note
-            ));
-            toast({
-              title: t('notes.updated'),
-              description: t('notes.noteUpdatedSuccess'),
-            });
-          } else if (payload.eventType === 'DELETE') {
-            const deletedNote = payload.old as Note;
-            setLocalNotes(prev => prev.filter(note => note.id !== deletedNote.id));
-            toast({
-              title: t('notes.deleted'),
-              description: t('notes.noteDeletedSuccess'),
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["notes"] });
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [queryClient, t]);
+  useNotesRealtime(setLocalNotes, initialNotes);
 
   const handleCreateNote = async (title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
     const { links, email, phone } = parseContent(content || "");
@@ -107,10 +63,7 @@ export const NotesContainer = ({
     if (isGuestMode) {
       onCreateNote(noteData);
     } else {
-      const newNote = await createNote(noteData);
-      if (newNote) {
-        setLocalNotes(prev => [newNote, ...prev]);
-      }
+      await createNote(noteData);
     }
   };
 
@@ -135,7 +88,6 @@ export const NotesContainer = ({
       onUpdateNote(updatedNote);
     } else {
       await updateNote(updatedNote);
-      setLocalNotes(prev => prev.map(n => n.id === updatedNote.id ? updatedNote : n));
     }
 
     setSelectedNote(null);
@@ -156,7 +108,6 @@ export const NotesContainer = ({
         onUpdateNote(updatedNote);
       } else {
         await updateNote(updatedNote);
-        setLocalNotes(prev => prev.map(n => n.id === updatedNote.id ? updatedNote : n));
       }
 
       setIsMoveDialogOpen(false);
@@ -175,7 +126,6 @@ export const NotesContainer = ({
       onDeleteNote(id);
     } else {
       await deleteNote(id);
-      setLocalNotes(prev => prev.filter(note => note.id !== id));
     }
   };
 
