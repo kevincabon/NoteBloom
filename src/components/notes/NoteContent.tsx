@@ -18,7 +18,7 @@ export const NoteContent = ({ content, audioUrl, images, className }: NoteConten
         </div>
       )}
       <div 
-        className={cn("prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none", className)}
+        className={cn("prose dark:prose-invert max-w-none", className)}
         dangerouslySetInnerHTML={{ __html: content }}
       />
       {images && images.length > 0 && (

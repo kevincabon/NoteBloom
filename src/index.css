@@ -104,3 +104,36 @@
 .ProseMirror p {
   @apply mb-2;
 }
+
+/* Styles pour le contenu des notes dans le menu latéral */
+.prose ul {
+  @apply list-disc pl-6 mb-4;
+}
+
+.prose h1 {
+  @apply text-2xl font-bold mb-4;
+}
+
+.prose h2 {
+  @apply text-xl font-bold mb-3;
+}
+
+.prose h3 {
+  @apply text-lg font-bold mb-2;
+}
+
+.prose strong {
+  @apply font-bold;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose a {
+  @apply text-primary underline hover:text-primary/80;
+}
