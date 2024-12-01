@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNoteCrud } from "./useNoteCrud";
 import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 export const useNotes = (initialNotes: Note[] = []) => {
   const navigate = useNavigate();
   const { createNote, updateNote, deleteNote } = useNoteCrud();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const { t } = useTranslation();
 
   const { data: notes = initialNotes, refetch } = useQuery({
     queryKey: ["notes"],
@@ -22,13 +26,21 @@ export const useNotes = (initialNotes: Note[] = []) => {
 
       const { data, error } = await supabase
         .from("notes")
-        .select("*")
+        .select("*, folders(name, color)")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      console.log("Notes fetched:", data);
-      return data as Note[];
+      
+      // Transform the data to match the Note type
+      const transformedData = data.map((note: any) => ({
+        ...note,
+        folder_name: note.folders?.name,
+        folder_color: note.folders?.color,
+      }));
+      
+      console.log("Notes fetched:", transformedData);
+      return transformedData as Note[];
     },
   });
 
@@ -45,7 +57,27 @@ export const useNotes = (initialNotes: Note[] = []) => {
         },
         async (payload) => {
           console.log("Notes change detected:", payload);
+          
+          // Refetch notes to get the latest data including folder information
           await refetch();
+
+          // Show appropriate toast notification based on the event type
+          if (payload.eventType === 'INSERT') {
+            toast({
+              title: t('notes.created'),
+              description: t('notes.noteCreatedSuccess'),
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            toast({
+              title: t('notes.updated'),
+              description: t('notes.noteUpdatedSuccess'),
+            });
+          } else if (payload.eventType === 'DELETE') {
+            toast({
+              title: t('notes.deleted'),
+              description: t('notes.noteDeletedSuccess'),
+            });
+          }
         }
       )
       .subscribe((status) => {
@@ -56,7 +88,7 @@ export const useNotes = (initialNotes: Note[] = []) => {
       console.log("Cleaning up notes channel");
       supabase.removeChannel(channel);
     };
-  }, [refetch]);
+  }, [refetch, toast, t]);
 
   return {
     notes,
