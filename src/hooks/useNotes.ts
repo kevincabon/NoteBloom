@@ -1,12 +1,14 @@
 import { Note } from "@/types/note";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNoteCrud } from "./useNoteCrud";
+import { useEffect } from "react";
 
 export const useNotes = (initialNotes: Note[] = []) => {
   const navigate = useNavigate();
   const { createNote, updateNote, deleteNote } = useNoteCrud();
+  const queryClient = useQueryClient();
 
   const { data: notes = initialNotes } = useQuery({
     queryKey: ["notes"],
@@ -27,6 +29,27 @@ export const useNotes = (initialNotes: Note[] = []) => {
       return data as Note[];
     },
   });
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('notes_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notes'
+        },
+        (payload) => {
+          queryClient.invalidateQueries({ queryKey: ["notes"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   return {
     notes,
