@@ -18,15 +18,13 @@ export const NoteFormActions = ({
 
   return (
     <div className="flex justify-end gap-2">
-      {isEditing && (
-        <Button 
-          variant="ghost" 
-          onClick={onCancel}
-          disabled={isUploading}
-        >
-          {t('common.cancel')}
-        </Button>
-      )}
+      <Button 
+        variant="ghost" 
+        onClick={onCancel}
+        disabled={isUploading}
+      >
+        {t('common.cancel')}
+      </Button>
       <Button 
         onClick={onSubmit}
         disabled={isUploading}
