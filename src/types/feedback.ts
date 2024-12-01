@@ -8,6 +8,6 @@ export type Feedback = {
   content: string;
   status: string;
   created_at: string;
-  user_id: string;
-  profile: Profile;
+  user_id: string | null;
+  profile: Profile | null;
 };

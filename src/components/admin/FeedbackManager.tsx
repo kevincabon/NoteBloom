@@ -17,12 +17,19 @@ export const FeedbackManager = () => {
         .from("feedback")
         .select(`
           *,
-          profile:profiles(username)
+          profile:user_id(
+            username
+          )
         `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data as Feedback[];
+      
+      // Transform the data to match our expected type
+      return (data || []).map(item => ({
+        ...item,
+        profile: item.profile ? item.profile[0] : null
+      })) as Feedback[];
     },
   });
 
