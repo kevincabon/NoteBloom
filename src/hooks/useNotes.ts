@@ -45,6 +45,8 @@ export const useNotes = (initialNotes: Note[] = []) => {
 
   useEffect(() => {
     console.log("Setting up realtime subscription");
+    
+    // Créer un canal spécifique pour les changements de notes
     const channel = supabase.channel('notes_changes')
       .on(
         'postgres_changes',
@@ -62,36 +64,59 @@ export const useNotes = (initialNotes: Note[] = []) => {
           let newNotes: Note[];
           let toastMessage;
 
-          switch (payload.eventType) {
-            case 'INSERT':
-              // Pour un INSERT, ajouter la nouvelle note au début du tableau
-              newNotes = [payload.new as Note, ...currentNotes];
-              toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
-              break;
+          // Récupérer les informations du dossier si nécessaire
+          const getFolderInfo = async (folderId: string | null) => {
+            if (!folderId) return null;
+            const { data } = await supabase
+              .from('folders')
+              .select('name, color')
+              .eq('id', folderId)
+              .single();
+            return data;
+          };
 
-            case 'UPDATE':
-              // Pour un UPDATE, remplacer la note existante
-              newNotes = currentNotes.map(note => 
-                note.id === payload.new.id ? payload.new as Note : note
-              );
-              toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
-              break;
+          try {
+            switch (payload.eventType) {
+              case 'INSERT': {
+                const folder = await getFolderInfo(payload.new.folder_id);
+                const newNote = {
+                  ...payload.new,
+                  folder_name: folder?.name,
+                  folder_color: folder?.color,
+                } as Note;
+                newNotes = [newNote, ...currentNotes];
+                toastMessage = { title: t('notes.created'), description: t('notes.noteCreatedSuccess') };
+                break;
+              }
+              case 'UPDATE': {
+                const folder = await getFolderInfo(payload.new.folder_id);
+                const updatedNote = {
+                  ...payload.new,
+                  folder_name: folder?.name,
+                  folder_color: folder?.color,
+                } as Note;
+                newNotes = currentNotes.map(note => 
+                  note.id === updatedNote.id ? updatedNote : note
+                );
+                toastMessage = { title: t('notes.updated'), description: t('notes.noteUpdatedSuccess') };
+                break;
+              }
+              case 'DELETE':
+                newNotes = currentNotes.filter(note => note.id !== payload.old.id);
+                toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
+                break;
+              default:
+                return;
+            }
 
-            case 'DELETE':
-              // Pour un DELETE, retirer la note du tableau
-              newNotes = currentNotes.filter(note => note.id !== payload.old.id);
-              toastMessage = { title: t('notes.deleted'), description: t('notes.noteDeletedSuccess') };
-              break;
-
-            default:
-              return;
-          }
-
-          // Mettre à jour le cache avec les nouvelles données
-          queryClient.setQueryData(["notes"], newNotes);
-          
-          if (toastMessage) {
-            toast(toastMessage);
+            // Mettre à jour le cache avec les nouvelles données
+            queryClient.setQueryData(["notes"], newNotes);
+            
+            if (toastMessage) {
+              toast(toastMessage);
+            }
+          } catch (error) {
+            console.error("Error handling realtime update:", error);
           }
         }
       )
