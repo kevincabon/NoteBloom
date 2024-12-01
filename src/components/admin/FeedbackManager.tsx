@@ -25,7 +25,7 @@ type Feedback = {
   status: string;
   created_at: string;
   user_id: string;
-  profile: Profile | null;
+  profile: Profile;
 };
 
 export const FeedbackManager = () => {
@@ -39,7 +39,7 @@ export const FeedbackManager = () => {
         .from("feedback")
         .select(`
           *,
-          profile:profiles!user_id(username)
+          profile:profiles(username)
         `)
         .order("created_at", { ascending: false });
 
