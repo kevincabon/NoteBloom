@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import { Note } from "@/types/note";
 import { NoteForm } from "@/components/notes/NoteForm";
 import { NoteCard } from "@/components/notes/NoteCard";
@@ -19,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useNotes } from "@/hooks/useNotes";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -29,7 +29,7 @@ interface NotesContainerProps {
 }
 
 export const NotesContainer = ({
-  notes,
+  notes: initialNotes,
   selectedFolderId,
   onCreateNote,
   onUpdateNote,
@@ -42,9 +42,9 @@ export const NotesContainer = ({
   const [sortBy, setSortBy] = useState<"date" | "title">("date");
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const { toast } = useToast();
   const { t } = useTranslation();
   const { isGuestMode } = useGuestMode();
+  const { createNote, updateNote, deleteNote } = useNotes(initialNotes);
 
   const { data: folders = [] } = useQuery({
     queryKey: ["folders"],
@@ -64,16 +64,14 @@ export const NotesContainer = ({
 
   const handleCreateNote = async (images: string[], audioUrl: string | null) => {
     if (!title.trim()) {
-      toast({
-        title: t("notes.errors.titleRequired"),
-        variant: "destructive",
-      });
       return;
     }
 
     const { links, email, phone } = parseContent(content);
+    
+    console.log("Preparing to create note with audio:", audioUrl);
 
-    onCreateNote({
+    const noteData = {
       title: title.trim(),
       content: content.trim(),
       links,
@@ -83,14 +81,16 @@ export const NotesContainer = ({
       images,
       audio_url: audioUrl,
       folder_id: selectedFolderId,
-    });
+    };
+
+    if (isGuestMode) {
+      onCreateNote(noteData);
+    } else {
+      await createNote(noteData);
+    }
 
     setTitle("");
     setContent("");
-
-    toast({
-      title: t("notes.created"),
-    });
   };
 
   const handleUpdateNote = async (images: string[], audioUrl: string | null) => {
@@ -98,7 +98,7 @@ export const NotesContainer = ({
 
     const { links, email, phone } = parseContent(content);
 
-    onUpdateNote({
+    const updatedNote = {
       ...editingNote,
       title: title.trim(),
       content: content.trim(),
@@ -108,21 +108,17 @@ export const NotesContainer = ({
       images,
       audio_url: audioUrl,
       folder_id: editingNote.folder_id,
-    });
+    };
+
+    if (isGuestMode) {
+      onUpdateNote(updatedNote);
+    } else {
+      await updateNote(updatedNote);
+    }
 
     setEditingNote(null);
     setTitle("");
     setContent("");
-
-    toast({
-      title: t("notes.updated"),
-    });
-  };
-
-  const startEditing = (note: Note) => {
-    setEditingNote(note);
-    setTitle(note.title);
-    setContent(note.content || "");
   };
 
   const handleMoveNote = async (note: Note, newFolderId: string | null) => {
@@ -134,21 +130,16 @@ export const NotesContainer = ({
 
       if (error) throw error;
 
-      toast({
-        title: t("notes.moved"),
-      });
-
-      onUpdateNote({
-        ...note,
-        folder_id: newFolderId,
-      });
+      const updatedNote = { ...note, folder_id: newFolderId };
+      if (isGuestMode) {
+        onUpdateNote(updatedNote);
+      } else {
+        await updateNote(updatedNote);
+      }
 
       setIsMoveDialogOpen(false);
     } catch (error) {
-      toast({
-        title: t("notes.errors.moveFailed"),
-        variant: "destructive",
-      });
+      console.error("Error moving note:", error);
     }
   };
 
@@ -176,12 +167,12 @@ export const NotesContainer = ({
         editingNote={editingNote}
         onTitleChange={setTitle}
         onContentChange={setContent}
-        onSubmit={handleUpdateNote}
         onCancelEdit={() => {
           setEditingNote(null);
           setTitle("");
           setContent("");
         }}
+        onSubmit={editingNote ? handleUpdateNote : handleCreateNote}
       />
 
       <div className="flex gap-4 items-center">
@@ -210,8 +201,12 @@ export const NotesContainer = ({
           <NoteCard
             key={note.id}
             note={note}
-            onEdit={startEditing}
-            onDelete={onDeleteNote}
+            onEdit={(note) => {
+              setEditingNote(note);
+              setTitle(note.title);
+              setContent(note.content || "");
+            }}
+            onDelete={isGuestMode ? onDeleteNote : deleteNote}
             onMove={(note) => {
               setSelectedNote(note);
               setIsMoveDialogOpen(true);
