@@ -17,13 +17,25 @@ export const useNoteCrud = () => {
         return;
       }
 
+      // S'assurer que content n'est jamais une chaîne vide
+      const noteData = {
+        ...note,
+        content: note.content || null,
+        user_id: user.id
+      };
+
+      console.log("Creating note with data:", noteData);
+
       const { data, error } = await supabase
         .from("notes")
-        .insert([{ ...note, user_id: user.id }])
+        .insert([noteData])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating note:", error);
+        throw error;
+      }
 
       toast({
         title: "Note créée avec succès",
@@ -42,17 +54,29 @@ export const useNoteCrud = () => {
 
   const updateNote = async (note: Note) => {
     try {
+      // S'assurer que content n'est jamais une chaîne vide
+      const noteData = {
+        ...note,
+        content: note.content || null
+      };
+
+      console.log("Updating note with data:", noteData);
+
       const { error } = await supabase
         .from("notes")
-        .update(note)
+        .update(noteData)
         .eq('id', note.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating note:", error);
+        throw error;
+      }
       
       toast({
         title: "Note mise à jour",
       });
     } catch (error) {
+      console.error("Error in updateNote:", error);
       toast({
         title: "Erreur",
         description: "Impossible de modifier la note",
@@ -86,6 +110,7 @@ export const useNoteCrud = () => {
         title: "Note supprimée",
       });
     } catch (error) {
+      console.error("Error in deleteNote:", error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer la note",
