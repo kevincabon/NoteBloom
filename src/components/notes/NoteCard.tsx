@@ -34,12 +34,13 @@ export const NoteCard = ({ note, onEdit, onDelete, onMove }: NoteCardProps) => {
   return (
     <>
       <Card 
-        className="p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300 fade-in max-h-[400px] overflow-hidden"
+        className="p-6 note-card cursor-pointer hover:shadow-md transition-all duration-300 fade-in"
         onClick={handleCardClick}
       >
         <NoteHeader note={note} onEdit={onEdit} onDelete={onDelete} onMove={onMove} />
         
-        <div className="overflow-hidden">
+        <div className="max-h-[200px] overflow-hidden relative">
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-note-50 dark:from-note-800 to-transparent" />
           <NoteContent 
             content={formattedContent} 
             audioUrl={note.audio_url}
