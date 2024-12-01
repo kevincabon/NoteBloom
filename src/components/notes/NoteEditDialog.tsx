@@ -13,7 +13,7 @@ interface NoteEditDialogProps {
   note: Note | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  onUpdateNote: (images: string[], audioUrl: string | null, folderId: string | null) => void;
+  onUpdateNote: (updatedNote: Note) => void;
 }
 
 export const NoteEditDialog = ({
@@ -40,8 +40,11 @@ export const NoteEditDialog = ({
       ...note,
       title,
       content,
+      images,
+      audio_url: audioUrl,
+      folder_id: folderId,
     };
-    onUpdateNote(images, audioUrl, folderId);
+    onUpdateNote(updatedNote);
     onOpenChange(false);
   };
 

@@ -67,27 +67,20 @@ export const NotesContainer = ({
     }
   };
 
-  const handleUpdateNote = async (note: Note, title: string, content: string, images: string[], audioUrl: string | null, folderId: string | null) => {
-    if (!note) return;
+  const handleUpdateNote = async (updatedNote: Note) => {
+    const { links, email, phone } = parseContent(updatedNote.content || "");
 
-    const { links, email, phone } = parseContent(content || "");
-
-    const updatedNote = {
-      ...note,
-      title,
-      content,
+    const noteToUpdate = {
+      ...updatedNote,
       links,
       phone,
       email,
-      images,
-      audio_url: audioUrl,
-      folder_id: folderId,
     };
 
     if (isGuestMode) {
-      onUpdateNote(updatedNote);
+      onUpdateNote(noteToUpdate);
     } else {
-      await updateNote(updatedNote);
+      await updateNote(noteToUpdate);
     }
 
     setSelectedNote(null);
@@ -177,11 +170,7 @@ export const NotesContainer = ({
         note={selectedNote}
         isOpen={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onUpdateNote={(images, audioUrl, folderId) => {
-          if (selectedNote) {
-            handleUpdateNote(selectedNote, selectedNote.title, selectedNote.content || "", images, audioUrl, folderId);
-          }
-        }}
+        onUpdateNote={handleUpdateNote}
       />
     </div>
   );
