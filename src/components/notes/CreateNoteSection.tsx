@@ -5,16 +5,20 @@ import { useTranslation } from "react-i18next";
 import { NoteForm } from "./NoteForm";
 
 interface CreateNoteSectionProps {
-  onCreateNote: (images: string[], audioUrl: string | null) => void;
+  onCreateNote: (images: string[], audioUrl: string | null, folderId: string | null) => void;
 }
 
 export const CreateNoteSection = ({ onCreateNote }: CreateNoteSectionProps) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const { t } = useTranslation();
 
-  const handleSubmit = async (images: string[], audioUrl: string | null) => {
-    await onCreateNote(images, audioUrl);
+  const handleSubmit = async (images: string[], audioUrl: string | null, folderId: string | null) => {
+    await onCreateNote(images, audioUrl, folderId);
     setIsFormVisible(false);
+    setTitle("");
+    setContent("");
   };
 
   return (
@@ -29,12 +33,16 @@ export const CreateNoteSection = ({ onCreateNote }: CreateNoteSectionProps) => {
         </Button>
       ) : (
         <NoteForm
-          title=""
-          content=""
+          title={title}
+          content={content}
           editingNote={null}
-          onTitleChange={() => {}}
-          onContentChange={() => {}}
-          onCancelEdit={() => setIsFormVisible(false)}
+          onTitleChange={setTitle}
+          onContentChange={setContent}
+          onCancelEdit={() => {
+            setIsFormVisible(false);
+            setTitle("");
+            setContent("");
+          }}
           onSubmit={handleSubmit}
         />
       )}
