@@ -15,7 +15,7 @@ interface RealtimeNote extends Note {
   };
 }
 
-type RealtimePayload = RealtimePostgresChangesPayload<{
+type DatabaseChangesPayload = RealtimePostgresChangesPayload<{
   [key: string]: any;
 }>;
 
@@ -56,8 +56,6 @@ export const useNotes = (initialNotes: Note[] = []) => {
   });
 
   useEffect(() => {
-    console.log("Setting up realtime subscription");
-    
     const channel = supabase.channel('notes_changes')
       .on(
         'postgres_changes',
@@ -66,27 +64,29 @@ export const useNotes = (initialNotes: Note[] = []) => {
           schema: 'public',
           table: 'notes'
         },
-        async (payload: RealtimePayload) => {
+        async (payload: DatabaseChangesPayload) => {
           console.log("Realtime change received:", payload);
           
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) return;
 
-          const handleRealtimeChange = async () => {
-            try {
-              switch (payload.eventType) {
-                case 'INSERT': {
-                  if (!payload.new || !payload.new.user_id || payload.new.user_id !== user.id) {
-                    return;
-                  }
+          // Function to fetch folder details if needed
+          const getFolderDetails = async (folderId: string | null) => {
+            if (!folderId) return null;
+            const { data } = await supabase
+              .from('folders')
+              .select('name, color')
+              .eq('id', folderId)
+              .single();
+            return data;
+          };
 
-                  const folder = payload.new.folder_id ? await supabase
-                    .from('folders')
-                    .select('name, color')
-                    .eq('id', payload.new.folder_id)
-                    .single()
-                    .then(({ data }) => data) : null;
-
+          try {
+            switch (payload.eventType) {
+              case 'INSERT': {
+                if (payload.new && 'user_id' in payload.new && payload.new.user_id === user.id) {
+                  const folder = await getFolderDetails(payload.new.folder_id);
+                  
                   queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
                     const newNote = {
                       ...payload.new,
@@ -95,20 +95,13 @@ export const useNotes = (initialNotes: Note[] = []) => {
                     } as Note;
                     return [newNote, ...oldNotes];
                   });
-                  break;
                 }
-                case 'UPDATE': {
-                  if (!payload.new || !payload.new.user_id || payload.new.user_id !== user.id) {
-                    return;
-                  }
-
-                  const folder = payload.new.folder_id ? await supabase
-                    .from('folders')
-                    .select('name, color')
-                    .eq('id', payload.new.folder_id)
-                    .single()
-                    .then(({ data }) => data) : null;
-
+                break;
+              }
+              case 'UPDATE': {
+                if (payload.new && 'user_id' in payload.new && payload.new.user_id === user.id) {
+                  const folder = await getFolderDetails(payload.new.folder_id);
+                  
                   queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
                     return oldNotes.map(note => 
                       note.id === payload.new.id 
@@ -120,24 +113,22 @@ export const useNotes = (initialNotes: Note[] = []) => {
                         : note
                     );
                   });
-                  break;
                 }
-                case 'DELETE': {
-                  if (!payload.old?.id) return;
-                  
-                  queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
-                    return oldNotes.filter(note => note.id !== payload.old?.id);
-                  });
-                  break;
-                }
+                break;
               }
-            } catch (error) {
-              console.error("Error handling realtime update:", error);
-              queryClient.invalidateQueries({ queryKey: ["notes"] });
+              case 'DELETE': {
+                if (payload.old && 'id' in payload.old) {
+                  queryClient.setQueryData<Note[]>(["notes"], (oldNotes = []) => {
+                    return oldNotes.filter(note => note.id !== payload.old.id);
+                  });
+                }
+                break;
+              }
             }
-          };
-
-          await handleRealtimeChange();
+          } catch (error) {
+            console.error("Error handling realtime update:", error);
+            queryClient.invalidateQueries({ queryKey: ["notes"] });
+          }
         }
       )
       .subscribe((status) => {
