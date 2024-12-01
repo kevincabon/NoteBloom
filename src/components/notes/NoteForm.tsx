@@ -136,14 +136,14 @@ export const NoteForm = ({
         <div className="flex items-center space-x-2">
           <Folder className="h-4 w-4 text-muted-foreground" />
           <Select
-            value={selectedFolderId || ""}
-            onValueChange={(value) => setSelectedFolderId(value || null)}
+            value={selectedFolderId || "no-folder"}
+            onValueChange={(value) => setSelectedFolderId(value === "no-folder" ? null : value)}
           >
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={t('notes.selectFolder')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">
+              <SelectItem value="no-folder">
                 {t('notes.noFolder')}
               </SelectItem>
               {folders.map((folder) => (
