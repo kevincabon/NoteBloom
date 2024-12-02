@@ -122,8 +122,8 @@ const Index = () => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       notesToFilter = notesToFilter.filter(note => 
-        note.title.toLowerCase().includes(query) || 
-        note.content.toLowerCase().includes(query)
+        (note.title?.toLowerCase() || '').includes(query) || 
+        (note.content?.toLowerCase() || '').includes(query)
       );
     }
 
