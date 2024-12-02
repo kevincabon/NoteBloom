@@ -5,6 +5,7 @@ import { Note } from '@/types/notes';
 import { NoteContent } from '@/components/notes/NoteContent';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
+import { Lock } from '@/components/icons/Lock';
 
 export default function SharedNote() {
   const router = useRouter();
@@ -95,7 +96,16 @@ export default function SharedNote() {
             </span>
           )}
         </div>
-        <NoteContent note={note} readonly />
+        {!note.is_locked ? (
+          <NoteContent note={note} readonly />
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 bg-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20">
+            <Lock className="h-12 w-12 text-muted-foreground/50" />
+            <p className="text-center text-muted-foreground">
+              {t("notes.lock.status.locked")}
+            </p>
+          </div>
+        )}
       </Card>
     </div>
   );

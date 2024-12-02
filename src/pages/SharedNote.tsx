@@ -7,6 +7,7 @@ import { NoteTimestamps } from "@/components/notes/NoteTimestamps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { Lock } from "lucide-react";
 
 export default function SharedNote() {
   usePageTitle("notes.sharedNote");
@@ -115,13 +116,25 @@ export default function SharedNote() {
               <h1 className="text-2xl font-semibold">{note.title}</h1>
             </div>
             <div className="prose dark:prose-invert max-w-none">
-              <NoteContent 
-                content={note.content} 
-                audioUrl={note.audio_url}
-                images={note.images}
-              />
+              {!note.is_locked ? (
+                <NoteContent 
+                  content={note.content} 
+                  audioUrl={note.audio_url}
+                  images={note.images}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 bg-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20">
+                  <Lock className="h-12 w-12 text-muted-foreground/50" />
+                  <p className="text-center text-muted-foreground">
+                    {t("notes.lock.status.sharedNoteLocked")}
+                  </p>
+                </div>
+              )}
             </div>
-            <NoteTimestamps note={note} />
+            <NoteTimestamps 
+              createdAt={note.created_at}
+              updatedAt={note.updated_at}
+            />
           </div>
         </CardHeader>
       </Card>
