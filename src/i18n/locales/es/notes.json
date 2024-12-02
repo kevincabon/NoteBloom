@@ -62,6 +62,37 @@
       "alreadyShared": "La nota ya está compartida con este usuario"
     }
   },
+  "lock": {
+    "title": "Bloquear Nota",
+    "description": "Bloquear esta nota con contraseña",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "passwordPlaceholder": "Ingrese una contraseña",
+    "confirmPasswordPlaceholder": "Confirme la contraseña",
+    "success": "Nota bloqueada",
+    "errors": {
+      "passwordRequired": "La contraseña es requerida",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+      "lockError": "No se pudo bloquear la nota"
+    },
+    "status": {
+      "locked": "Esta nota está bloqueada. Haz clic en el candado para desbloquearla.",
+      "sharedNoteLocked" : "Esta nota compartida esta bloqueada. Contacta al propietario para desbloquearla."
+    }
+  },
+  "unlock": {
+    "title": "Desbloquear Nota",
+    "description": "Desbloquear esta nota con tu contraseña",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingrese la contraseña",
+    "success": "Nota desbloqueada",
+    "errors": {
+      "incorrectPassword": "Contraseña incorrecta",
+      "decryptionFailed": "Error al descifrar",
+      "unlockError": "No se pudo desbloquear la nota"
+    }
+  },
   "errors": {
     "titleRequired": "El título es obligatorio",
     "createError": "No se pudo crear la nota",

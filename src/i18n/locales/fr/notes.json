@@ -62,6 +62,37 @@
       "alreadyShared": "La note est déjà partagée avec cet utilisateur"
     }
   },
+  "lock": {
+    "title": "Verrouiller la note",
+    "description": "Verrouiller cette note avec un mot de passe",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordPlaceholder": "Entrez un mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez le mot de passe",
+    "success": "Note verrouillée",
+    "errors": {
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères",
+      "lockError": "Impossible de verrouiller la note"
+    },
+    "status": {
+      "locked": "Cette note est verrouillée. Cliquez sur le cadenas pour la déverrouiller.",
+      "sharedNoteLocked" : "Cette note partagée est verrouillée. Contactez le propriétaire pour la déverrouiller."
+    }
+  },
+  "unlock": {
+    "title": "Déverrouiller la note",
+    "description": "Déverrouiller cette note avec votre mot de passe",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Entrez le mot de passe",
+    "success": "Note déverrouillée",
+    "errors": {
+      "incorrectPassword": "Mot de passe incorrect",
+      "decryptionFailed": "Échec du déchiffrement",
+      "unlockError": "Impossible de déverrouiller la note"
+    }
+  },
   "errors": {
     "titleRequired": "Le titre est requis",
     "createError": "Impossible de créer la note",

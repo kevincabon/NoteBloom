@@ -62,6 +62,37 @@
       "alreadyShared": "Note is already shared with this user"
     }
   },
+  "lock": {
+    "title": "Lock Note",
+    "description": "Lock this note with a password",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordPlaceholder": "Enter a password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "success": "Note locked",
+    "errors": {
+      "passwordRequired": "Password is required",
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters long",
+      "lockError": "Unable to lock note"
+    },
+    "status": {
+      "locked": "This note is locked. Click the padlock to unlock it.",
+      "sharedNoteLocked" : "This shared note is locked. Contact the owner to unlock it."
+    }
+  },
+  "unlock": {
+    "title": "Unlock Note",
+    "description": "Unlock this note with your password",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "success": "Note unlocked",
+    "errors": {
+      "incorrectPassword": "Incorrect password",
+      "decryptionFailed": "Decryption failed",
+      "unlockError": "Unable to unlock note"
+    }
+  },
   "errors": {
     "titleRequired": "Title is required",
     "createFailed": "Failed to create note",
