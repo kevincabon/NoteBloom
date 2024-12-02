@@ -1,0 +1,85 @@
+/* Styles pour les listes de tâches dans l'éditeur */
+.ProseMirror ul[data-type="taskList"],
+.prose ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li,
+.prose ul[data-type="taskList"] li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label,
+.prose ul[data-type="taskList"] li > label {
+  margin-right: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div,
+.prose ul[data-type="taskList"] li > div {
+  flex: 1;
+  margin-top: 0;
+}
+
+/* Style pour les cases à cocher dans la vue en lecture seule */
+.prose input[type="checkbox"] {
+  margin: 0;
+  margin-right: 0.5rem;
+  margin-top: 0.25rem;
+  pointer-events: none;
+  opacity: 0.85;
+  cursor: default;
+}
+
+.prose input[type="checkbox"]:disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.85;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  position: relative;
+  margin-top: 4px;
+  background-color: transparent;
+}
+
+/* Style spécifique pour le mode sombre */
+:root[class~="dark"] .prose input[type="checkbox"]:disabled {
+  border-color: rgb(156 163 175); /* gray-400 */
+}
+
+.prose input[type="checkbox"]:disabled:checked {
+  background-color: currentColor;
+  border-width: 0;
+}
+
+/* Style spécifique pour le mode sombre quand coché */
+:root[class~="dark"] .prose input[type="checkbox"]:disabled:checked {
+  background-color: rgb(156 163 175); /* gray-400 */
+}
+
+.prose input[type="checkbox"]:disabled:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Style pour le texte barré quand la tâche est cochée */
+.ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div > p,
+.prose ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  opacity: 0.6;
+}

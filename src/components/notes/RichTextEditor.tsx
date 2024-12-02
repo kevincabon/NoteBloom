@@ -1,6 +1,8 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
 import { Toggle } from "@/components/ui/toggle";
 import { 
   Bold, 
@@ -9,10 +11,12 @@ import {
   AlignCenter, 
   AlignLeft, 
   AlignRight,
-  List
+  List,
+  CheckSquare
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
+import '@/styles/taskList.css';
 
 interface RichTextEditorProps {
   content: string;
@@ -29,6 +33,13 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
       TextAlign.configure({
         types: ['heading', 'paragraph'],
         alignments: ['left', 'center', 'right'],
+      }),
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+        HTMLAttributes: {
+          class: 'task-list-item',
+        },
       }),
     ],
     content: content || '',
@@ -90,6 +101,15 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
           aria-label="Bullet List"
         >
           <List className="h-4 w-4" />
+        </Toggle>
+
+        <Toggle
+          size="sm"
+          pressed={editor.isActive('taskList')}
+          onPressedChange={() => editor.chain().focus().toggleTaskList().run()}
+          aria-label="Task List"
+        >
+          <CheckSquare className="h-4 w-4" />
         </Toggle>
 
         <div className="flex gap-1">
