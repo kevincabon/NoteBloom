@@ -224,7 +224,7 @@
     "noFavorites": "No favorites"
   },
   "landing": {
-    "title": "Welcome to Quick Note Garden",
+    "title": "Welcome to NoteBloom",
     "subtitle": "Organize your ideas, create notes, and keep everything in order",
     "getStarted": "Get Started",
     "features": {
@@ -311,7 +311,7 @@
   },
   "roadmap": {
     "title": "Roadmap",
-    "description": "Discover upcoming features of Quick Note Garden",
+    "description": "Discover upcoming features of NoteBloom",
     "suggestions": "Your suggestions",
     "suggestionsDescription": "Have a feature idea? Don't hesitate to let us know!",
     "editor": "Editor",

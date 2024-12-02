@@ -19,7 +19,7 @@ export const Footer = () => {
     <footer className="w-full border-t">
       <div className="container flex h-16 items-center justify-between space-x-4 px-8 md:px-6">
         <div className="flex items-center space-x-4">
-          <span className="text-sm text-muted-foreground">Quick Note Garden</span>
+          <span className="text-sm text-muted-foreground">NoteBloom</span>
           <span className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">Beta v0.1.0</span>
         </div>
         <nav className="flex items-center space-x-4">

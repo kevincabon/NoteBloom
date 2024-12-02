@@ -264,7 +264,7 @@
     "roleUpdated": "Rôle mis à jour"
   },
   "landing": {
-    "title": "Bienvenue sur Quick Note Garden",
+    "title": "Bienvenue sur NoteBloom",
     "subtitle": "Organisez vos idées, créez des notes et gardez tout en ordre",
     "getStarted": "Commencer",
     "features": {
@@ -315,7 +315,7 @@
   },
   "roadmap": {
     "title": "Feuille de route",
-    "description": "Découvrez les fonctionnalités à venir de Quick Note Garden",
+    "description": "Découvrez les fonctionnalités à venir de NoteBloom",
     "suggestions": "Vos suggestions",
     "suggestionsDescription": "Vous avez une idée de fonctionnalité ? N'hésitez pas à nous en faire part !",
     "editor": "Éditeur",
