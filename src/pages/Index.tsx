@@ -14,8 +14,10 @@ import { FolderList } from "@/components/folders/FolderList";
 import { Folder } from "@/types";
 import { SearchBar } from "@/components/search/SearchBar"; // Correction du chemin d'importation
 import { useMemo } from "react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Index = () => {
+  usePageTitle("notes.title");
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(""); // New state for search
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]); // New state for selected tags

@@ -8,11 +8,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Admin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useTranslation();
+  usePageTitle("admin.title");
 
   useEffect(() => {
     const checkAdminAccess = async () => {

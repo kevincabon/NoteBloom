@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogOut, User, ShieldCheck } from "lucide-react";
+import { LogOut, User, ShieldCheck, Sparkles } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Link } from "react-router-dom";
@@ -42,6 +42,11 @@ export const Header = ({ isEditing, onSave, onLogout, children }: HeaderProps) =
           </div>
           <div className="flex items-center gap-4">
             {children}
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/roadmap">
+                <Sparkles className="h-4 w-4" />
+              </Link>
+            </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link to="/profile">
                 <User className="h-4 w-4" />

@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 import Admin from "./pages/Admin";
 import SharedNote from "./pages/SharedNote";
+import Roadmap from "./pages/Roadmap";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ export default function App() {
                   <Route path="/landing" element={<Landing />} />
                   <Route path="/login" element={<AuthRoute><Login /></AuthRoute>} />
                   <Route path="/shared/:token" element={<SharedNote />} />
+                  <Route path="/roadmap" element={<Roadmap />} />
                   <Route
                     path="/"
                     element={

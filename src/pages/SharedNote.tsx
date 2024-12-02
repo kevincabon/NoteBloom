@@ -6,8 +6,10 @@ import { NoteContent } from "@/components/notes/NoteContent";
 import { NoteTimestamps } from "@/components/notes/NoteTimestamps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function SharedNote() {
+  usePageTitle("notes.sharedNote");
   const { token } = useParams();
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);

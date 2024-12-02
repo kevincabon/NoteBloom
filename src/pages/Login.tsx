@@ -3,9 +3,11 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Login = () => {
   const navigate = useNavigate();
+  usePageTitle("auth.login");
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {

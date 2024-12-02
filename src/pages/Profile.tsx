@@ -12,8 +12,10 @@ import { useQuery } from "@tanstack/react-query";
 import { RecentActivity } from "@/components/profile/RecentActivity";
 import { Statistics } from "@/components/profile/Statistics";
 import { UserOptions } from "@/components/profile/UserOptions";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Profile = () => {
+  usePageTitle("profile.title");
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
