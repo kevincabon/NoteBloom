@@ -5,9 +5,11 @@ import { Note } from "@/types/note";
 import { NoteContent } from "@/components/notes/NoteContent";
 import { NoteTimestamps } from "@/components/notes/NoteTimestamps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Lock } from "lucide-react";
+import { SharedNoteUnlockDialog } from "@/components/notes/SharedNoteUnlockDialog";
 
 export default function SharedNote() {
   usePageTitle("notes.sharedNote");
@@ -15,14 +17,68 @@ export default function SharedNote() {
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
+  const [showUnlockDialog, setShowUnlockDialog] = useState(false);
   const { t } = useTranslation();
+
+  const handleUnlock = async (password: string) => {
+    if (!token) return false;
+
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+      const { data: result, error } = await supabase
+        .rpc('verify_share_link_password', {
+          p_token: token,
+          p_password_hash: passwordHash
+        });
+
+      if (error) {
+        console.error("Error verifying password:", error);
+        return false;
+      }
+
+      if (result && result.length > 0) {
+        await fetchNoteContent(result[0].note_id);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Error unlocking note:", error);
+      return false;
+    }
+  };
+
+  const fetchNoteContent = async (noteId: string) => {
+    try {
+      const { data: note, error: noteError } = await supabase
+        .from('notes')
+        .select('*')
+        .eq('id', noteId)
+        .single();
+
+      if (noteError) throw noteError;
+
+      if (note) {
+        setNote(note);
+        setIsLocked(false);
+      }
+    } catch (error) {
+      console.error("Error fetching note:", error);
+      setError(t("sharedNote.errors.noteNotFound"));
+    }
+  };
 
   useEffect(() => {
     async function fetchSharedNote() {
       if (!token) return;
 
       try {
-        // First, find the note_id from the share link using a direct query
         const cleanToken = token.replace('eq.', '');
         
         const { data: shareLinks, error: shareError } = await supabase
@@ -52,30 +108,19 @@ export default function SharedNote() {
           return;
         }
 
-        // Then fetch the note details
-        const { data: note, error: noteError } = await supabase
-          .from("notes")
-          .select("*, folders(name, color)")
-          .eq("id", shareLink.note_id)
-          .single();
-
-        if (noteError) {
-          console.error("Error fetching note:", noteError);
-          setError(t("sharedNote.errors.fetchError"));
+        // If the note has a password, show the unlock dialog
+        if (shareLink.password_hash) {
+          setIsLocked(true);
+          setShowUnlockDialog(true);
           setLoading(false);
           return;
         }
 
-        if (!note) {
-          setError(t("sharedNote.errors.noteNotFound"));
-          setLoading(false);
-          return;
-        }
-
-        setNote(note);
-      } catch (err) {
-        console.error("Unexpected error:", err);
-        setError(t("sharedNote.errors.fetchError"));
+        // If no password, fetch the note content directly
+        await fetchNoteContent(shareLink.note_id);
+      } catch (error) {
+        console.error("Error:", error);
+        setError(t("sharedNote.errors.generic"));
       } finally {
         setLoading(false);
       }
@@ -87,7 +132,10 @@ export default function SharedNote() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4">{t("sharedNote.loading")}</p>
+        </div>
       </div>
     );
   }
@@ -95,48 +143,63 @@ export default function SharedNote() {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Card className="p-6 max-w-lg w-full mx-4">
-          <h1 className="text-xl font-semibold text-red-600 mb-2">{t("sharedNote.errors.error")}</h1>
-          <p className="text-gray-600">{error}</p>
-        </Card>
+        <div className="text-center">
+          <p className="text-red-500">{error}</p>
+        </div>
       </div>
     );
   }
 
+  if (isLocked) {
+    return (
+      <>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <Lock className="h-12 w-12 mx-auto mb-4" />
+            <p>{t("sharedNote.passwordProtected")}</p>
+            <Button
+              onClick={() => setShowUnlockDialog(true)}
+              className="mt-4"
+            >
+              {t("sharedNote.unlock")}
+            </Button>
+          </div>
+        </div>
+        <SharedNoteUnlockDialog
+          isOpen={showUnlockDialog}
+          onOpenChange={setShowUnlockDialog}
+          onUnlock={handleUnlock}
+        />
+      </>
+    );
+  }
+
   if (!note) {
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p>{t("sharedNote.errors.noteNotFound")}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container py-8">
       <Card>
         <CardHeader>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-semibold">{note.title}</h1>
-            </div>
-            <div className="prose dark:prose-invert max-w-none">
-              {!note.is_locked ? (
-                <NoteContent 
-                  content={note.content} 
-                  audioUrl={note.audio_url}
-                  images={note.images}
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 bg-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20">
-                  <Lock className="h-12 w-12 text-muted-foreground/50" />
-                  <p className="text-center text-muted-foreground">
-                    {t("notes.lock.status.sharedNoteLocked")}
-                  </p>
-                </div>
-              )}
-            </div>
-            <NoteTimestamps 
+          <CardTitle>{note.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NoteContent note={note} readonly />
+          <div className="mt-4 pt-4 border-t">
+            <NoteTimestamps
               createdAt={note.created_at}
               updatedAt={note.updated_at}
+              owner={note.owner}
             />
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
     </div>
   );

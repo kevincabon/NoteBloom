@@ -49,6 +49,8 @@ export const NoteShareDialog = ({
   const [shareLink, setShareLink] = useState<{ url: string; expiresAt: string } | null>(null);
   const [linkExpiration, setLinkExpiration] = useState<string>("7days");
   const [isLoading, setIsLoading] = useState(false);
+  const [usePassword, setUsePassword] = useState(false);
+  const [sharePassword, setSharePassword] = useState("");
 
   useEffect(() => {
     if (note) {
@@ -283,13 +285,24 @@ export const NoteShareDialog = ({
         .delete()
         .eq("note_id", note.id);
 
+      // Hasher le mot de passe si nécessaire
+      let passwordHash = null;
+      if (usePassword && sharePassword) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(sharePassword);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
       // Créer un nouveau lien de partage
       const { data, error } = await supabase
         .from("note_share_links")
         .insert({
           note_id: note.id,
           expires_at: expiresAt.toISOString(),
-          token: crypto.randomUUID()
+          token: crypto.randomUUID(),
+          password_hash: passwordHash
         })
         .select()
         .single();
@@ -301,23 +314,19 @@ export const NoteShareDialog = ({
       }
 
       const url = `${window.location.origin}/shared/${data.token}`;
-      setShareLink({ 
-        url, 
-        expiresAt: data.expires_at 
-      });
+      setShareLink({ url, expiresAt: data.expires_at });
       
-      await navigator.clipboard.writeText(url);
+      // Réinitialiser le formulaire
+      setUsePassword(false);
+      setSharePassword("");
+      
       toast({
-        title: t("notes.sharing.success.linkCopied"),
-        description: t("notes.sharing.success.linkCreated", {
-          expiration: getExpirationText(data.expires_at)
-        })
+        title: t("notes.sharing.success.linkCreated"),
       });
     } catch (error) {
       console.error("Error generating share link:", error);
       toast({
         title: t("notes.sharing.errors.linkError"),
-        description: t("notes.sharing.errors.tryAgain"),
         variant: "destructive",
       });
     } finally {
@@ -457,8 +466,8 @@ export const NoteShareDialog = ({
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
-                  ))
-                )}
+                  )))
+                }
               </ScrollArea>
             </div>
           </TabsContent>
@@ -482,7 +491,7 @@ export const NoteShareDialog = ({
                   </p>
                 </div>
               ) : (
-                <>
+                <div>
                   <div className="space-y-2">
                     <Label>{t("notes.sharing.expiration")}</Label>
                     <Select
@@ -500,6 +509,23 @@ export const NoteShareDialog = ({
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="space-y-2">
+                    <Switch
+                      checked={usePassword}
+                      onCheckedChange={setUsePassword}
+                    />
+                    <Label>{t("notes.sharing.usePassword")}</Label>
+                  </div>
+                  {usePassword && (
+                    <div className="space-y-2">
+                      <Input
+                        type="password"
+                        placeholder={t("notes.sharing.passwordPlaceholder")}
+                        value={sharePassword}
+                        onChange={(e) => setSharePassword(e.target.value)}
+                      />
+                    </div>
+                  )}
                   <Button
                     onClick={handleGenerateShareLink}
                     disabled={isLoading}
@@ -507,7 +533,7 @@ export const NoteShareDialog = ({
                   >
                     {t("notes.sharing.generateLink")}
                   </Button>
-                </>
+                </div>
               )}
             </div>
           </TabsContent>

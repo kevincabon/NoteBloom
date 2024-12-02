@@ -31,12 +31,30 @@
     "indicator": "This note is shared",
     "with": "Shared with"
   },
+  "sharedNote": {
+    "loading": "Loading shared note...",
+    "passwordProtected": "This note is protected by a password",
+    "unlock": "Unlock Note",
+    "errors": {
+      "linkNotFound": "Share link not found",
+      "linkExpired": "Share link has expired",
+      "noteNotFound": "Note not found",
+      "generic": "An error occurred",
+      "wrongPassword": "Wrong password",
+      "unlockError": "Error unlocking note"
+    }
+  },
   "sharing": {
     "title": "Share note",
     "description": "Share your note with other users",
     "makePublic": "Make note public",
     "generateLink": "Generate sharing link",
     "expiration": "Expiration time",
+    "usePassword": "Protect with password",
+    "passwordPlaceholder": "Enter password for shared link",
+    "unlockTitle": "Unlock Shared Note",
+    "enterPassword": "Enter password to view note",
+    "unlock": "Unlock",
     "expirations": {
       "1hour": "1 hour",
       "1day": "1 day",
@@ -49,8 +67,8 @@
       "madePublic": "Note is now public",
       "madePrivate": "Note is now private",
       "shared": "Note shared successfully",
-      "deleted": "Share deleted",
-      "linkCopied": "Link copied to clipboard"
+      "linkCreated": "Share link created successfully",
+      "linkCopied": "Share link copied to clipboard"
     },
     "errors": {
       "updateError": "Error updating visibility",
