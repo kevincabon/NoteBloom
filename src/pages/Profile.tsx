@@ -15,8 +15,8 @@ import { UserOptions } from "@/components/profile/UserOptions";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 const Profile = () => {
-  usePageTitle("profile.title");
   const { t } = useTranslation();
+  usePageTitle(t("profile.title"));
   const navigate = useNavigate();
   const { toast } = useToast();
   const [username, setUsername] = useState("");

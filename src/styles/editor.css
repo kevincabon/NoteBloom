@@ -1,0 +1,154 @@
+/* Code inline styling */
+.ProseMirror code,
+.note-content code {
+  background-color: rgb(243 244 246);
+  color: rgb(31 41 55);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875em;
+}
+
+/* Dark mode for inline code */
+[data-theme="dark"] .ProseMirror code,
+[data-theme="dark"] .note-content code {
+  background-color: rgb(31 41 55);
+  color: rgb(229 231 235);
+}
+
+/* Code block styling */
+.ProseMirror pre,
+.note-content pre {
+  background-color: rgb(243 244 246);
+  border-radius: 8px;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code,
+.note-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: rgb(31 41 55);
+}
+
+/* Dark mode for code blocks */
+[data-theme="dark"] .ProseMirror pre,
+[data-theme="dark"] .note-content pre {
+  background-color: rgb(31 41 55);
+}
+
+[data-theme="dark"] .ProseMirror pre code,
+[data-theme="dark"] .note-content pre code {
+  color: rgb(229 231 235);
+}
+
+/* Styles de base */
+.ProseMirror {
+  position: relative;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  padding: 1rem;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Style direct pour les couleurs de texte */
+.ProseMirror span[style*="color"] {
+  color: attr(style color) !important;
+}
+
+/* Style pour les notes */
+.note-content span[style*="color"] {
+  color: attr(style color) !important;
+}
+
+/* Blockquote styling */
+.ProseMirror blockquote,
+.note-content blockquote {
+  position: relative;
+  padding: 1.5em 1.5em 1.5em 2em;
+  margin: 1em 0;
+  font-style: italic;
+  border-radius: 8px;
+  background: linear-gradient(to right, rgb(var(--primary) / 0.1), transparent);
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for paragraphs inside blockquotes */
+.ProseMirror blockquote p,
+.note-content blockquote p {
+  margin: 0; /* Remove default margins */
+}
+
+/* Add margin only between paragraphs */
+.ProseMirror blockquote p + p,
+.note-content blockquote p + p {
+  margin-top: 1em;
+}
+
+.ProseMirror blockquote::before,
+.note-content blockquote::before {
+  content: '"';
+  position: absolute;
+  left: 0.5em;
+  top: 0.5em;
+  font-size: 2em;
+  font-family: Georgia, serif;
+  color: rgb(var(--primary));
+  opacity: 0.5;
+}
+
+.ProseMirror blockquote::after,
+.note-content blockquote::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: rgb(var(--primary));
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+/* Dark mode for blockquotes */
+[data-theme="dark"] .ProseMirror blockquote,
+[data-theme="dark"] .note-content blockquote {
+  background: linear-gradient(to right, rgb(var(--primary) / 0.2), rgb(var(--primary) / 0.05));
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Style pour l'input de couleur */
+input[type="color"] {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}

@@ -17,6 +17,20 @@ export const formatContent = (content: string): string => {
 
   let formattedContent = content;
 
+  // Préserver les styles inline (comme la couleur)
+  formattedContent = formattedContent.replace(
+    /style="([^"]*)"/g,
+    (match, styles) => {
+      // Extraire la couleur si elle existe
+      const colorMatch = styles.match(/color:\s*([^;]+)/);
+      if (colorMatch) {
+        const color = colorMatch[1];
+        return `style="--color: ${color}; ${styles}"`;
+      }
+      return match;
+    }
+  );
+
   // Remplacer d'abord les retours à la ligne par des <br>
   formattedContent = formattedContent.replace(/\n/g, '<br>');
   

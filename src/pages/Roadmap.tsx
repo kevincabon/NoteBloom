@@ -50,7 +50,7 @@ const Roadmap = () => {
       category: "roadmap.editor",
       items: [
         { key: "autocomplete", icon: <Wand2 className="w-4 h-4" />, status: "inDev" },
-        { key: "checkboxes", icon: <CheckSquare className="w-4 h-4" />, status: "inDev" },
+        { key: "checkboxes", icon: <CheckSquare className="w-4 h-4" />, status: "done" },
         { key: "emojis", icon: <Smile className="w-4 h-4" />, status: "planned" },
         { key: "favorites", icon: <Star className="w-4 h-4" />, status: "planned" },
         { key: "templates", icon: <FileText className="w-4 h-4" />, status: "soon" },
@@ -98,10 +98,12 @@ const Roadmap = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
+      case "done":
+        return <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20">{t("roadmap.status.done")}</Badge>;
       case "inDev":
         return <Badge className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 border-blue-500/20">{t("roadmap.status.inDev")}</Badge>;
       case "soon":
-        return <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20">{t("roadmap.status.soon")}</Badge>;
+        return <Badge className="bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 border-orange-500/20">{t("roadmap.status.soon")}</Badge>;
       case "planned":
         return <Badge variant="outline" className="border-purple-500/20 text-purple-500">{t("roadmap.status.planned")}</Badge>;
       default:

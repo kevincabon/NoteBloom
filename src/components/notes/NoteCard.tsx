@@ -10,6 +10,7 @@ import { NoteMetadata } from "./NoteMetadata";
 import { NoteTimestamps } from "./NoteTimestamps";
 import { formatContent } from "@/utils/contentParser";
 import { cn } from "@/lib/utils";
+import '@/styles/editor.css';
 
 interface NoteCardProps {
   note: Note;
@@ -79,7 +80,7 @@ export const NoteCard = ({
             onDelete={(id) => handleDelete(id)}
             isSharedView={isSharedView}
           />
-          <div className="mt-4">
+          <div className="mt-4 note-content">
             <NoteContent content={formattedContent} audioUrl={note.audio_url} images={note.images} />
           </div>
           <div className="mt-4">
@@ -138,7 +139,7 @@ export const NoteCard = ({
               </div>
             )}
           </SheetHeader>
-          <div className="mt-6">
+          <div className="mt-6 note-content">
             <NoteContent 
               content={formattedContent} 
               audioUrl={note.audio_url}

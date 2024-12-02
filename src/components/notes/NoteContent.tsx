@@ -2,6 +2,7 @@ import { ImageGallery } from "./ImageGallery";
 import { AudioPlayer } from "./AudioPlayer";
 import { cn } from "@/lib/utils";
 import '@/styles/taskList.css';
+import '@/styles/editor.css';
 import { useEffect, useRef } from 'react';
 
 interface NoteContentProps {
@@ -26,20 +27,19 @@ export const NoteContent = ({ content, audioUrl, images, className, fullContent 
   }, [content]);
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("flex flex-col gap-4", className)}>
       {audioUrl && (
         <div className="mb-4">
           <AudioPlayer url={audioUrl} />
         </div>
       )}
       <div 
-        ref={contentRef}
         className={cn(
-          "prose dark:prose-invert max-w-none",
-          !fullContent && "line-clamp-4",
-          className
+          "note-content prose dark:prose-invert max-w-none",
+          !fullContent && "line-clamp-4"
         )}
         dangerouslySetInnerHTML={{ __html: content }}
+        ref={contentRef}
       />
       {images && images.length > 0 && (
         <div className="mt-4">
