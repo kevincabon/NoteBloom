@@ -301,5 +301,11 @@
     "addError": "No se pudo añadir a favoritos",
     "removeError": "No se pudo quitar de favoritos",
     "noFavorites": "No hay favoritos"
+  },
+  "roadmap": {
+    "title": "Hoja de ruta",
+    "description": "Descubre las próximas funcionalidades de Quick Note Garden",
+    "suggestions": "Tus sugerencias",
+    "suggestionsDescription": "¿Tienes una idea para una nueva función? ¡No dudes en hacérnoslo saber!"
   }
 }

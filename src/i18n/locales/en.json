@@ -6,14 +6,14 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "logout": "Logout",
-    "backToHome": "Back to Home",
+    "backToHome": "Back to home",
     "theme": "Theme",
     "language": "Language",
     "uploading": "Uploading...",
     "description": "Description",
     "optional": "optional",
-    "createdAt": "Created on",
-    "updatedAt": "Modified on",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
     "unknown": "Unknown date",
     "add": "Add",
     "copy": "Copy",
@@ -34,32 +34,25 @@
     "title": "Folders",
     "all": "All notes",
     "loading": "Loading...",
-    "newFolder": "New Folder",
+    "newFolder": "New folder",
     "create": "Create",
-    "edit": "Edit Folder",
-    "delete": "Delete Folder",
+    "edit": "Edit folder",
+    "delete": "Delete folder",
     "name": "Name",
-    "createFolder": "Create Folder",
+    "createFolder": "Create folder",
     "description": "Description",
     "color": "Color",
-    "parent": "Parent Folder",
+    "parent": "Parent folder",
     "noParent": "None",
-    "deleteConfirmation": "Are you sure you want to delete the folder \"{name}\"?",
-    "deleteDetails": "This action will also delete",
-    "deleteWarning": "This action is irreversible and will permanently delete all items listed above.",
-    "subFoldersCount": "{{count}} subfolder",
-    "subFoldersCount_plural": "{{count}} subfolders",
-    "notesCount": "{{count}} note",
-    "notesCount_plural": "{{count}} notes",
-    "searchPlaceholder": "Search in folders...",
     "namePlaceholder": "Folder name",
+    "descriptionPlaceholder": "Folder description",
+    "searchPlaceholder": "Search folders...",
     "colorPlaceholder": "Folder color",
-    "descriptionPlaceholder": "Folder description...",
     "created": "Folder created",
     "updated": "Folder updated",
     "deleted": "Folder deleted",
     "empty": "No folders",
-    "sharedWithMe": "Shared with me",
+    "sharedWithMe": "Notes shared with me",
     "limitReached": "Folder limit reached",
     "limitReachedDescription": "You cannot create more than {{max}} root folders",
     "subFolderLimitReached": "Subfolder limit reached",
@@ -71,15 +64,22 @@
       "deleteError": "Could not delete folder"
     },
     "delete": {
-      "title": "Delete Folder",
-      "description": "Are you sure you want to delete this folder? All notes inside it will also be deleted. This action cannot be undone."
-    }
+      "title": "Delete folder",
+      "description": "Are you sure you want to delete this folder? All notes it contains will also be deleted. This action cannot be undone."
+    },
+    "deleteConfirmation": "Are you sure you want to delete the folder \"{name}\"?",
+    "deleteDetails": "This action will also delete",
+    "deleteWarning": "This action is irreversible and will permanently delete all items above.",
+    "subFoldersCount": "{{count}} subfolder",
+    "subFoldersCount_plural": "{{count}} subfolders",
+    "notesCount": "{{count}} note",
+    "notesCount_plural": "{{count}} notes"
   },
   "notes": {
     "title": "Notes",
-    "newNote": "New Note",
+    "newNote": "New note",
     "create": "Create",
-    "edit": "Edit Note",
+    "edit": "Edit note",
     "titlePlaceholder": "Note title",
     "contentPlaceholder": "Start writing...",
     "created": "Note created",
@@ -90,7 +90,7 @@
     "sortBy": "Sort by",
     "sortByDate": "Date",
     "sortByTitle": "Title",
-    "empty": "No notes",
+    "empty": "This folder has no notes",
     "audioRecording": "Audio recording",
     "existingImages": "Existing images",
     "newImages": "New images",
@@ -101,42 +101,43 @@
     "imageUrlPlaceholder": "Paste image URL here",
     "moveNote": "Move note",
     "selectDestination": "Select destination folder",
+    "shared": {
+      "title": "Notes shared with me",
+      "empty": "No shared notes",
+      "owner": "Shared by",
+      "indicator": "This note is shared",
+      "with": "Shared with"
+    },
     "sharing": {
-      "title": "Share Note",
-      "public": "Visibility",
-      "shareWithUsers": "Share with Users",
-      "generateLink": "Share Link",
-      "publicNote": "Public Note",
-      "privateNote": "Private Note",
-      "publicDescription": "Anyone with the link can view this note",
-      "privateDescription": "Only you can view this note",
-      "userEmailPlaceholder": "Enter email address",
-      "sharedWith": "Shared with",
-      "noShares": "This note hasn't been shared with anyone yet",
-      "linkExpiration": "Link Expiration",
-      "expiresInHours": "Expires in {{hours}} hours",
-      "expiresInDays": "Expires in {{days}} days",
+      "title": "Share note",
+      "description": "Share your note with other users",
+      "makePublic": "Make note public",
+      "generateLink": "Generate share link",
+      "expiration": "Expiration time",
+      "expirations": {
+        "1hour": "1 hour",
+        "1day": "1 day",
+        "7days": "7 days",
+        "30days": "30 days"
+      },
+      "expiresInHours": "Expires in {{hours}} hour(s)",
+      "expiresInDays": "Expires in {{days}} day(s)",
       "success": {
         "madePublic": "Note is now public",
         "madePrivate": "Note is now private",
         "shared": "Note shared successfully",
-        "deleted": "Share removed successfully",
-        "linkCopied": "Share link copied to clipboard"
+        "deleted": "Share deleted",
+        "linkCopied": "Link copied to clipboard"
       },
       "errors": {
-        "userNotFound": "User not found",
-        "alreadyShared": "Note is already shared with this user",
+        "updateError": "Error updating visibility",
         "shareError": "Error sharing note",
-        "visibilityError": "Error updating note visibility",
-        "loadError": "Error loading shared users"
+        "deleteError": "Error deleting share",
+        "linkError": "Error generating link",
+        "copyError": "Error copying link",
+        "userNotFound": "User not found",
+        "alreadyShared": "Note is already shared with this user"
       }
-    },
-    "shared": {
-      "title": "Shared with me",
-      "empty": "No shared notes yet",
-      "owner": "Shared by {{username}}",
-      "indicator": "This note is shared",
-      "with": "Shared with"
     },
     "errors": {
       "titleRequired": "Title is required",
@@ -147,28 +148,24 @@
     },
     "delete": {
       "note": {
-        "title": "Delete Note",
+        "title": "Delete note",
         "description": "Are you sure you want to delete this note? This action cannot be undone."
-      },
-      "folder": {
-        "title": "Delete Folder",
-        "description": "Are you sure you want to delete this folder? All notes inside it will also be deleted. This action cannot be undone."
       }
     }
   },
   "tags": {
     "title": "Tags",
-    "create": "Create Tag",
-    "edit": "Edit Tag",
-    "delete": "Delete Tag",
+    "create": "Create tag",
+    "edit": "Edit tag",
+    "delete": "Delete tag",
     "name": "Name",
     "color": "Color",
-    "addToNote": "Add Tag",
-    "removeFromNote": "Remove Tag",
+    "addToNote": "Add tag",
+    "removeFromNote": "Remove tag",
     "noTags": "No tags",
     "searchPlaceholder": "Search tags...",
-    "manage": "Manage Tags",
-    "deleteConfirmTitle": "Delete Tag",
+    "manage": "Manage tags",
+    "deleteConfirmTitle": "Delete tag",
     "deleteConfirmDescription": "Are you sure you want to delete the tag \"{tag}\"? This action cannot be undone.",
     "limitReached": "Tag limit reached",
     "errors": {
@@ -179,11 +176,20 @@
       "maxTagsReachedDescription": "You cannot create more than {{max}} tags"
     }
   },
+  "sharedNote": {
+    "errors": {
+      "error": "An error occurred",
+      "fetchError": "Could not fetch shared note",
+      "linkNotFound": "Share link is invalid or has expired",
+      "linkExpired": "This share link has expired",
+      "noteNotFound": "Note not found"
+    }
+  },
   "auth": {
-    "switchToGuest": "Guest Mode",
-    "switchToAuth": "Sign In",
-    "guestMode": "Guest Mode Active",
-    "signIn": "Sign In",
+    "switchToGuest": "Guest mode",
+    "switchToAuth": "Sign in",
+    "guestMode": "Guest mode active",
+    "signIn": "Sign in",
     "notAuthenticated": "You must be signed in"
   },
   "theme": {
@@ -192,24 +198,64 @@
     "system": "System"
   },
   "feedback": {
-    "giveFeedback": "Give Feedback",
-    "title": "Your Feedback Matters",
+    "giveFeedback": "Give feedback",
+    "title": "Your feedback matters",
     "description": "Share your suggestions, report a bug, or ask a question.",
     "type": "Type",
     "selectType": "Select a type",
     "types": {
       "suggestion": "Suggestion",
       "bug": "Bug",
-      "question": "Question"
+      "question": "Question",
+      "other": "Other"
     },
-    "content": "Message",
-    "contentPlaceholder": "Describe your suggestion, bug, or question...",
+    "content": "Content",
+    "contentPlaceholder": "Write your feedback here...",
     "submit": "Submit",
     "success": "Thank you for your feedback!",
-    "successDescription": "We have received your message.",
-    "error": "An error occurred",
-    "errorDescription": "Could not send your message. Please try again.",
-    "notAuthenticated": "You must be signed in to give feedback"
+    "error": "Could not submit feedback"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "addError": "Could not add to favorites",
+    "removeError": "Could not remove from favorites",
+    "noFavorites": "No favorites"
+  },
+  "landing": {
+    "title": "Welcome to Quick Note Garden",
+    "subtitle": "Organize your ideas, create notes, and keep everything in order",
+    "getStarted": "Get Started",
+    "features": {
+      "title": "Features",
+      "notes": {
+        "title": "Simple Note Taking",
+        "description": "Create and edit notes quickly with our intuitive editor"
+      },
+      "folders": {
+        "title": "Folder Organization",
+        "description": "Organize your notes in customizable folders with colors"
+      },
+      "organization": {
+        "title": "Note Sharing",
+        "description": "Share your notes easily with others"
+      }
+    }
+  },
+  "limits": {
+    "currentUsage": "{{current}} of {{max}} {{type}} used",
+    "maxTagsReached": "You've reached the tag limit. Upgrade to VIP to create more!",
+    "maxRootFoldersReached": "You've reached the root folders limit. Upgrade to VIP to create more!",
+    "maxSubFoldersReached": "You've reached the subfolder limit. Upgrade to VIP to create more!",
+    "maxNotesReached": "You've reached the note limit. Upgrade to VIP to create more!",
+    "upgradeNeeded": "Upgrade to VIP to unlock this feature",
+    "types": {
+      "tags": "tags",
+      "rootFolders": "root folders",
+      "subFolders": "subfolders",
+      "notes": "notes"
+    }
   },
   "profile": {
     "title": "Profile",
@@ -263,57 +309,69 @@
     "statusUpdated": "Status updated",
     "roleUpdated": "Role updated"
   },
-  "landing": {
-    "title": "Welcome to Quick Note Garden",
-    "subtitle": "Organize your ideas, create notes, and keep everything in order",
-    "getStarted": "Get Started",
+  "roadmap": {
+    "title": "Roadmap",
+    "description": "Discover upcoming features of Quick Note Garden",
+    "suggestions": "Your suggestions",
+    "suggestionsDescription": "Have a feature idea? Don't hesitate to let us know!",
+    "editor": "Editor",
+    "interface": "Interface",
+    "security": "Security",
+    "collaboration": "Collaboration",
+    "organization": "Organization",
+    "status": {
+      "done": "Done",
+      "inDev": "In Development",
+      "soon": "Coming Soon",
+      "planned": "Planned"
+    },
     "features": {
-      "title": "Features",
-      "notes": {
-        "title": "Simple Note Taking",
-        "description": "Create and edit notes quickly with our intuitive editor"
-      },
-      "folders": {
-        "title": "Folder Organization",
-        "description": "Organize your notes in customizable folders with colors"
-      },
-      "organization": {
-        "title": "Note Sharing",
-        "description": "Share your notes easily with others"
-      }
-    }
-  },
-  "sharedNote": {
-    "errors": {
-      "error": "An error occurred",
-      "fetchError": "Unable to retrieve the shared note",
-      "linkNotFound": "The share link is invalid or has expired",
-      "linkExpired": "This share link has expired",
-      "noteNotFound": "Note not found"
-    }
-  },
-  "favorites": {
-    "title": "Favorites",
-    "addToFavorites": "Add to favorites",
-    "removeFromFavorites": "Remove from favorites",
-    "addSuccess": "Note added to favorites",
-    "removeSuccess": "Note removed from favorites",
-    "addError": "Could not add to favorites",
-    "removeError": "Could not remove from favorites",
-    "noFavorites": "No favorites"
-  },
-  "limits": {
-    "currentUsage": "{{current}} of {{max}} {{type}} used",
-    "maxTagsReached": "You've reached the tag limit. Upgrade to VIP to create more!",
-    "maxRootFoldersReached": "You've reached the root folders limit. Upgrade to VIP to create more!",
-    "maxSubFoldersReached": "You've reached the subfolder limit. Upgrade to VIP to create more!",
-    "maxNotesReached": "You've reached the note limit. Upgrade to VIP to create more!",
-    "upgradeNeeded": "Upgrade to VIP to unlock this feature",
-    "types": {
-      "tags": "tags",
-      "rootFolders": "root folders",
-      "subFolders": "subfolders",
-      "notes": "notes"
+      "autocomplete": "Autocompletion",
+      "autocompleteDesc": "Smart suggestions while typing",
+      "checkboxes": "Checkboxes",
+      "checkboxesDesc": "Create interactive task lists",
+      "emojis": "Emoji support",
+      "emojisDesc": "Add emojis to your notes",
+      "favorites": "Favorites system",
+      "favoritesDesc": "Mark your important notes",
+      "templates": "Custom templates",
+      "templatesDesc": "Create and reuse templates",
+      "ai": "AI Writing Assistant",
+      "aiDesc": "Get suggestions and writing help",
+      "responsiveDesign": "Responsive design",
+      "responsiveDesignDesc": "Interface optimized for all screens",
+      "darkMode": "Dark mode",
+      "darkModeDesc": "Interface adapted to brightness",
+      "customThemes": "Custom themes",
+      "customThemesDesc": "Customize the app's appearance",
+      "gestureSupport": "Gesture support",
+      "gestureSupportDesc": "Natural touch navigation",
+      "encryption": "Sensitive notes encryption",
+      "encryptionDesc": "Protect your confidential data",
+      "twoFactor": "Two-factor authentication",
+      "twoFactorDesc": "Enhanced account security",
+      "noteLock": "Note locking",
+      "noteLockDesc": "Protect your notes with a password",
+      "backup": "Automatic backups",
+      "backupDesc": "Protect your important data",
+      "realTimeCollab": "Real-time collaboration",
+      "realTimeCollabDesc": "Work together on the same notes",
+      "comments": "Comments and annotations",
+      "commentsDesc": "Discuss around your notes",
+      "sharing": "Advanced sharing",
+      "sharingDesc": "Fine-grained permission control",
+      "tags": "Hierarchical tags",
+      "tagsDesc": "Organize your notes with nested tags",
+      "customFields": "Custom fields",
+      "customFieldsDesc": "Add metadata to your notes",
+      "kanban": "Kanban view",
+      "kanbanDesc": "Visualize your tasks in columns",
+      "calendar": "Calendar view",
+      "calendarDesc": "Display your notes on a calendar",
+      "import": "Import from other apps",
+      "importDesc": "Easily import your notes",
+      "export": "Export to different formats",
+      "exportDesc": "Export your notes in multiple formats"
     }
   }
 }
