@@ -1,0 +1,14 @@
+{
+  "currentUsage": "{{current}} sur {{max}} {{type}} utilisés",
+  "maxRootFoldersReached": "Limite de dossiers racine atteinte ({{max}})",
+  "maxSubFoldersReached": "Limite de sous-dossiers atteinte ({{max}})",
+  "maxNotesReached": "Limite de notes atteinte ({{max}})",
+  "maxTagsReached": "Limite de tags atteinte ({{max}})",
+  "maxFileSizeReached": "Taille maximale de fichier atteinte ({{max}})",
+  "types": {
+    "rootFolders": "dossiers racine",
+    "subFolders": "sous-dossiers",
+    "notes": "notes",
+    "tags": "tags"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "giveFeedback": "Dar feedback",
+  "title": "Tu opinión es importante",
+  "description": "Comparte tus sugerencias, reporta un error o haz una pregunta.",
+  "type": "Tipo",
+  "selectType": "Selecciona un tipo",
+  "types": {
+    "suggestion": "Sugerencia",
+    "bug": "Error",
+    "question": "Pregunta",
+    "feature": "Solicitud de Función",
+    "improvement": "Mejora",
+    "other": "Otro"
+  },
+  "content": "Mensaje",
+  "contentPlaceholder": "Describe tu sugerencia, error o pregunta...",
+  "submit": "Enviar",
+  "success": "¡Gracias por tu feedback!",
+  "successDescription": "Hemos recibido tu mensaje.",
+  "error": "Ha ocurrido un error",
+  "errorDescription": "No se pudo enviar tu mensaje. Por favor, inténtalo de nuevo.",
+  "notAuthenticated": "Debes iniciar sesión para dar feedback",
+  "categories": {
+    "bug": "Reporte de Error",
+    "feature": "Solicitud de Función",
+    "improvement": "Mejora",
+    "other": "Otro"
+  },
+  "form": {
+    "category": "Categoría",
+    "title": "Título",
+    "description": "Descripción",
+    "submitSuccess": "¡Gracias por tus comentarios!",
+    "submitError": "Error al enviar los comentarios"
+  }
+}

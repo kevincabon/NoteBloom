@@ -1,0 +1,14 @@
+{
+  "currentUsage": "{{current}} of {{max}} {{type}} used",
+  "maxRootFoldersReached": "Root folders limit reached ({{max}})",
+  "maxSubFoldersReached": "Subfolders limit reached ({{max}})",
+  "maxNotesReached": "Notes limit reached ({{max}})",
+  "maxTagsReached": "Tags limit reached ({{max}})",
+  "maxFileSizeReached": "Maximum file size reached ({{max}})",
+  "types": {
+    "rootFolders": "root folders",
+    "subFolders": "subfolders",
+    "notes": "notes",
+    "tags": "tags"
+  }
+}

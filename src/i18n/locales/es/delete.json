@@ -1,0 +1,14 @@
+{
+  "note": {
+    "title": "Eliminar Nota",
+    "description": "¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."
+  },
+  "folder": {
+    "title": "Eliminar Carpeta",
+    "description": "¿Estás seguro de que quieres eliminar esta carpeta? Todas las notas dentro serán eliminadas también."
+  },
+  "tag": {
+    "title": "Eliminar Etiqueta",
+    "description": "¿Estás seguro de que quieres eliminar esta etiqueta? Se eliminará de todas las notas."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "giveFeedback": "Donner un avis",
+  "title": "Votre avis compte",
+  "description": "Partagez vos suggestions, signalez un bug ou posez une question.",
+  "type": "Type",
+  "selectType": "Sélectionnez un type",
+  "types": {
+    "suggestion": "Suggestion",
+    "bug": "Bug",
+    "question": "Question"
+  },
+  "content": "Message",
+  "contentPlaceholder": "Décrivez votre suggestion, bug ou question... ",
+  "submit": "Envoyer",
+  "success": "Merci pour votre retour !",
+  "successDescription": "Nous avons bien reçu votre message.",
+  "error": "Une erreur est survenue",
+  "errorDescription": "Impossible d'envoyer votre message. Veuillez réessayer.",
+  "notAuthenticated": "Vous devez être connecté pour donner un avis"
+}

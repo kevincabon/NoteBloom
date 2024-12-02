@@ -1,0 +1,20 @@
+{
+  "title": "Bienvenue sur NoteBloom",
+  "subtitle": "Organisez vos idées, créez des notes et gardez tout en ordre",
+  "getStarted": "Commencer",
+  "features": {
+    "title": "Fonctionnalités",
+    "notes": {
+      "title": "Prise de notes simple",
+      "description": "Créez et modifiez des notes rapidement avec notre éditeur intuitif"
+    },
+    "folders": {
+      "title": "Organisation en dossiers",
+      "description": "Organisez vos notes dans des dossiers personnalisables avec des couleurs"
+    },
+    "organization": {
+      "title": "Partage de notes",
+      "description": "Partagez vos notes facilement avec d'autres personnes"
+    }
+  }
+}

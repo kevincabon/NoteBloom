@@ -1,0 +1,9 @@
+{
+  "errors": {
+    "error": "Une erreur est survenue",
+    "fetchError": "Impossible de récupérer la note partagée",
+    "linkNotFound": "Le lien de partage est invalide ou a expiré",
+    "linkExpired": "Ce lien de partage a expiré",
+    "noteNotFound": "Note introuvable"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "title": "Notas",
+  "newNote": "Nueva nota",
+  "create": "Crear",
+  "edit": "Editar nota",
+  "titlePlaceholder": "Título de la nota",
+  "contentPlaceholder": "Empieza a escribir...",
+  "created": "Nota creada",
+  "updated": "Nota actualizada",
+  "deleted": "Nota eliminada",
+  "searchPlaceholder": "Buscar notas...",
+  "searchInAllFolders": "Buscar en todas las carpetas",
+  "sortBy": "Ordenar por",
+  "sortByDate": "Fecha",
+  "sortByTitle": "Título",
+  "empty": "Esta carpeta no tiene notas",
+  "audioRecording": "Grabación de audio",
+  "existingImages": "Imágenes existentes",
+  "newImages": "Nuevas imágenes",
+  "allNotes": "Todas las notas",
+  "noFolder": "Sin carpeta",
+  "addImage": "Añadir imagen",
+  "addImageUrl": "Añadir imagen desde URL",
+  "imageUrlPlaceholder": "Pega la URL de la imagen aquí",
+  "moveNote": "Mover nota",
+  "selectDestination": "Seleccionar carpeta de destino",
+  "shared": {
+    "title": "Notas compartidas conmigo",
+    "empty": "No hay notas compartidas",
+    "owner": "Compartido por",
+    "indicator": "Esta nota está compartida",
+    "with": "Compartido con"
+  },
+  "sharing": {
+    "title": "Compartir nota",
+    "description": "Comparte tu nota con otros usuarios",
+    "makePublic": "Hacer nota pública",
+    "generateLink": "Generar enlace de compartir",
+    "expiration": "Tiempo de expiración",
+    "expirations": {
+      "1hour": "1 hora",
+      "1day": "1 día",
+      "7days": "7 días",
+      "30days": "30 días"
+    },
+    "expiresInHours": "Expira en {{hours}} hora(s)",
+    "expiresInDays": "Expira en {{days}} día(s)",
+    "success": {
+      "madePublic": "La nota ahora es pública",
+      "madePrivate": "La nota ahora es privada",
+      "shared": "Nota compartida con éxito",
+      "deleted": "Compartir eliminado",
+      "linkCopied": "Enlace copiado al portapapeles"
+    },
+    "errors": {
+      "updateError": "Error al actualizar la visibilidad",
+      "shareError": "Error al compartir la nota",
+      "deleteError": "Error al eliminar el compartir",
+      "linkError": "Error al generar el enlace",
+      "copyError": "Error al copiar el enlace",
+      "userNotFound": "Usuario no encontrado",
+      "alreadyShared": "La nota ya está compartida con este usuario"
+    }
+  },
+  "errors": {
+    "titleRequired": "El título es obligatorio",
+    "createError": "No se pudo crear la nota",
+    "updateError": "No se pudo actualizar la nota",
+    "deleteError": "No se pudo eliminar la nota",
+    "imageUploadFailed": "No se pudo subir la imagen",
+    "createFailed": "Error al crear la nota",
+    "updateFailed": "Error al actualizar la nota",
+    "deleteFailed": "Error al eliminar la nota"
+  },
+  "delete": {
+    "note": {
+      "title": "Eliminar Nota",
+      "description": "¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."
+    }
+  },
+  "name": "Título de la Nota",
+  "content": "Contenido de la Nota",
+  "folder": "Carpeta",
+  "tags": "Etiquetas",
+  "noTags": "Sin Etiquetas",
+  "createSuccess": "Nota creada",
+  "updateSuccess": "Nota actualizada",
+  "deleteSuccess": "Nota eliminada",
+  "lastEdited": "Última edición",
+  "createdAt": "Creada el"
+}

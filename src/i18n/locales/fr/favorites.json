@@ -1,0 +1,10 @@
+{
+  "title": "Favoris",
+  "addToFavorites": "Ajouter aux favoris",
+  "removeFromFavorites": "Retirer des favoris",
+  "addSuccess": "Note ajoutée aux favoris",
+  "removeSuccess": "Note retirée des favoris",
+  "addError": "Impossible d'ajouter aux favoris",
+  "removeError": "Impossible de retirer des favoris",
+  "noFavorites": "Aucun favori"
+}

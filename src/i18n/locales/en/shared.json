@@ -1,0 +1,16 @@
+{
+  "title": "Shared Notes",
+  "share": "Share Note",
+  "unshare": "Unshare",
+  "shareWith": "Share with",
+  "sharedBy": "Shared by",
+  "noSharedNotes": "No shared notes",
+  "shareSuccess": "Note shared successfully",
+  "unshareSuccess": "Note unshared successfully",
+  "copyLink": "Copy Link",
+  "linkCopied": "Link copied to clipboard",
+  "errors": {
+    "shareFailed": "Failed to share note",
+    "unshareFailed": "Failed to unshare note"
+  }
+}

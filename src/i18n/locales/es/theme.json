@@ -1,0 +1,22 @@
+{
+  "title": "Tema",
+  "mode": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "colors": {
+    "primary": "Color Primario",
+    "secondary": "Color Secundario",
+    "accent": "Color de Acento"
+  },
+  "font": {
+    "size": "Tamaño de Fuente",
+    "family": "Tipo de Fuente"
+  },
+  "apply": "Aplicar Tema",
+  "reset": "Restaurar Predeterminado",
+  "custom": "Tema Personalizado",
+  "saveSuccess": "Tema guardado",
+  "resetSuccess": "Tema restaurado a predeterminado"
+}

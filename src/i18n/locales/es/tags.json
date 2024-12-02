@@ -1,0 +1,29 @@
+{
+  "title": "Etiquetas",
+  "create": "Crear etiqueta",
+  "edit": "Editar etiqueta",
+  "delete": "Eliminar etiqueta",
+  "name": "Nombre",
+  "color": "Color",
+  "addToNote": "Añadir etiqueta",
+  "removeFromNote": "Quitar etiqueta",
+  "noTags": "Sin etiquetas",
+  "searchPlaceholder": "Buscar etiqueta...",
+  "manage": "Gestionar etiquetas",
+  "deleteConfirmTitle": "Eliminar etiqueta",
+  "deleteConfirmDescription": "¿Estás seguro de que quieres eliminar la etiqueta \"{tag}\"? Esta acción es irreversible.",
+  "limitReached": "Límite de etiquetas alcanzado",
+  "createSuccess": "Etiqueta creada",
+  "updateSuccess": "Etiqueta actualizada",
+  "deleteSuccess": "Etiqueta eliminada",
+  "errors": {
+    "createError": "No se pudo crear la etiqueta",
+    "updateError": "No se pudo modificar la etiqueta",
+    "deleteError": "No se pudo eliminar la etiqueta",
+    "maxTagsReached": "Límite de etiquetas alcanzado",
+    "maxTagsReachedDescription": "No puedes crear más de {{max}} etiquetas",
+    "createFailed": "Error al crear la etiqueta",
+    "updateFailed": "Error al actualizar la etiqueta",
+    "deleteFailed": "Error al eliminar la etiqueta"
+  }
+}

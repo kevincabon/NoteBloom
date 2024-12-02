@@ -1,0 +1,15 @@
+{
+  "title": "Perfil",
+  "email": "Correo electrónico",
+  "username": "Nombre de usuario",
+  "usernamePlaceholder": "Ingresa tu nombre de usuario",
+  "updated": "Perfil actualizado",
+  "statistics": "Estadísticas",
+  "recentActivity": "Actividad reciente",
+  "options": "Opciones",
+  "totalNotes": "Total de notas",
+  "totalFolders": "Total de carpetas",
+  "errors": {
+    "updateFailed": "No se pudo actualizar el perfil"
+  }
+}

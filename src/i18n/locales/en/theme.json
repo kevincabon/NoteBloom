@@ -1,0 +1,22 @@
+{
+  "title": "Theme",
+  "mode": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "colors": {
+    "primary": "Primary Colour",
+    "secondary": "Secondary Colour",
+    "accent": "Accent Colour"
+  },
+  "font": {
+    "size": "Font Size",
+    "family": "Font Family"
+  },
+  "apply": "Apply Theme",
+  "reset": "Reset to Default",
+  "custom": "Custom Theme",
+  "saveSuccess": "Theme saved",
+  "resetSuccess": "Theme reset to default"
+}

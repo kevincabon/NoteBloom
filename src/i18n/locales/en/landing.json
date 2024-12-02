@@ -1,0 +1,20 @@
+{
+  "title": "Welcome to NoteBloom",
+  "subtitle": "Organize your ideas, create notes and keep everything in order",
+  "getStarted": "Get Started",
+  "features": {
+    "title": "Features",
+    "notes": {
+      "title": "Simple Note Taking",
+      "description": "Create and edit notes quickly with our intuitive editor"
+    },
+    "folders": {
+      "title": "Folder Organization",
+      "description": "Organize your notes in customizable folders with colors"
+    },
+    "organization": {
+      "title": "Note Sharing",
+      "description": "Share your notes easily with others"
+    }
+  }
+}

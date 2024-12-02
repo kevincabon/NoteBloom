@@ -1,0 +1,75 @@
+{
+  "commands": {
+    "todoList": {
+      "title": "Lista de tareas",
+      "description": "Crear una nueva lista de tareas"
+    },
+    "heading1": {
+      "title": "Título 1",
+      "description": "Agregar un título de sección principal"
+    },
+    "heading2": {
+      "title": "Título 2",
+      "description": "Agregar un subtítulo de sección"
+    },
+    "heading3": {
+      "title": "Título 3",
+      "description": "Agregar un título de subsección"
+    },
+    "bulletList": {
+      "title": "Lista con viñetas",
+      "description": "Crear una lista con viñetas"
+    },
+    "orderedList": {
+      "title": "Lista numerada",
+      "description": "Crear una lista numerada"
+    },
+    "bold": {
+      "title": "Negrita",
+      "description": "Poner texto en negrita"
+    },
+    "italic": {
+      "title": "Cursiva",
+      "description": "Poner texto en cursiva"
+    },
+    "code": {
+      "title": "Código",
+      "description": "Insertar código"
+    },
+    "codeBlock": {
+      "title": "Bloque de código",
+      "description": "Insertar un bloque de código"
+    },
+    "blockquote": {
+      "title": "Cita",
+      "description": "Insertar una cita"
+    },
+    "link": {
+      "title": "Enlace",
+      "description": "Insertar un enlace"
+    },
+    "image": {
+      "title": "Imagen",
+      "description": "Insertar una imagen"
+    }
+  },
+  "placeholder": "Empieza a escribir o usa '/' para comandos...",
+  "untitled": "Sin título",
+  "bold": "Negrita",
+  "italic": "Cursiva",
+  "underline": "Subrayado",
+  "strikethrough": "Tachado",
+  "heading1": "Título 1",
+  "heading2": "Título 2",
+  "heading3": "Título 3",
+  "bulletList": "Lista con Viñetas",
+  "numberedList": "Lista Numerada",
+  "quote": "Cita",
+  "code": "Código",
+  "link": "Enlace",
+  "image": "Imagen",
+  "undo": "Deshacer",
+  "redo": "Rehacer",
+  "save": "Guardar",
+  "preview": "Vista Previa"
+}

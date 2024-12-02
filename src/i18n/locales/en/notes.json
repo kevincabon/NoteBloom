@@ -1,0 +1,87 @@
+{
+  "title": "Notes",
+  "newNote": "New Note",
+  "create": "Create Note",
+  "edit": "Edit Note",
+  "titlePlaceholder": "Note title",
+  "contentPlaceholder": "Start writing...",
+  "created": "Note created",
+  "updated": "Note updated",
+  "deleted": "Note deleted",
+  "searchPlaceholder": "Search notes...",
+  "searchInAllFolders": "Search in all folders",
+  "sortBy": "Sort by",
+  "sortByDate": "Date",
+  "sortByTitle": "Title",
+  "empty": "This folder has no notes",
+  "audioRecording": "Audio recording",
+  "existingImages": "Existing images",
+  "newImages": "New images",
+  "allNotes": "All notes",
+  "noFolder": "No Folder",
+  "addImage": "Add image",
+  "addImageUrl": "Add image from URL",
+  "imageUrlPlaceholder": "Paste image URL here",
+  "moveNote": "Move note",
+  "selectDestination": "Select destination folder",
+  "shared": {
+    "title": "Notes shared with me",
+    "empty": "No shared notes",
+    "owner": "Shared by",
+    "indicator": "This note is shared",
+    "with": "Shared with"
+  },
+  "sharing": {
+    "title": "Share note",
+    "description": "Share your note with other users",
+    "makePublic": "Make note public",
+    "generateLink": "Generate sharing link",
+    "expiration": "Expiration time",
+    "expirations": {
+      "1hour": "1 hour",
+      "1day": "1 day",
+      "7days": "7 days",
+      "30days": "30 days"
+    },
+    "expiresInHours": "Expires in {{hours}} hour(s)",
+    "expiresInDays": "Expires in {{days}} day(s)",
+    "success": {
+      "madePublic": "Note is now public",
+      "madePrivate": "Note is now private",
+      "shared": "Note shared successfully",
+      "deleted": "Share deleted",
+      "linkCopied": "Link copied to clipboard"
+    },
+    "errors": {
+      "updateError": "Error updating visibility",
+      "shareError": "Error sharing note",
+      "deleteError": "Error deleting share",
+      "linkError": "Error generating link",
+      "copyError": "Error copying link",
+      "userNotFound": "User not found",
+      "alreadyShared": "Note is already shared with this user"
+    }
+  },
+  "errors": {
+    "titleRequired": "Title is required",
+    "createFailed": "Failed to create note",
+    "updateFailed": "Failed to update note",
+    "deleteFailed": "Failed to delete note",
+    "imageUploadFailed": "Could not upload image"
+  },
+  "delete": {
+    "note": {
+      "title": "Delete Note",
+      "description": "Are you sure you want to delete this note? This action cannot be undone."
+    }
+  },
+  "name": "Note Title",
+  "content": "Note Content",
+  "folder": "Folder",
+  "tags": "Tags",
+  "createSuccess": "Note created",
+  "updateSuccess": "Note updated",
+  "deleteSuccess": "Note deleted",
+  "lastEdited": "Last edited",
+  "createdAt": "Created at"
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Tags",
+  "create": "Create Tag",
+  "edit": "Edit Tag",
+  "delete": "Delete Tag",
+  "name": "Name",
+  "color": "Color",
+  "addToNote": "Add Tag",
+  "removeFromNote": "Remove Tag",
+  "noTags": "No tags",
+  "searchPlaceholder": "Search tags...",
+  "manage": "Manage Tags",
+  "deleteConfirmTitle": "Delete Tag",
+  "deleteConfirmDescription": "Are you sure you want to delete the tag \"{tag}\"? This action cannot be undone.",
+  "limitReached": "Tag limit reached",
+  "createSuccess": "Tag created",
+  "updateSuccess": "Tag updated",
+  "deleteSuccess": "Tag deleted",
+  "errors": {
+    "createError": "Failed to create tag",
+    "updateError": "Failed to update tag",
+    "deleteError": "Failed to delete tag",
+    "maxTagsReached": "Tag limit reached",
+    "maxTagsReachedDescription": "You cannot create more than {{max}} tags"
+  }
+}

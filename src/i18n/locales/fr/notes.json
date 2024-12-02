@@ -1,0 +1,78 @@
+{
+  "title": "Notes",
+  "newNote": "Nouvelle note",
+  "create": "Créer",
+  "edit": "Modifier la note",
+  "titlePlaceholder": "Titre de la note",
+  "contentPlaceholder": "Commencez à écrire...",
+  "created": "Note créée",
+  "updated": "Note mise à jour",
+  "deleted": "Note supprimée",
+  "searchPlaceholder": "Rechercher des notes...",
+  "searchInAllFolders": "Rechercher dans tous les dossiers",
+  "sortBy": "Trier par",
+  "sortByDate": "Date",
+  "sortByTitle": "Titre",
+  "empty": "Ce dossier ne contient aucune note",
+  "audioRecording": "Enregistrement audio",
+  "existingImages": "Images existantes",
+  "newImages": "Nouvelles images",
+  "allNotes": "Toutes les notes",
+  "noFolder": "Sans dossier",
+  "addImage": "Ajouter une image",
+  "addImageUrl": "Ajouter une image depuis une URL",
+  "imageUrlPlaceholder": "Collez l'URL de l'image ici",
+  "moveNote": "Déplacer la note",
+  "selectDestination": "Sélectionnez le dossier de destination",
+  "shared": {
+    "title": "Notes partagées avec moi",
+    "empty": "Aucune note partagée",
+    "owner": "Partagée par",
+    "indicator": "Cette note est partagée",
+    "with": "Partagée avec"
+  },
+  "sharing": {
+    "title": "Partager la note",
+    "description": "Partagez votre note avec d'autres utilisateurs",
+    "makePublic": "Rendre la note publique",
+    "generateLink": "Générer un lien de partage",
+    "expiration": "Durée de validité",
+    "expirations": {
+      "1hour": "1 heure",
+      "1day": "1 jour",
+      "7days": "7 jours",
+      "30days": "30 jours"
+    },
+    "expiresInHours": "Expire dans {{hours}} heure(s)",
+    "expiresInDays": "Expire dans {{days}} jour(s)",
+    "success": {
+      "madePublic": "La note est maintenant publique",
+      "madePrivate": "La note est maintenant privée",
+      "shared": "Note partagée avec succès",
+      "deleted": "Partage supprimé",
+      "linkCopied": "Lien copié dans le presse-papiers"
+    },
+    "errors": {
+      "updateError": "Erreur lors de la mise à jour de la visibilité",
+      "shareError": "Erreur lors du partage de la note",
+      "deleteError": "Erreur lors de la suppression du partage",
+      "linkError": "Erreur lors de la génération du lien",
+      "copyError": "Erreur lors de la copie du lien",
+      "userNotFound": "Utilisateur non trouvé",
+      "alreadyShared": "La note est déjà partagée avec cet utilisateur"
+    }
+  },
+  "errors": {
+    "titleRequired": "Le titre est requis",
+    "createError": "Impossible de créer la note",
+    "updateError": "Impossible de modifier la note",
+    "deleteError": "Impossible de supprimer la note",
+    "imageUploadFailed": "Impossible d'envoyer l'image"
+  },
+  "delete": {
+    "note": {
+      "title": "Supprimer la note",
+      "description": "Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Profile",
+  "email": "Email",
+  "username": "Username",
+  "usernamePlaceholder": "Enter your username",
+  "updated": "Profile updated",
+  "statistics": "Statistics",
+  "recentActivity": "Recent Activity",
+  "options": "Options",
+  "totalNotes": "Total Notes",
+  "totalFolders": "Total Folders",
+  "errors": {
+    "updateFailed": "Failed to update profile"
+  }
+}

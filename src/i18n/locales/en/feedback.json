@@ -1,0 +1,20 @@
+{
+  "giveFeedback": "Give Feedback",
+  "title": "Your Feedback Matters",
+  "description": "Share your suggestions, report a bug, or ask a question.",
+  "type": "Type",
+  "selectType": "Select a type",
+  "types": {
+    "suggestion": "Suggestion",
+    "bug": "Bug",
+    "question": "Question"
+  },
+  "content": "Message",
+  "contentPlaceholder": "Describe your suggestion, bug, or question...",
+  "submit": "Submit",
+  "success": "Thank you for your feedback!",
+  "successDescription": "We have received your message.",
+  "error": "An error occurred",
+  "errorDescription": "Unable to send your message. Please try again.",
+  "notAuthenticated": "You must be logged in to give feedback"
+}

@@ -1,0 +1,58 @@
+{
+  "commands": {
+    "todoList": {
+      "title": "Todo List",
+      "description": "Create a new todo list"
+    },
+    "heading1": {
+      "title": "Heading 1",
+      "description": "Add a main section heading"
+    },
+    "heading2": {
+      "title": "Heading 2",
+      "description": "Add a section subheading"
+    },
+    "heading3": {
+      "title": "Heading 3",
+      "description": "Add a subsection heading"
+    },
+    "bulletList": {
+      "title": "Bullet List",
+      "description": "Create a bullet list"
+    },
+    "orderedList": {
+      "title": "Numbered List",
+      "description": "Create a numbered list"
+    },
+    "bold": {
+      "title": "Bold",
+      "description": "Make text bold"
+    },
+    "italic": {
+      "title": "Italic",
+      "description": "Make text italic"
+    },
+    "code": {
+      "title": "Code",
+      "description": "Insert code"
+    },
+    "codeBlock": {
+      "title": "Code Block",
+      "description": "Insert a code block"
+    },
+    "blockquote": {
+      "title": "Quote",
+      "description": "Insert a quote"
+    },
+    "link": {
+      "title": "Link",
+      "description": "Insert a link"
+    },
+    "image": {
+      "title": "Image",
+      "description": "Insert an image"
+    }
+  },
+  "placeholder": "Start writing or use '/' for commands...",
+  "untitled": "Untitled"
+}

@@ -1,0 +1,14 @@
+{
+  "currentUsage": "{{current}} de {{max}} {{type}} utilizados",
+  "maxRootFoldersReached": "Límite de carpetas raíz alcanzado ({{max}})",
+  "maxSubFoldersReached": "Límite de subcarpetas alcanzado ({{max}})",
+  "maxNotesReached": "Límite de notas alcanzado ({{max}})",
+  "maxTagsReached": "Límite de etiquetas alcanzado ({{max}})",
+  "maxFileSizeReached": "Tamaño máximo de archivo alcanzado ({{max}})",
+  "types": {
+    "rootFolders": "carpetas raíz",
+    "subFolders": "subcarpetas",
+    "notes": "notas",
+    "tags": "etiquetas"
+  }
+}

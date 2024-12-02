@@ -1,0 +1,16 @@
+{
+  "title": "Notas Compartidas",
+  "share": "Compartir Nota",
+  "unshare": "Dejar de Compartir",
+  "shareWith": "Compartir con",
+  "sharedBy": "Compartido por",
+  "noSharedNotes": "No hay notas compartidas",
+  "shareSuccess": "Nota compartida con éxito",
+  "unshareSuccess": "Se dejó de compartir la nota",
+  "copyLink": "Copiar Enlace",
+  "linkCopied": "Enlace copiado al portapapeles",
+  "errors": {
+    "shareFailed": "Error al compartir la nota",
+    "unshareFailed": "Error al dejar de compartir la nota"
+  }
+}

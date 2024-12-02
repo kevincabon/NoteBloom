@@ -1,0 +1,62 @@
+{
+  "commands": {
+    "todoList": {
+      "title": "Liste de tâches",
+      "description": "Créer une nouvelle liste de tâches"
+    },
+    "heading1": {
+      "title": "Titre 1",
+      "description": "Ajouter un titre de section principal"
+    },
+    "heading2": {
+      "title": "Titre 2",
+      "description": "Ajouter un sous-titre de section"
+    },
+    "heading3": {
+      "title": "Titre 3",
+      "description": "Ajouter un titre de sous-section"
+    },
+    "bulletList": {
+      "title": "Liste à puces",
+      "description": "Créer une liste à puces"
+    },
+    "orderedList": {
+      "title": "Liste numérotée",
+      "description": "Créer une liste numérotée"
+    },
+    "bold": {
+      "title": "Gras",
+      "description": "Mettre le texte en gras"
+    },
+    "italic": {
+      "title": "Italique",
+      "description": "Mettre le texte en italique"
+    },
+    "code": {
+      "title": "Code",
+      "description": "Insérer du code"
+    },
+    "codeBlock": {
+      "title": "Bloc de code",
+      "description": "Insérer un bloc de code"
+    },
+    "blockquote": {
+      "title": "Citation",
+      "description": "Insérer une citation"
+    },
+    "link": {
+      "title": "Lien",
+      "description": "Insérer un lien"
+    },
+    "image": {
+      "title": "Image",
+      "description": "Insérer une image"
+    },
+    "color": {
+      "title": "Changer la couleur du texte",
+      "description": "Modifie la couleur du texte sélectionné"
+    }
+  },
+  "placeholder": "Commencez à écrire ou utilisez '/' pour les commandes...",
+  "untitled": "Sans titre"
+}
