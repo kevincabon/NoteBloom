@@ -3,7 +3,7 @@ import { NoteActions } from "./NoteActions";
 import { FolderBadge } from "./FolderBadge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Share2 } from "lucide-react";
+import { Share2, Lock, Unlock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useTranslation } from "react-i18next";
 import { useNoteTags } from "@/hooks/useNoteTags";
@@ -12,12 +12,15 @@ import { TagBadge } from "@/components/tags/TagBadge";
 import { TagPicker } from "@/components/tags/TagPicker";
 import { TagDialog } from "@/components/tags/TagDialog";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface NoteHeaderProps {
   note: Note;
   onEdit?: (note: Note) => void;
   onDelete?: (id: string) => void;
   isSharedView?: boolean;
+  onLock?: () => void;
+  onUnlock?: () => void;
 }
 
 export const NoteHeader = ({
@@ -25,6 +28,8 @@ export const NoteHeader = ({
   onEdit,
   onDelete,
   isSharedView = false,
+  onLock,
+  onUnlock,
 }: NoteHeaderProps) => {
   const { t } = useTranslation();
   const { data: folder } = useQuery({
@@ -58,47 +63,80 @@ export const NoteHeader = ({
   const [showTagDialog, setShowTagDialog] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4 w-full">
+      <div className="flex items-start justify-between w-full">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold">{note.title}</h2>
-            <div className="flex items-center gap-2">
-              {!isSharedView && isShared && (
+            <h2 className="text-2xl font-bold truncate">{note.title}</h2>
+            {note.is_locked && (
+              <Lock className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
+          {!note.is_locked && (
+            <div className="flex items-center gap-2 mt-2">
+              {folder && (
+                <FolderBadge name={folder.name} color={folder.color} />
+              )}
+              {isShared && (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <Share2 className="h-4 w-4 text-muted-foreground" />
+                    <TooltipTrigger asChild>
+                      <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                        <Share2 className="h-4 w-4" />
+                        {t("notes.sharing.shared")}
+                      </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{t('notes.shared.indicator', 'Cette note est partagée')}</p>
+                      <p>{t("notes.sharing.sharedTooltip")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               )}
             </div>
-          </div>
-          <div className="space-y-2">
-            {isSharedView && note.owner && (
-              <p className="text-sm text-muted-foreground">
-                {t('notes.shared.owner', 'Partagée par')} {note.owner}
-              </p>
-            )}
-            {!isSharedView && folder && (
-              <FolderBadge name={folder.name} color={folder.color} />
-            )}
-          </div>
+          )}
         </div>
-        {!isSharedView && onEdit && onDelete && (
-          <NoteActions
-            note={note}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        )}
+
+        <div className="flex items-start gap-2 ml-4">
+          {!isSharedView && (
+            <>
+              {note.is_locked ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onUnlock?.();
+                  }}
+                >
+                  <Unlock className="h-4 w-4" />
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onLock?.();
+                    }}
+                  >
+                    <Lock className="h-4 w-4" />
+                  </Button>
+                  {onEdit && onDelete && (
+                    <NoteActions
+                      note={note}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
-      {!isSharedView && (
+      {!isSharedView && !note.is_locked && (
         <>
           <div className="flex flex-wrap gap-2 items-center">
             {noteTags && noteTags.length > 0 && noteTags.map((tag) => (
