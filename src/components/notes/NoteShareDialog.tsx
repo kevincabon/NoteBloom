@@ -277,29 +277,77 @@ export const NoteShareDialog = ({
           break;
       }
 
+      // Supprimer l'ancien lien de partage s'il existe
+      await supabase
+        .from("note_share_links")
+        .delete()
+        .eq("note_id", note.id);
+
+      // Créer un nouveau lien de partage
       const { data, error } = await supabase
-        .rpc('create_share_link', {
-          p_note_id: note.id,
-          p_expires_at: expiresAt.toISOString()
-        });
+        .from("note_share_links")
+        .insert({
+          note_id: note.id,
+          expires_at: expiresAt.toISOString(),
+          token: crypto.randomUUID()
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      const url = `${window.location.origin}/shared/${data[0].token}`;
-      setShareLink({ url, expiresAt: data[0].expires_at });
+      if (!data || !data.token) {
+        throw new Error('No token received from create_share_link');
+      }
+
+      const url = `${window.location.origin}/shared/${data.token}`;
+      setShareLink({ 
+        url, 
+        expiresAt: data.expires_at 
+      });
       
       await navigator.clipboard.writeText(url);
       toast({
         title: t("notes.sharing.success.linkCopied"),
+        description: t("notes.sharing.success.linkCreated", {
+          expiration: getExpirationText(data.expires_at)
+        })
       });
     } catch (error) {
       console.error("Error generating share link:", error);
       toast({
         title: t("notes.sharing.errors.linkError"),
+        description: t("notes.sharing.errors.tryAgain"),
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getExpirationText = (expiresAt: string) => {
+    try {
+      const expiration = new Date(expiresAt);
+      if (isNaN(expiration.getTime())) {
+        return t("notes.sharing.expirationError");
+      }
+
+      const now = new Date();
+      const diffInHours = Math.round((expiration.getTime() - now.getTime()) / (1000 * 60 * 60));
+      
+      if (diffInHours < 0) {
+        return t("notes.sharing.expired");
+      }
+      
+      if (diffInHours < 24) {
+        return t("notes.sharing.expiresInHours", { hours: Math.max(0, diffInHours) });
+      } else {
+        const diffInDays = Math.round(diffInHours / 24);
+        return t("notes.sharing.expiresInDays", { days: Math.max(0, diffInDays) });
+      }
+    } catch (error) {
+      console.error("Error calculating expiration:", error);
+      return t("notes.sharing.expirationError");
     }
   };
 
@@ -316,19 +364,6 @@ export const NoteShareDialog = ({
         title: t("notes.sharing.errors.copyError"),
         variant: "destructive",
       });
-    }
-  };
-
-  const getExpirationText = (expiresAt: string) => {
-    const expiration = new Date(expiresAt);
-    const now = new Date();
-    const diffInHours = Math.round((expiration.getTime() - now.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 24) {
-      return t("notes.sharing.expiresInHours", { hours: diffInHours });
-    } else {
-      const diffInDays = Math.round(diffInHours / 24);
-      return t("notes.sharing.expiresInDays", { days: diffInDays });
     }
   };
 
