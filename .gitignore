@@ -15,7 +15,7 @@ dist-ssr
 .env
 .env.*
 
-supabase
+supabase/migrations
 
 # Editor directories and files
 .vscode/*
