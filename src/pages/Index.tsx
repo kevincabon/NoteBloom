@@ -334,7 +334,7 @@ const Index = () => {
         onSave={() => {}}
         onLogout={handleLogout}
       >
-        <GuestModeToggle />
+
       </Header>
 
       <main className="container pt-24 pb-16">

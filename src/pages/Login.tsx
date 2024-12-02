@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [view, setView] = useState<"sign_in" | "sign_up" | "forgotten_password" | "update_password">("sign_in");
-  
+
   usePageTitle(
     view === "sign_in" 
       ? "auth.login.title" 
@@ -33,8 +33,26 @@ const Login = () => {
   }, [navigate]);
 
   const handleGuestMode = async () => {
-    // Implement guest mode logic here
-    navigate("/");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: import.meta.env.VITE_GUEST_EMAIL,
+        password: import.meta.env.VITE_GUEST_PASSWORD,
+      });
+
+      if (error) {
+        toast.error(t("auth.errors.guestLoginFailed"));
+        console.error("Guest mode error:", error);
+        return;
+      }
+
+      if (data?.user) {
+        toast.success(t("auth.guestMode"));
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Guest mode error:", error);
+      toast.error(t("auth.errors.guestLoginFailed"));
+    }
   };
 
   const socialProviderText = (provider: string) => {
@@ -239,16 +257,27 @@ const Login = () => {
                         loading_button_label: "...",
                         link_text: "",
                         confirmation_text: t("auth.resetPassword.success"),
-                        email_input_placeholder: t("auth.login.emailPlaceholder"),
+                        email_input_placeholder: t("auth.login.emailPlaceholder")
                       },
                       update_password: {
                         password_label: t("auth.resetPassword.newPassword"),
                         button_label: t("auth.resetPassword.updatePassword"),
                         loading_button_label: "...",
                         confirmation_text: t("auth.resetPassword.success"),
-                        password_input_placeholder: t("auth.login.passwordPlaceholder"),
-                      },
+                        password_input_placeholder: t("auth.login.passwordPlaceholder")
+                      }
                     },
+                    translations: {
+                      fr: {
+                        "Invalid login credentials": t("auth.errors.invalidCredentials")
+                      },
+                      en: {
+                        "Invalid login credentials": t("auth.errors.invalidCredentials")
+                      },
+                      es: {
+                        "Invalid login credentials": t("auth.errors.invalidCredentials")
+                      }
+                    }
                   }}
                 />
                 {view !== "forgotten_password" && view !== "update_password" && (
