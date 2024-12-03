@@ -1,17 +1,5 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { MessageSquareHeart, Sparkles, Link2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { MessageSquareHeart, Sparkles, Link2, Github } from "lucide-react";
-import { FeedbackForm } from "../feedback/FeedbackForm";
-import { Link } from "react-router-dom";
-import { Separator } from "@/components/ui/separator";
 import { APP_VERSION } from "@/config/version";
 import {
   Tooltip,
@@ -20,6 +8,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { FeedbackForm } from "../feedback/FeedbackForm";
 
 export const Footer = () => {
   const { t, i18n } = useTranslation("landing");
@@ -32,9 +25,10 @@ export const Footer = () => {
   });
 
   return (
-    <footer className="w-full border-t">
-      <div className="container flex h-16 items-center justify-between space-x-4 px-8 md:px-6">
-        <div className="flex items-center space-x-4">
+    <footer className="w-full border-t bg-background">
+      <div className="container flex flex-col sm:flex-row h-auto sm:h-16 py-4 sm:py-0 items-center justify-between gap-4 sm:gap-0 px-4 sm:px-8">
+        {/* Left section */}
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
           <span className="text-sm text-muted-foreground">NoteBloom</span>
           <TooltipProvider>
             <Tooltip>
@@ -48,46 +42,45 @@ export const Footer = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Separator orientation="vertical" className="h-4" />
+          <div className="hidden sm:flex">
+            <Separator orientation="vertical" className="h-4" />
+          </div>
           <a
             href="https://lnkqr.co"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <Link2 className="h-3 w-3" />
             LinkQR
           </a>
         </div>
-        <nav className="flex items-center space-x-4">
-          <p className="text-sm text-muted-foreground">
-            {new Date().getFullYear()} Notes App
-          </p>
-          <div className="flex items-center gap-2">
-            <Link to="/roadmap">
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Sparkles className="h-4 w-4" />
-                {t("roadmap.title")}
+
+        {/* Right section */}
+        <nav className="flex items-center gap-4">
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2 text-muted-foreground hover:text-primary"
+              >
+                <MessageSquareHeart className="h-4 w-4" />
+                <span className="hidden sm:inline">{t("feedback.title")}</span>
               </Button>
-            </Link>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <MessageSquareHeart className="h-4 w-4" />
-                  {t("feedback.giveFeedback")}
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{t("feedback.title")}</DialogTitle>
-                  <DialogDescription>
-                    {t("feedback.description")}
-                  </DialogDescription>
-                </DialogHeader>
-                <FeedbackForm onSuccess={() => {}} />
-              </DialogContent>
-            </Dialog>
-          </div>
+            </DialogTrigger>
+            <DialogContent>
+              <FeedbackForm onClose={() => setDialogOpen(false)} />
+            </DialogContent>
+          </Dialog>
+
+          <Link
+            to="/roadmap"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Sparkles className="h-4 w-4" />
+            <span className="hidden sm:inline">{t("viewRoadmap")}</span>
+          </Link>
         </nav>
       </div>
     </footer>
