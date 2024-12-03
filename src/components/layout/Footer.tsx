@@ -30,7 +30,7 @@ export const Footer = () => {
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <Link2 className="h-3 w-3" />
-            QuickLink
+            LinkQR
           </a>
         </div>
         <nav className="flex items-center space-x-4">
