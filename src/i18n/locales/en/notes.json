@@ -26,7 +26,8 @@
   "imageUrlPlaceholder": "Paste image URL here",
   "moveNote": "Move note",
   "selectDestination": "Select destination folder",
-  "sharedNote" : "Shared Note",
+  "sharedNote": "Shared Note",
+  "showMore": "Show more",
   "shared": {
     "title": "Notes shared with me",
     "empty": "No shared notes",

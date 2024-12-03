@@ -11,6 +11,8 @@ import { CurrentFolderHeader } from "./CurrentFolderHeader";
 import { useNoteMutations } from "@/hooks/useNoteMutations";
 import { useSharedNotes } from "@/hooks/useSharedNotes";
 import { Tag } from "@/types/tag";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
 
 interface NotesContainerProps {
   notes: Note[];
@@ -49,8 +51,10 @@ export const NotesContainer = ({
   onRemoveTag,
   isSharedView = false,
 }: NotesContainerProps) => {
+  const { t } = useTranslation();
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [displayLimit, setDisplayLimit] = useState(4);
 
   // Récupérer les notes partagées
   const { data: sharedNotes = [] } = useSharedNotes();
@@ -107,6 +111,13 @@ export const NotesContainer = ({
       }
     });
 
+  const displayedNotes = filteredAndSortedNotes.slice(0, displayLimit);
+  const hasMoreNotes = filteredAndSortedNotes.length > displayLimit;
+
+  const handleShowMore = () => {
+    setDisplayLimit(prev => prev + 4);
+  };
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <CurrentFolderHeader selectedFolderId={selectedFolderId} />
@@ -139,13 +150,25 @@ export const NotesContainer = ({
       />
 
       <NoteList
-        notes={filteredAndSortedNotes}
+        notes={displayedNotes}
         onEdit={handleEditNote}
         onDelete={async (id) => {
           await deleteNoteMutation.mutateAsync(id);
         }}
         isSharedView={isSharedView}
       />
+
+      {hasMoreNotes && (
+        <div className="flex justify-center mt-4">
+          <Button
+            variant="outline"
+            onClick={handleShowMore}
+            className="w-full max-w-xs"
+          >
+            {t("notes.showMore")}
+          </Button>
+        </div>
+      )}
 
       {!isSharedView && (
         <NoteEditDialog
