@@ -21,7 +21,7 @@ export const Footer = () => {
       <div className="container flex h-16 items-center justify-between space-x-4 px-8 md:px-6">
         <div className="flex items-center space-x-4">
           <span className="text-sm text-muted-foreground">NoteBloom</span>
-          <span className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">Beta v0.2.0</span>
+          <span className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">Beta v0.2.1</span>
           <Separator orientation="vertical" className="h-4" />
           <a
             href="https://lnkqr.co"
