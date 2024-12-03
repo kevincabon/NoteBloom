@@ -8,20 +8,46 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { MessageSquareHeart, Sparkles, Link2 } from "lucide-react";
+import { MessageSquareHeart, Sparkles, Link2, Github } from "lucide-react";
 import { FeedbackForm } from "../feedback/FeedbackForm";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
+import { APP_VERSION } from "@/config/version";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useState } from "react";
 
 export const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation("landing");
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const formattedDate = new Date(APP_VERSION.lastUpdate).toLocaleDateString(i18n.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   return (
     <footer className="w-full border-t">
       <div className="container flex h-16 items-center justify-between space-x-4 px-8 md:px-6">
         <div className="flex items-center space-x-4">
           <span className="text-sm text-muted-foreground">NoteBloom</span>
-          <span className="rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">Beta v0.2.1</span>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="rounded-md bg-primary/10 px-2 py-1 text-xs text-muted-foreground hover:text-primary transition-colors cursor-default">
+                  Beta v{APP_VERSION.number}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t("landing.lastUpdate")}: {formattedDate}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <Separator orientation="vertical" className="h-4" />
           <a
             href="https://lnkqr.co"
