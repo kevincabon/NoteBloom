@@ -30,9 +30,9 @@ export const useNoteOperations = ({
     folderId: string | null
   ) => {
     const { links, email, phone } = parseContent(content || "");
-    
+
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     const noteData = {
       title,
       content: content || null,
@@ -45,7 +45,6 @@ export const useNoteOperations = ({
       folder_id: folderId || selectedFolderId,
       user_id: user?.id || null,
     };
-
 
     if (isGuestMode) {
       propOnCreateNote(noteData);
@@ -67,8 +66,10 @@ export const useNoteOperations = ({
 
     if (isGuestMode) {
       propOnUpdateNote(noteToUpdate);
+      return noteToUpdate;
     } else {
-      await updateNote(noteToUpdate);
+      const updatedData = await updateNote(noteToUpdate);
+      return updatedData;
     }
   };
 

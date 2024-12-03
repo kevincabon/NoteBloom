@@ -60,7 +60,10 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
     ],
     content: content || '',
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const newContent = editor.getHTML();
+      if (newContent !== content) {
+        onChange(newContent);
+      }
     },
     editorProps: {
       attributes: {
@@ -74,7 +77,7 @@ export const RichTextEditor = ({ content, onChange, placeholder }: RichTextEdito
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content || '');
     }
-  }, [content, editor]);
+  }, [editor, content]);
 
   if (!editor) {
     return null;

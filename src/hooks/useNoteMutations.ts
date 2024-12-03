@@ -13,7 +13,7 @@ interface CreateNoteParams {
 
 export const useNoteMutations = (
   handleCreateNote: (title: string, content: string | null, images: string[], audioUrl: string | null, folderId: string | null) => Promise<void>,
-  handleUpdateNote: (note: Note) => Promise<void>,
+  handleUpdateNote: (note: Note) => Promise<Note>,
   handleDeleteNote: (id: string) => Promise<void>
 ) => {
   const queryClient = useQueryClient();
@@ -37,12 +37,21 @@ export const useNoteMutations = (
 
   const updateNoteMutation = useMutation({
     mutationFn: handleUpdateNote,
-    onSuccess: () => {
+    onSuccess: (updatedNote: Note) => {
+      // Invalider et recharger la liste des notes
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       queryClient.refetchQueries({ queryKey: ["notes"] });
+
+      // Invalider et recharger la note individuelle
+      queryClient.invalidateQueries({ queryKey: ["note", updatedNote.id] });
+      queryClient.refetchQueries({ queryKey: ["note", updatedNote.id] });
+
+      // Mettre à jour le cache immédiatement
+      queryClient.setQueryData(["note", updatedNote.id], updatedNote);
+
       toast({
         title: t("notes.updated"),
-        description: t("notes.noteUpdatedSuccess"),
+        description: t("notes.updatedSuccess"),
       });
     },
   });
@@ -54,7 +63,7 @@ export const useNoteMutations = (
       queryClient.refetchQueries({ queryKey: ["notes"] });
       toast({
         title: t("notes.deleted"),
-        description: t("notes.noteDeletedSuccess"),
+        description: t("notes.deletedSuccess"),
       });
     },
   });

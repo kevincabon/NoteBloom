@@ -1,16 +1,15 @@
 {
-  "title": "Shared Notes",
-  "share": "Share Note",
-  "unshare": "Unshare",
-  "shareWith": "Share with",
-  "sharedBy": "Shared by",
-  "noSharedNotes": "No shared notes",
-  "shareSuccess": "Note shared successfully",
-  "unshareSuccess": "Note unshared successfully",
-  "copyLink": "Copy Link",
-  "linkCopied": "Link copied to clipboard",
+  "note": {
+    "unlock": "Unlock note",
+    "passwordProtected": "This note is protected by a password",
+    "loading": "Loading shared note...",
+    "description": "Share your note with other users"
+  },
   "errors": {
-    "shareFailed": "Failed to share note",
-    "unshareFailed": "Failed to unshare note"
+    "error": "An error occurred",
+    "fetchError": "Unable to fetch shared note",
+    "linkNotFound": "Shared link is invalid or expired",
+    "linkExpired": "Shared link has expired",
+    "noteNotFound": "Note not found"
   }
 }

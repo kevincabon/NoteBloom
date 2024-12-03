@@ -7,7 +7,9 @@
   "contentPlaceholder": "Start writing...",
   "created": "Note created",
   "updated": "Note updated",
+  "updatedSuccess": "Note updated successfully",
   "deleted": "Note deleted",
+  "deletedSuccess": "Note deleted successfully",
   "searchPlaceholder": "Search notes...",
   "searchInAllFolders": "Search in all folders",
   "sortBy": "Sort by",
@@ -24,25 +26,13 @@
   "imageUrlPlaceholder": "Paste image URL here",
   "moveNote": "Move note",
   "selectDestination": "Select destination folder",
+  "sharedNote" : "Shared Note",
   "shared": {
     "title": "Notes shared with me",
     "empty": "No shared notes",
     "owner": "Shared by",
     "indicator": "This note is shared",
     "with": "Shared with"
-  },
-  "sharedNote": {
-    "loading": "Loading shared note...",
-    "passwordProtected": "This note is protected by a password",
-    "unlock": "Unlock Note",
-    "errors": {
-      "linkNotFound": "Share link not found",
-      "linkExpired": "Share link has expired",
-      "noteNotFound": "Note not found",
-      "generic": "An error occurred",
-      "wrongPassword": "Wrong password",
-      "unlockError": "Error unlocking note"
-    }
   },
   "sharing": {
     "title": "Share note",
@@ -77,7 +67,8 @@
       "linkError": "Error generating link",
       "copyError": "Error copying link",
       "userNotFound": "User not found",
-      "alreadyShared": "Note is already shared with this user"
+      "alreadyShared": "Note is already shared with this user",
+      "wrongPassword": "Incorrect password"
     }
   },
   "lock": {
@@ -116,7 +107,12 @@
     "createFailed": "Failed to create note",
     "updateFailed": "Failed to update note",
     "deleteFailed": "Failed to delete note",
-    "imageUploadFailed": "Could not upload image"
+    "imageUploadFailed": "Could not upload image",
+    "decryptionFailed": "Decryption failed",
+    "incorrectPassword": "Incorrect password",
+    "audioUploadFailed": "Could not upload audio",
+    "audioRecordingFailed": "Could not record audio",
+    "moveFailed": "Could not move note"
   },
   "delete": {
     "note": {

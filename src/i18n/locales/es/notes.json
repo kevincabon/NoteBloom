@@ -7,7 +7,9 @@
   "contentPlaceholder": "Empieza a escribir...",
   "created": "Nota creada",
   "updated": "Nota actualizada",
+  "updatedSuccess": "Nota actualizada con éxito",
   "deleted": "Nota eliminada",
+  "deletedSuccess": "Nota eliminada con éxito",
   "searchPlaceholder": "Buscar notas...",
   "searchInAllFolders": "Buscar en todas las carpetas",
   "sortBy": "Ordenar por",
@@ -24,6 +26,7 @@
   "imageUrlPlaceholder": "Pega la URL de la imagen aquí",
   "moveNote": "Mover nota",
   "selectDestination": "Seleccionar carpeta de destino",
+  "sharedNote": "Nota compartida",
   "shared": {
     "title": "Notas compartidas conmigo",
     "empty": "No hay notas compartidas",
@@ -78,7 +81,7 @@
     },
     "status": {
       "locked": "Esta nota está bloqueada. Haz clic en el candado para desbloquearla.",
-      "sharedNoteLocked" : "Esta nota compartida esta bloqueada. Contacta al propietario para desbloquearla."
+      "sharedNoteLocked": "Esta nota compartida esta bloqueada. Contacta al propietario para desbloquearla."
     }
   },
   "unlock": {
@@ -98,16 +101,10 @@
     "createError": "No se pudo crear la nota",
     "updateError": "No se pudo actualizar la nota",
     "deleteError": "No se pudo eliminar la nota",
-    "imageUploadFailed": "No se pudo subir la imagen",
-    "createFailed": "Error al crear la nota",
-    "updateFailed": "Error al actualizar la nota",
-    "deleteFailed": "Error al eliminar la nota"
-  },
-  "delete": {
-    "note": {
-      "title": "Eliminar Nota",
-      "description": "¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."
-    }
+    "imageUploadFailed": "Error al subir la imagen",
+    "audioUploadFailed": "Error al subir el audio",
+    "audioRecordingFailed": "Error al grabar el audio",
+    "moveError": "No se pudo mover la nota"
   },
   "name": "Título de la Nota",
   "content": "Contenido de la Nota",

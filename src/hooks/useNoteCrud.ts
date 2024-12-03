@@ -60,10 +60,12 @@ export const useNoteCrud = () => {
         folder_id: noteData.folder_id || null
       };
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("notes")
         .update(updateData)
-        .eq('id', note.id);
+        .eq('id', note.id)
+        .select('*, folders(*)')
+        .single();
 
       if (error) {
         console.error("Error updating note:", error);
@@ -73,6 +75,8 @@ export const useNoteCrud = () => {
       toast({
         title: "Note mise à jour",
       });
+
+      return data;
     } catch (error) {
       console.error("Error in updateNote:", error);
       toast({
@@ -80,6 +84,7 @@ export const useNoteCrud = () => {
         description: "Impossible de modifier la note",
         variant: "destructive",
       });
+      throw error;
     }
   };
 

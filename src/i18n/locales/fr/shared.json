@@ -1,4 +1,10 @@
 {
+  "note": {
+    "unlock": "Déverrouiller la note",
+    "passwordProtected": "Cette note est protégée par un mot de passe",
+    "loading": "Chargement de la note partagée...",
+    "description": "Partagez votre note avec d'autres utilisateurs"
+  },
   "errors": {
     "error": "Une erreur est survenue",
     "fetchError": "Impossible de récupérer la note partagée",

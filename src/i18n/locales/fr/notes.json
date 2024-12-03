@@ -7,7 +7,9 @@
   "contentPlaceholder": "Commencez à écrire...",
   "created": "Note créée",
   "updated": "Note mise à jour",
+  "updatedSuccess": "La note a bien éte mise à jour",
   "deleted": "Note supprimée",
+  "deletedSuccess": "La note a bien éte supprimée",
   "searchPlaceholder": "Rechercher des notes...",
   "searchInAllFolders": "Rechercher dans tous les dossiers",
   "sortBy": "Trier par",
@@ -24,6 +26,7 @@
   "imageUrlPlaceholder": "Collez l'URL de l'image ici",
   "moveNote": "Déplacer la note",
   "selectDestination": "Sélectionnez le dossier de destination",
+  "sharedNote": "Note partagée",
   "shared": {
     "title": "Notes partagées avec moi",
     "empty": "Aucune note partagée",
@@ -37,6 +40,11 @@
     "makePublic": "Rendre la note publique",
     "generateLink": "Générer un lien de partage",
     "expiration": "Durée de validité",
+    "usePassword": "Protéger avec un mot de passe",
+    "passwordPlaceholder": "Entrez un mot de passe pour le lien de partage",
+    "unlockTitle": "Déverrouiller la note partagée",
+    "enterPassword": "Entrez le mot de passe pour voir la note",
+    "unlock": "Déverrouiller",
     "expirations": {
       "1hour": "1 heure",
       "1day": "1 jour",
@@ -59,7 +67,8 @@
       "linkError": "Erreur lors de la génération du lien",
       "copyError": "Erreur lors de la copie du lien",
       "userNotFound": "Utilisateur non trouvé",
-      "alreadyShared": "La note est déjà partagée avec cet utilisateur"
+      "alreadyShared": "La note est déjà partagée avec cet utilisateur",
+      "wrongPassword": "Mot de passe incorrect"
     }
   },
   "lock": {
@@ -78,7 +87,7 @@
     },
     "status": {
       "locked": "Cette note est verrouillée. Cliquez sur le cadenas pour la déverrouiller.",
-      "sharedNoteLocked" : "Cette note partagée est verrouillée. Contactez le propriétaire pour la déverrouiller."
+      "sharedNoteLocked": "Cette note partagée est verrouillée. Contactez le propriétaire pour la déverrouiller."
     }
   },
   "unlock": {
@@ -98,7 +107,10 @@
     "createError": "Impossible de créer la note",
     "updateError": "Impossible de modifier la note",
     "deleteError": "Impossible de supprimer la note",
-    "imageUploadFailed": "Impossible d'envoyer l'image"
+    "imageUploadFailed": "Échec du téléchargement de l'image",
+    "audioUploadFailed": "Échec du téléchargement de l'audio",
+    "audioRecordingFailed": "Échec de l'enregistrement audio",
+    "moveError": "Impossible de déplacer la note"
   },
   "delete": {
     "note": {

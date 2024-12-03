@@ -21,7 +21,6 @@ type DatabaseChangesPayload = RealtimePostgresChangesPayload<{
 
 export const useNotes = (initialNotes: Note[] = []) => {
   const navigate = useNavigate();
-  const { createNote, updateNote, deleteNote } = useNoteCrud();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -83,6 +82,72 @@ export const useNotes = (initialNotes: Note[] = []) => {
     },
     initialData: initialNotes,
   });
+
+  const createNote = async (note: Note) => {
+    try {
+      const { data, error } = await supabase
+        .from("notes")
+        .insert([note])
+        .select('*, folders(*)')
+        .single();
+
+      if (error) {
+        console.error("Error creating note:", error);
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error in createNote:", error);
+      throw error;
+    }
+  };
+
+  const updateNote = async (note: Note) => {
+    try {
+      // Exclure les champs qui ne sont pas dans la table notes
+      const { tags, folders, ...noteData } = note;
+      const updateData = {
+        ...noteData,
+        content: noteData.content || null,
+        folder_id: noteData.folder_id || null
+      };
+
+      const { data, error } = await supabase
+        .from("notes")
+        .update(updateData)
+        .eq('id', note.id)
+        .select('*, folders(*)')
+        .single();
+
+      if (error) {
+        console.error("Error updating note:", error);
+        throw error;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error in updateNote:", error);
+      throw error;
+    }
+  };
+
+  const deleteNote = async (noteId: string) => {
+    try {
+      const { error } = await supabase
+        .from("notes")
+        .delete()
+        .eq('id', noteId);
+
+      if (error) {
+        console.error("Error deleting note:", error);
+        throw error;
+      }
+    } catch (error) {
+      console.error("Error in deleteNote:", error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     const channel = supabase.channel('notes_changes')

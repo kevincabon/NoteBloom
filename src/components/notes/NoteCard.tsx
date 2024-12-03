@@ -41,6 +41,29 @@ export const NoteCard = ({
   const formattedContent = decryptedContent || formatContent(updatedNote?.content || note.content || "");
   const { t } = useTranslation();
 
+  useEffect(() => {
+    // Invalider et recharger les données de la note quand elle est modifiée
+    const channel = supabase
+      .channel(`note-${note.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notes',
+          filter: `id=eq.${note.id}`,
+        },
+        () => {
+          invalidateNote();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [note.id, invalidateNote]);
+
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('[role="dialog"]')) return;
     if (!(e.target as HTMLElement).closest('button') && !(e.target as HTMLElement).closest('a')) {

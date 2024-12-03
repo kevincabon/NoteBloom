@@ -12,7 +12,7 @@ import { Lock } from "lucide-react";
 import { SharedNoteUnlockDialog } from "@/components/notes/SharedNoteUnlockDialog";
 
 export default function SharedNote() {
-  usePageTitle("notes.sharedNote");
+  usePageTitle("notes.sharedNote"); 
   const { token } = useParams();
   const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ export default function SharedNote() {
       }
     } catch (error) {
       console.error("Error fetching note:", error);
-      setError(t("sharedNote.errors.noteNotFound"));
+      setError(t("shared.errors.noteNotFound"));
     }
   };
 
@@ -88,13 +88,13 @@ export default function SharedNote() {
 
         if (shareError) {
           console.error("Error fetching share link:", shareError);
-          setError(t("sharedNote.errors.linkNotFound"));
+          setError(t("shared.errors.linkNotFound"));
           setLoading(false);
           return;
         }
 
         if (!shareLinks || shareLinks.length === 0) {
-          setError(t("sharedNote.errors.linkNotFound"));
+          setError(t("shared.errors.linkNotFound"));
           setLoading(false);
           return;
         }
@@ -103,7 +103,7 @@ export default function SharedNote() {
 
         // Check if the link has expired
         if (shareLink.expires_at && new Date(shareLink.expires_at) < new Date()) {
-          setError(t("sharedNote.errors.linkExpired"));
+          setError(t("shared.errors.linkExpired"));
           setLoading(false);
           return;
         }
@@ -120,7 +120,7 @@ export default function SharedNote() {
         await fetchNoteContent(shareLink.note_id);
       } catch (error) {
         console.error("Error:", error);
-        setError(t("sharedNote.errors.generic"));
+        setError(t("shared.errors.generic"));
       } finally {
         setLoading(false);
       }
@@ -134,7 +134,7 @@ export default function SharedNote() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4">{t("sharedNote.loading")}</p>
+          <p className="mt-4">{t("shared.note.loading")}</p>
         </div>
       </div>
     );
@@ -156,12 +156,12 @@ export default function SharedNote() {
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <Lock className="h-12 w-12 mx-auto mb-4" />
-            <p>{t("sharedNote.passwordProtected")}</p>
+            <p>{t("shared.note.passwordProtected")}</p>
             <Button
               onClick={() => setShowUnlockDialog(true)}
               className="mt-4"
             >
-              {t("sharedNote.unlock")}
+              {t("shared.note.unlock")}
             </Button>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function SharedNote() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p>{t("sharedNote.errors.noteNotFound")}</p>
+          <p>{t("shared.errors.noteNotFound")}</p>
         </div>
       </div>
     );
@@ -191,7 +191,17 @@ export default function SharedNote() {
           <CardTitle>{note.title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <NoteContent note={note} readonly />
+          { !note.is_locked ? (
+              <NoteContent note={note} 
+             /> 
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-4 py-8 px-4 bg-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20">
+              <Lock className="h-12 w-12 text-muted-foreground/50" />
+              <p className="text-center text-muted-foreground">
+                {t("notes.lock.status.sharedNoteLocked")}
+              </p>
+            </div>
+            )}
           <div className="mt-4 pt-4 border-t">
             <NoteTimestamps
               createdAt={note.created_at}
