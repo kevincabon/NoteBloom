@@ -65,7 +65,7 @@ export default function App() {
   return (
     <GuestModeProvider>
       <SupabaseProvider>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
               <BrowserRouter>
