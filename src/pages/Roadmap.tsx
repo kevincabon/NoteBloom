@@ -49,7 +49,7 @@ const Roadmap = () => {
     {
       category: "roadmap.editor",
       items: [
-        { key: "autocomplete", icon: <Wand2 className="w-4 h-4" />, status: "inDev" },
+        { key: "autocomplete", icon: <Wand2 className="w-4 h-4" />, status: "done" },
         { key: "checkboxes", icon: <CheckSquare className="w-4 h-4" />, status: "done" },
         { key: "emojis", icon: <Smile className="w-4 h-4" />, status: "planned" },
         { key: "favorites", icon: <Star className="w-4 h-4" />, status: "planned" },
@@ -69,24 +69,24 @@ const Roadmap = () => {
     {
       category: "roadmap.security",
       items: [
-        { key: "encryption", icon: <Shield className="w-4 h-4" />, status: "inDev" },
+        { key: "encryption", icon: <Shield className="w-4 h-4" />, status: "done" },
         { key: "twoFactor", icon: <Lock className="w-4 h-4" />, status: "planned" },
-        { key: "noteLock", icon: <Lock className="w-4 h-4" />, status: "planned" },
+        { key: "noteLock", icon: <Lock className="w-4 h-4" />, status: "done" },
         { key: "backup", icon: <Database className="w-4 h-4" />, status: "soon" }
       ],
     },
     {
       category: "roadmap.collaboration",
       items: [
-        { key: "realTimeCollab", icon: <Users className="w-4 h-4" />, status: "planned" },
+        { key: "realTimeCollab", icon: <Users className="w-4 h-4" />, status: "inDev" },
         { key: "comments", icon: <MessagesSquare className="w-4 h-4" />, status: "planned" },
-        { key: "sharing", icon: <Users className="w-4 h-4" />, status: "soon" }
+        { key: "sharing", icon: <Users className="w-4 h-4" />, status: "done" }
       ],
     },
     {
       category: "roadmap.organization",
       items: [
-        { key: "tags", icon: <Tags className="w-4 h-4" />, status: "inDev" },
+        { key: "tags", icon: <Tags className="w-4 h-4" />, status: "done" },
         { key: "customFields", icon: <Database className="w-4 h-4" />, status: "planned" },
         { key: "kanban", icon: <Layout className="w-4 h-4" />, status: "planned" },
         { key: "calendar", icon: <Calendar className="w-4 h-4" />, status: "planned" },
