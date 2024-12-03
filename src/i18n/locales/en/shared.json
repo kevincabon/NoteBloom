@@ -5,6 +5,7 @@
     "loading": "Loading shared note...",
     "description": "Share your note with other users"
   },
+  "comingSoon" : "Coming soon", 
   "errors": {
     "error": "An error occurred",
     "fetchError": "Unable to fetch shared note",

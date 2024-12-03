@@ -1,20 +1,37 @@
 {
-  "title": "Bienvenido a NoteBloom",
-  "subtitle": "Organiza tus ideas, crea notas y mantén todo en orden",
-  "getStarted": "Comenzar",
+  "title": "Quick Note Garden",
+  "subtitle": "Un espacio seguro para organizar y compartir tus notas",
+  "getStarted": "Empezar",
+  "viewRoadmap": "Ver hoja de ruta",
   "features": {
     "title": "Características",
     "notes": {
-      "title": "Toma de Notas Simple",
-      "description": "Crea y edita notas rápidamente con nuestro editor intuitivo"
+      "title": "Toma de notas",
+      "description": "Crea y organiza tus notas con un editor rico e intuitivo"
+    },
+    "security": {
+      "title": "Seguridad",
+      "description": "Protege tus notas sensibles con cifrado de extremo a extremo"
+    },
+    "sharing": {
+      "title": "Compartir",
+      "description": "Comparte tus notas de forma segura con enlaces protegidos por contraseña"
     },
     "folders": {
-      "title": "Organización en Carpetas",
-      "description": "Organiza tus notas en carpetas personalizables con colores"
+      "title": "Organización",
+      "description": "Organiza tus notas en carpetas para una mejor gestión"
     },
-    "organization": {
-      "title": "Compartir Notas",
-      "description": "Comparte tus notas fácilmente con otros"
+    "tags": {
+      "title": "Etiquetas",
+      "description": "Añade etiquetas a tus notas para encontrarlas fácilmente"
+    },
+    "ai": {
+      "title": "Asistente IA",
+      "description": "Obtén sugerencias inteligentes para mejorar tus notas"
     }
+  },
+  "comingSoon": {
+    "title": "¡Y hay más!",
+    "description": "Se están desarrollando nuevas funciones para enriquecer tu experiencia"
   }
 }

@@ -5,6 +5,7 @@
     "loading": "Chargement de la note partagée...",
     "description": "Partagez votre note avec d'autres utilisateurs"
   },
+  "comingSoon" : "Prochainement",
   "errors": {
     "error": "Une erreur est survenue",
     "fetchError": "Impossible de récupérer la note partagée",
